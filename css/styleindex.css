@@ -1,0 +1,85 @@
+.menu-restaurant
+{
+    float:left;
+    font-family:Montserrat,arial;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#FFB03B;
+}
+.menu-restaurant .menu-line
+{
+    position: absolute;
+    bottom:6px;
+    border-bottom:1px dotted rgba(0,0,0,.3);
+    margin-left: .6em;
+    margin-right: .6em;
+
+}
+.menu-restaurant .menu-price{
+    font-weight:600;
+    position:absolute;
+    right:0;
+    top:0;
+
+}
+#menu-filters ul li a.active, #menu-filters ul li a:hover
+{
+    background: transparent;
+    color:#fff;
+    border:1px solid #FFB03B;
+}
+#menu-filters ul li
+{
+    display:inline-table;
+    color:#fff;
+    text-transform:capitalize;
+    letter-spacing:1px;
+    margin-botttom:10px;
+}
+#menu-filters ul li a
+{
+    padding:6px 12px;
+    font-size:13px;
+    color:#565656;
+    text-decoration:none;
+    cursor:pointer;
+    border-radius:8px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.scrolling-wrapper {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+.scrolling-wrapper .smallcard {
+    display: inline-block;
+}
+
+.scrolling-wrapper-flexbox {
+    display: -webkit-box;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+.scrolling-wrapper-flexbox .smallcard {
+    -webkit-box-flex: 0;
+    flex: 0 0 auto;
+    margin-right: 3px;
+}
+
+.smallcard {
+    width: 200px;
+    height: 260px;
+}
+
+.scrolling-wrapper,  {
+    height: 260px;
+    margin-bottom: 20px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+.scrolling-wrapper::-webkit-scrollbar, :-webkit-scrollbar {
+    display: none;
+}

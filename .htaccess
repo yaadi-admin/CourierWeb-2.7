@@ -1,0 +1,4 @@
+RewriteEngine On 
+RewriteCond %{SERVER_PORT} 80
+RewriteCond %{HTTP_HOST} ^(www\.)?yaadi\.co
+RewriteRule ^(.*)$ https://www.yaadi.co/$1 [R,L]

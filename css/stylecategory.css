@@ -1,0 +1,113 @@
+.input-field div.error{
+    position: relative;
+    top: -1rem;
+    left: 0rem;
+    font-size: 0.8rem;
+    color:#FF4081;
+    -webkit-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    -o-transform: translateY(0%);
+    transform: translateY(0%);
+}
+.input-field label.active{
+    width:100%;
+}
+
+.row {margin: 0 -5px;}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 2px;
+    background-color: #f1f1f1;
+}
+#myDIV {
+    width: 100%;
+    margin-top: 20px;
+}
+ul
+{
+    list-style:none;
+}
+
+.menu-restaurant
+{
+    width:50%;
+    float:left;
+    padding:15px;
+    position:relative;
+
+}
+.menu-restaurant .menu-title
+{
+    float:left;
+    font-family:Montserrat,arial;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#FFB03B;
+}
+.menu-restaurant .menu-line
+{
+    position: absolute;
+    bottom:6px;
+    border-bottom:1px dotted rgba(0,0,0,.3);
+    margin-left: .6em;
+    margin-right: .6em;
+
+}
+.menu-restaurant .menu-price{
+    font-weight:600;
+    position:absolute;
+    right:0;
+    top:0;
+
+}
+.menu-restaurant .menu-subtitle
+{
+    display:block;
+    float:left;
+    color:#B1B1B1;
+    font-family: Satisfy,'Open Sans',arial;
+    font-size: 1.2rem;
+}
+.menu-restaurant span.clearfix{
+    position:relative;
+    display:block;
+}
+#menu-filters ul li a.active, #menu-filters ul li a:hover
+{
+    background: #FFB03B;
+    color:#fff;
+    border:1px solid #FFB03B;
+}
+#menu-filters ul li
+{
+    display:inline-table;
+    color:#fff;
+    text-transform:capitalize;
+    letter-spacing:1px;
+    margin-botttom:10px;
+}
+#menu-filters ul li a
+{
+    padding:6px 12px;
+    font-size:13px;
+    color:#565656;
+    border:1px solid #BBBBBB;
+    text-decoration:none;
+    cursor:pointer;
+    border-radius:8px;
+    height: 40px;
+    line-height: 40px;
+
+}
