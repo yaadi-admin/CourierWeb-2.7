@@ -1,9 +1,32 @@
 <?php
 include 'includes/connect.php';
-
-
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed couriers page";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
+        $count = 0;
+        $count2 = 0;
+        $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' OR role='Delivery');");
+        while($row = mysqli_fetch_array($result))
+        {
+            $count++;
+        }
+        $results = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' OR role='Delivery') AND verified='1';");
+        while($row = mysqli_fetch_array($results))
+        {
+            $count2++;
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +36,7 @@ include 'includes/connect.php';
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>Delivery</title>
+  <title>Couriers</title>
   <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
   <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
   <meta name="msapplication-TileColor" content="#00bcd4">
@@ -92,7 +115,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
+                    </ul>
+                    <ul class="right">
+                        <li><a class="waves-effect waves-light modal-trigger" href="#addcourier" style="color: white;"><i class="mdi-social-person-add"></i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -163,46 +189,24 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
        <section id="content">
-         <div id="breadcrumbs-wrapper">
           <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Delivery</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-          <div class="container">
-          <p class="caption">Enable, Disable or Verify rider information</p>
-          <div class="divider"></div>
           <div id="editableTable" class="section">
-		  <form class="formValidate" id="formValidate1" method="post" action="routers/ard-router.php" novalidate="novalidate">
             <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Riders</h4>
-              </div>
-              <div>
-                  <table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:33.33%;">Name</th>
-                        <th data-field="price" style="width:33.33%;">Details</th>
-                        <th data-field="price" style="width:33.33%;">Actions</th>
-                      </tr>
-                    </thead>
+                  <ul class="collection with-header collapsible z-depth-0">
+                      <li class="collection-header"><h4>Couriers <span class="right"><?php echo $count2; ?><span style="font-size: 10px;"> Verified</span></span> <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Couriers</span></span></h4><p class="caption">Enable, Disable or add couriers</p></li>
 
-                    <tbody>
-				<?php
-				$result = mysqli_query($con, "SELECT * FROM users WHERE role='Delivery' OR role='Rider';");
-				while($row = mysqli_fetch_array($result))
-				{
-                    $name =  $row["name"];
+                  <?php
+
+				$getriders = mysqli_query($con, "SELECT * FROM users WHERE role='Delivery' OR role='Rider';");
+				while($row = mysqli_fetch_array($getriders)) {
+                    $name = $row["name"];
+                    $id = $row["id"];
                     $username = $row["username"];
                     $email = $row["email"];
                     $contact = $row["contact"];
@@ -210,86 +214,105 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     $paw = $row['password'];
                     $hours = $row['opentime'];
                     $type = $row['ocassion'];
-                    
-					echo '<tr><td>
 
-<span class="text-black" style="font-weight: 300;">'.$name.'</span>
-<div><label for="email">Email</label><input id="email" name="'.$row['id'].'_email" value="'.$email.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-</td>';
-                    
-                    echo '<td>
-<div><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-<div><label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-</td>';
 
-                    $key = $row['id'];
-                    $sql = mysqli_query($con,"SELECT * from wallet WHERE customer_id = $key;");
-                    if($row1 = mysqli_fetch_array($sql)){
-                        $wallet_id = $row1['id'];
-                        $sql1 = mysqli_query($con,"SELECT * from wallet_details WHERE wallet_id = $wallet_id;");
-                        if($row2 = mysqli_fetch_array($sql1)){
-                            $balance = $row2['balance'];
-                        }
-                    }
-
-					echo '<td>
-                    <div><select name="'.$row['id'].'_role">
-                      <option value="Delivery"'.($row['role']=='Delivery' ? 'selected' : '').'>Delivery</option>
-                      <option value="Rider"'.($row['role']=='Rider' ? 'selected' : '').'>Rider</option>
-                    </select></div>
-                    
-                    <div><select name="'.$row['id'].'_verified">
-                      <option value="1"'.($row['verified'] ? 'selected' : '').'>Verified</option>
-                      <option value="0"'.(!$row['verified'] ? 'selected' : '').'>Not Verified</option>
-                    </select></div>
-                    
-                    <div><select name="'.$row['id'].'_deleted">
-                      <option value="1"'.($row['deleted'] ? 'selected' : '').'>Disable</option>
-                      <option value="0"'.(!$row['deleted'] ? 'selected' : '').'>Enable</option>
-                    </select></div>
-                    
-                    <div><label for="balance">Balance</label><input id="balance" name="'.$row['id'].'_balance" value="'.$balance.'" type="number" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-                    </td></tr>';
-
-				}
-				?>
-                    </tbody>
-                  </table>
-              </div>
-			  <div class="input-field col s12">
-                              <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:8px;">Update
-                                <i class="mdi-content-send right"></i>
-                              </button>
-                            </div>
-            </div>
-			</form>
-		  <form class="formValidate" id="formValidate" method="post" action="routers/add-users.php" novalidate="novalidate">
-            <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Enroll</h4>
-              </div>
-              <div>
-<table class="responsive centered highlight striped">
+                    echo '<li class="collection-item avatar" style="background-color: white;color: black;">
+      <img src="images/yaadi-icon.png" alt="" class="circle">
+      <span class="title">' . $row["name"] . '</span>
+      <p>Phone: ' . $row["contact"] . ' <br>
+         Email: ' . $email . '
+      </p>
+      <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-action-info-outline" style="font-size: 21px;"></i></a>
+      <div class="collapsible-body">
+      <form class="formValidate" id="formValidate1" method="post" action="routers/ard-router.php" novalidate="novalidate">
+      <table class="responsive centered highlight striped">
                     <thead class="teal lighten-2">
                       <tr>
-                        <th data-field="name" style="width:33.33%;">Identity</th>
-                        <th data-field="name" style="width:33.33%;">Password & Location</th>
-                        <th data-field="name" style="width:33.33%;">Role</th
+                        <th data-field="name" style="width:100%;">Details</th>
                       </tr>
                     </thead>
+
                     <tbody>
-				<?php
-					echo '<tr><td>
+      
+      <tr><td>
+
+<span class="text-black" style="font-weight: 300;">' . $row['name'] . '</span>
+<div><label for="email">Email</label><input id="email" name="' . $row['id'] . '_email" value="' . $email . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+
+      
+      
+<div><label for="contact">Contact</label><input id="contact" name="' . $row['id'] . '_contact" value="' . $contact . '" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+<div><label for="address">Address</label><input id="address" name="' . $row['id'] . '_address" value="' . $address . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+';
+
+                        $key = $row['id'];
+                        $sql = mysqli_query($con, "SELECT * from wallet WHERE customer_id = $key;");
+                        if ($row1 = mysqli_fetch_array($sql)) {
+                            $wallet_id = $row1['id'];
+                            $sql1 = mysqli_query($con, "SELECT * from wallet_details WHERE wallet_id = $wallet_id;");
+                            if ($row2 = mysqli_fetch_array($sql1)) {
+                                $balance = $row2['balance'];
+                            }
+                        }
+
+                        echo '
+                    <div><select name="' . $row['id'] . '_role">
+                      <option value="Delivery"' . ($row['role'] == 'Delivery' ? 'selected' : '') . '>Delivery</option>
+                      <option value="Rider"' . ($row['role'] == 'Rider' ? 'selected' : '') . '>Rider</option>
+                    </select></div>
+                    
+                    <div><select name="' . $row['id'] . '_verified">
+                      <option value="1"' . ($row['verified'] ? 'selected' : '') . '>Verified</option>
+                      <option value="0"' . (!$row['verified'] ? 'selected' : '') . '>Not Verified</option>
+                    </select></div>
+                    
+                    <div><select name="' . $row['id'] . '_deleted">
+                      <option value="1"' . ($row['deleted'] ? 'selected' : '') . '>Disable</option>
+                      <option value="0"' . (!$row['deleted'] ? 'selected' : '') . '>Enable</option>
+                    </select></div>
+                    
+                    <div><label for="balance">Balance</label><input id="balance" name="' . $row['id'] . '_balance" value="' . $balance . '" type="number" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+                    </td></tr>
+                    
+                    </tbody>
+                  </table>
+                  
+                  <button class="waves-effect waves-green btn right" type="submit" name="action">Update</button><br><br>
+                  </form></div>
+    </li>';
+
+                }
+                    ?>
+                  </ul>
+            </div>
+
+
+              <div id="addcourier" class="modal modal-fixed-footer">
+                  <div class="modal-content">
+                      <h4>Add Courier</h4>
+                      <p>Here you can add a new courier.</p>
+                      <form class="formValidate" id="formValidate" method="post" action="routers/add-users.php" novalidate="novalidate">
+                          <div class="row" id="add">
+                              <div>
+                                  <table class="responsive centered highlight striped">
+                                      <thead class="teal lighten-2">
+                                      <tr>
+                                          <th data-field="name" style="width:100%;">Identity</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      <?php
+                                      echo '<tr><td>
 <div><label for="username">Username</label><input id="username" name="username" type="text" data-error=".errorTxt02" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt02"></div></div>
 <div><label for="name">Name</label><input id="name" name="name" type="text" data-error=".errorTxt04" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt04"></div></div>
 <div><label for="contact">Phone Number</label><input id="contact" name="contact" type="number" data-error=".errorTxt05" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt05"></div></div>
-</td>';
-					echo '<td>
+';
+                                      echo '
 <div><label for="password">Password</label><input id="password" name="password" type="password" data-error=".errorTxt03" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt03"></div></div>
 <div><label for="email">Email</label><input id="email" name="email" type="email" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"></div>
 <div><label for="address">Address</label><input id="address" name="address" type="text" data-error=".errorTxt06" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"></div></div>
-</td>';
-					echo '<td>
+';
+                                      echo '
 <div><select name="role">
                       <option value="Delivery" selected>Delivery</option>
                       <option value="Rider">Rider</option>
@@ -303,19 +326,23 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                       <option value="0" selected>Enable</option>
                     </select></div>
 </td></tr>';
-				?>
-                    </tbody>
-</table>
+                                      ?>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                  </div>
+
+
+                  <div class="modal-footer">
+                      <button class="waves-effect waves-green btn-flat" type="submit" name="action">Add</button>
+                  </div>
+                  </form>
+                  </div>
               </div>
-			  <div class="input-field col s12">
-                              <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:8px;">Enroll
-                                <i class="mdi-content-send right"></i>
-                              </button>
-                            </div>
-            </div>
-			</form>			
-            <div class="divider"></div>
-            
+
+
           </div>
         </div>
            </section>

@@ -2,6 +2,110 @@
 include 'includes/connect.php';
 if($_SESSION['admin_sid']==session_id())
 {
+    $id = "";
+    $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+    while($row = mysqli_fetch_array($result))
+    {
+        $id = $row['id'];
+    }
+    $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+    $date->setTimezone(new DateTimeZone('America/Jamaica'));
+    $timestamp = $date->format('Y-m-d H:i:sP');
+    $url = $_SERVER['REQUEST_URI'];
+    $action = "Viewed reports page";
+    $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+    $con->query($sql);
+
+    $totalservice = 0;
+    $totaldelivery = 0;
+    $totalorders = 0;
+    $cancelledbyadmin = 0;
+    $cancelledbyadmintotal = 0;
+    $cancelledbyadminservice = 0;
+    $cancelled = 0;
+    $cancelledtotal = 0;
+    $cancelledservice = 0;
+    $cancelledbycustomer = 0;
+    $cancelledbycustomertotal = 0;
+    $cancelledbycustomerservice = 0;
+    $completed = 0;
+    $completedtotal = 0;
+    $profit_loss = 0;
+    $completedservice = 0;
+    $moneyin = 0;
+
+//    costs
+    $totalcost = 0;
+    $costdomain = 11.99;
+    $costdomainday = 11.99/365;
+    $costhost = 19.99;
+    $costhostday = (19.99 * 12) / 365;
+    $costcust = 6 * 0.0511;
+    $costrider = 3 * 0.0511;
+    $costadm = 2 * 0.0511;
+    $costadvert = 1;
+    $totalcostbefore = $costdomainday + $costhostday + $costadvert;
+    $totalcost = $costdomainday + $costhostday + $costcust + $costrider + $costadm + $costadvert;
+    $totalcosttoorder = $costcust + $costrider + $costadm;
+
+
+
+    $getmoneyin = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Completed';");
+    while($row = mysqli_fetch_array($getmoneyin))
+    {
+        $count = $row['total'];
+        $counts = $row['service_fee'];
+        $moneyin = $moneyin + $count;
+        $totalservice = $totalservice + $counts;
+        $totaldelivery = $totaldelivery + $row['fee'];
+
+    }
+    $getcomplt = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Completed';");
+    while($row = mysqli_fetch_array($getcomplt))
+    {
+        $count = $row['fee'];
+        $counts = $row['service_fee'];
+        $completed = $completed + $count;
+        $completedservice = $completedservice + $counts;
+        $completedtotal++;
+
+    }
+
+    $getcancel = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Cancelled';");
+    while($row = mysqli_fetch_array($getcancel))
+    {
+        $count = $row['fee'];
+        $counts = $row['service_fee'];
+        $cancelled = $cancelled + $count;
+        $cancelledservice = $cancelledservice + $counts;
+        $cancelledtotal++;
+    }
+
+    $getcanad = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Cancelled by Admin';");
+    while($row = mysqli_fetch_array($getcanad))
+    {
+        $count = $row['fee'];
+        $counts = $row['service_fee'];
+        $cancelledbyadmin = $cancelledbyadmin + $count;
+        $cancelledbyadminservice = $cancelledbyadminservice + $counts;
+        $cancelledbyadmintotal++;
+    }
+
+    $getcancus = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Cancelled by Customer';");
+    while($row = mysqli_fetch_array($getcancus))
+    {
+        $count = $row['fee'];
+        $counts = $row['service_fee'];
+        $cancelledbycustomer = $cancelledbycustomer + $count;
+        $cancelledbycustomerservice = $cancelledbycustomerservice + $counts;
+        $cancelledbycustomertotal++;
+    }
+
+
+    $profit_loss = $completed + $completedservice - ($cancelledbycustomer + $cancelledbycustomerservice + $cancelledbyadminservice + $cancelledservice + $cancelledbyadmin + $cancelled);
+    $total = $profit_loss;
+    $totalorders = ($cancelledbycustomertotal + $cancelledbyadmintotal + $cancelledtotal + $completedtotal);
+
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -88,10 +192,9 @@ if($_SESSION['admin_sid']==session_id())
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul>
-                        <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                        <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
                     <ul class="right">
-                        <li><i class="mdi-action-search"></i></li>
                     </ul>
                 </div>
             </nav>
@@ -159,59 +262,143 @@ if($_SESSION['admin_sid']==session_id())
                             </li>
                         </ul>
                     </li>
-                    <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+                    <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
                     </li>
                 </ul>
                 <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
             </aside>
-            <section id="content">
-                <div id="breadcrumbs-wrapper">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col s12 m12 l12">
-                                <h5 class="breadcrumbs-title">Reports
-                                </h5>
-                            </div>
-                        </div>
+
+            <div id="breadcrumbs-wrapper">
+                <div class="container">
+                    <div class="row">
                     </div>
                 </div>
-
-            </section>
+            </div>
 
             <section>
-                <table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                    <tr>
-                        <th data-field="name" style="width:33.33%;">Data</th>
-                        <th data-field="name" style="width:33.33%;">Data</th>
-                        <th data-field="price" style="width:33.33%;">Data</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM orders;");
-                    while($row = mysqli_fetch_array($result))
-                    {
+                <div class="container">
 
+                    <ul class="collection with-header">
+                        <li class="collection-header"><h4>Order Report <span class="right"><?php echo number_format($totalorders); ?> <span style="font-size: 10px;">Orders</span></span></h4></li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title teal-text">Cost Structure</span>
+                            <p>Domain(Yearly): $<?php echo number_format($costdomain, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Hosting(Monthly): $<?php echo number_format($costhost, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Text to Customer: $<?php echo number_format($costcust, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Text to Rider(s): $<?php echo number_format($costrider, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Text to Admin(s): $<?php echo number_format($costadm, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Advertisements: $<?php echo number_format($costadvert, 2); ?> cents <span style="font-size:10px;">USD</span><br>
+                                Per Order: $<?php echo number_format($totalcosttoorder, 2); ?> cents <span style="font-size:10px;">USD</span> | $<?php $totalcosttoorder = $totalcosttoorder * 144.17; echo number_format($totalcosttoorder, 2); ?> cents <span style="font-size:10px;">JMD</span><br>
+                                Daily Cost: $<?php echo number_format($totalcostbefore, 2); ?> cents <span style="font-size:10px;">USD</span> | $<?php $totalcostbefore = $totalcostbefore * 145.17; echo number_format($totalcostbefore, 2); ?> cents <span style="font-size:10px;">JMD</span><br>
+                                Total(daily): $<?php $totalcost = $totalcost * 145.17; echo number_format($totalcost, 2); ?> cents <span style="font-size:10px;">JMD</span><br>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format(6); ?> <span style="font-size: 10px;">Items</span></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title teal-text">Revenue</span>
+                            <p>Cash Flow: $<?php echo number_format($moneyin); ?><br>
+                                Total Service Fee: $<?php echo number_format($totalservice); ?> <span style="font-size:10px;">JMD</span><br>
+                                Total Delivery Fee: $<?php echo number_format($totaldelivery); ?> <span style="font-size:10px;">JMD</span><br>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format($totalorders); ?> <span style="font-size: 10px;">Orders</span></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title teal-text">Completed Orders</span>
+                            <p>Delivery: $<?php echo number_format($completed); ?> <span style="font-size:10px;">JMD</span><br>
+                                Service: $<?php echo number_format($completedservice); ?> <span style="font-size:10px;">JMD</span>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format($completedtotal); ?> <span style="font-size: 10px;">Orders</span></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title red-text">Cancelled by Customer</span>
+                            <p>Delivery: $<?php echo number_format($cancelledbycustomer); ?> <span style="font-size:10px;">JMD</span><br>
+                                Service: $<?php echo number_format($cancelledbycustomerservice); ?> <span style="font-size:10px;">JMD</span>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format($cancelledbycustomertotal); ?> <span style="font-size: 10px;">Orders</span></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title red-text">Cancelled by Admin</span>
+                            <p>Delivery: $<?php echo number_format($cancelledbyadmin); ?> <span style="font-size:10px;">JMD</span><br>
+                                Service: $<?php echo number_format($cancelledbyadminservice); ?> <span style="font-size:10px;">JMD</span>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format($cancelledbyadmintotal); ?> <span style="font-size: 10px;">Orders</span></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title red-text">Cancelled By Restaurant</span>
+                            <p>Delivery: $<?php echo number_format($cancelled); ?> <span style="font-size:10px;">JMD</span><br>
+                                Service: $<?php echo number_format($cancelledservice); ?> <span style="font-size:10px;">JMD</span>
+                            </p>
+                            <a href="#!" class="secondary-content black-text"><?php echo number_format($cancelledtotal); ?> <span style="font-size: 10px;">Orders</span></a>
+                        </li>
+                    </ul>
 
-                        echo '<tr><td>
-<div></div>
-</td>';
-
-                        echo '<td>
-
-</td>';
-
-                        echo '<td>
-
-</td></tr>';
-
-
-                    }
-                    ?>
-                    </tbody>
-                </table>
+                </div>
             </section>
+            <section>
+                <div class="container">
+
+
+                    <ul class="collection with-header">
+                        <li class="collection-header"><h4>Courier Report <span class="right"><?php echo number_format($totalorders); ?><span style="font-size: 10px;">Orders</span></span></h4></li>
+                        <h6 class="center">Financial Distributions</h6>
+
+                        <?php
+
+                        $commission = 0;
+                        $payout = 0;
+                        $deliverytotal = 0;
+                        $servicetotal = 0;
+                        $totalcom = 0;
+
+    $getords = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE 'Completed';");
+    while($row = mysqli_fetch_array($getords))
+    {
+        $assignedto = $row['assignedto'];
+        $counter = 0;
+        $percentage_cut = .30;
+        $percentage_cutr = .70;
+        $count = $row['fee'];
+        $counts = $row['service_fee'];
+        $deliverytotal = $deliverytotal + $count;
+        $servicetotal = $servicetotal + $counts;
+        $commission = ($percentage_cut * $count) + $counts;
+        $payout = ($percentage_cutr * $count);
+        $totalcom = $commission + $totalcom;
+
+        $getriders = mysqli_query($con, "SELECT * FROM users WHERE id LIKE $assignedto;");
+        while($row1 = mysqli_fetch_array($getriders)) {
+            echo '<li class="collection-item avatar">
+                            <img src="images/yaadi-icon.png" alt="" class="circle">
+                            <span class="title teal-text">'.$row1['name'].'</span>
+                            <p>'.$row['date'].' <span class="right red-text">'.$row['pay_type'].'</span><br>
+                            Delivery Collected: $'.number_format($row['fee']).' <span style="font-size:10px;">JMD</span><br>
+                                Service Collected: $'.number_format($row['service_fee']).' <span style="font-size:10px;">JMD</span><br>
+                               <span class="teal-text">Balance to ™Yaadi.co: $'.number_format($commission).' <span style="font-size:10px;">JMD</span></span><br>
+                               <span class="red-text">Balance to Courier: $'.number_format($payout).' <span style="font-size:10px;">JMD</span></span>
+                            </p>
+                            <a href="#!" class="secondary-content black-text">Order #'.$row['id'].'</a>
+                        </li>';
+
+
+        }
+
+
+    }
+                        ?>
+
+
+                    </ul>
+
+                </div>
+            </section>
+
+
         </div>
     </div>
 

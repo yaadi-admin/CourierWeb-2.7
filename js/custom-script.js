@@ -19,7 +19,7 @@ $('button.remove').on('click', function(){
     complete: function(elem) {
       $(elem).addClass("deleted");
     },
-    easing: [ 0.65, -0.02, 0.72, 0.29 ]
+    easing: [ 0.65, -0.02, 0.72, 0.29 ] 
   });
 });
 
@@ -45,7 +45,7 @@ $('#changePrices').on('click', function() {
     duration: 500,
     easing: [ 1, 0, 1, 1 ]
   });
-
+  
   // float the old price up
   $oldPrice.velocity({
     translateY: "-1.2em",
@@ -58,12 +58,12 @@ $('#changePrices').on('click', function() {
     },
     easing: [ 0, 1, 1, 1 ]
   });
-
+  
   // Fade in the new price, then unwrap it to finish the animation
-  $newPrice.velocity({
+  $newPrice.velocity({ 
     opacity: 1
   }, {
-    delay: 500,
+    delay: 500, 
     duration: 250,
     easing: "linear",
     complete: function(elem) {

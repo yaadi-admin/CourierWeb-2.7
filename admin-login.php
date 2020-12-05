@@ -61,48 +61,48 @@ else{
       <div id="loader"></div>        
       <div class="loader-section section-left"></div>
       <div class="loader-section section-right"></div>
-  </div> 
-    <div id="login-page" class="row">
-    <div class="col s12 z-depth-4 card-panel" style="border-radius: 8px;">
-         <form class="formValidate  login-form" id="formValidate" method="post" action="routers/router-admin.php" novalidate="novalidate"> 
-        <div class="row"><i class="mdi-action-lock-outline prefix" style="font-size:18px;color:#b5796d;"></i>
-          <div class="input-field col s12 center"> 
-              <span class="badge " data-badge-caption="custom caption" style="color: #61677C;
-  font-weight: bold;box-shadow: -5px -5px 20px #FFF, 5px 5px 20px #BABECC;transition: all 0.2s ease-in-out;cursor: pointer;font-weight: 600;border-radius: 8px;line-height: 0;width: 60px;height: 40px;display: inline-flex;color: #b5796d;justify-content: center;align-items: center;margin: 0 8px;font-size: 15.2px;font-family: Open Sans, ;font-family: Akronim;">Yaadi.co</span>
-              <img src="images/yaadi-icon.png" width="200px" height="150px" style="object-position: center;object-fit: scale-down;">
-            <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;">ADMINISTRATION</p><span class="badge" data-badge-caption="custom caption"><h6 style="font-size:10px;font-family: Open Sans, ;font-family: Akronim;">V.x3</h6></span>
-          </div>
-        </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-social-person-outline prefix" style="color: antiquewhite;"></i>
-            <input name="username" id="username" type="text" data-error=".errorTxt1" style="border-radius: 8px;border-bottom: 2px solid antiquewhite;">
-            <label for="username" class="center-align"  style="font-size:12px;">Username</label>
-              <div class="errorTxt1"></div>
-            </div>
-        </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-action-lock-outline prefix" style="color: antiquewhite;"></i>
-            <input name="password" id="password" type="password" data-error=".errorTxt2" style="border-radius: 8px;border-bottom: 2px solid antiquewhite;">
-            <label for="password" style="font-size:12px;">Passcode</label>
-              <div class="errorTxt2"></div>
-          </div>
-        </div>
-        <div class="row col s12">
-            <button value="submit" class="icon ion-md-lock btn colorr waves-effect waves-light center col s12" onclick="document.getElementById('formValidate').check();" type="submit" style="color: white;font-family: Open Sans, ;font-family: Akronim;font-size:20px;border-radius: 8px;" name="action">Login</button><br><br>
-		  		      <div class="row">
-                    <div class="segment">
-                     <div class="btn-group">
-                         <p class="medium-small center" style="font-size:12px;color:#b5796d;"><a href="login.php" style="font-size:15px;color:#b5796d;"><button class="btn unit" type="button" style="border-radius: 8px;"> Customer Login</button></a></p><br>
-                         <div class="divider"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        </div>
-    </div>
+  </div>
+
+  <div id="login-page" class="row">
+      <div class="col s12 z-depth-4 card-panel" style="border: 2px solid antiquewhite;border-radius: 8px;">
+          <form class="formValidate  login-form" id="formValidate" method="post" action="<?php echo "routers/router-admin.php"; ?>" novalidate="novalidate">
+              <div class="row"><span style="font-size:18px;">🍉</span>
+                  <div class="input-field col s12 center">
+                      <img id="logoimg" src="images/yaadi-icon.png" width="200px" height="150px" style="object-position: center;object-fit: scale-down;">
+                      <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;"></p><span class="badge" data-badge-caption="custom caption"><h6 style="font-size:12px;font-family: Open Sans, ;font-family: Akronim;color: #a0381b;">V.04</h6></span>
+                  </div>
+              </div>
+              <div class="row margin">
+                  <div class="input-field col s12">
+                      <i class="mdi-action-verified-user prefix" style="color: #a0381b;"></i>
+                      <input name="username" id="username" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid #a0381b;">
+                      <label for="username" class="center-align" style="font-size:12px;">Admin Username</label>
+                      <div class="errorTxt1"></div>
+                  </div>
+              </div>
+              <div class="row margin">
+                  <div class="input-field col s12">
+                      <span<a><i class="mdi-hardware-security prefix" style="color: #a0381b;"></i></a></span>
+                      <input name="password" id="password" type="password" data-error=".errorTxt2" style="border-bottom-right-radius: 8px;border-bottom: 2px solid #a0381b;">
+                      <label for="password" style="font-size:12px;">Password</label>
+                      <div class="errorTxt2"></div>
+                  </div>
+              </div>
+              <div class="row col s12">
+                  <button id="loginbtn" value="submit" class="icon ion-md-lock btn-flat color waves-effect waves-light center col s12" type="submit" style="background-color: #a0381b;color: white;font-size:12px;border: 1px solid antiquewhite;border-radius: 8px;" name="action">Login <i class="mdi-action-lock right"></i></button><br><br>
+                  <div class="row">
+                      <div class="segment">
+                          <div class="btn-group">
+                              <div style="height:10px;"></div>
+                              <div class="divider"></div>
+                              <p class="center"><i class="mdi-notification-event-available"></i> Welcome to Yaadi admissions</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
 
   <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>

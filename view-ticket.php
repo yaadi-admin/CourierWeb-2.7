@@ -39,6 +39,8 @@ if($continue){
    <link href="css/custom/custom.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
    <style type="text/css">
   .input-field div.error{
     position: relative;
@@ -105,8 +107,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
          <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> YAADi</a><span class="logo-text">Logo</span></h1></li>
+                    <ul class="left">
+                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Modak', 'cursive';">Yaad<span style="color: mediumspringgreen;">i</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
                     <ul class="right hide-on-med-and-down">                        
                         <li><a href="#" class="waves-effect waves-block waves-light"><i class="mdi-editor-attach-money"><?php echo $balance;?></i></a>

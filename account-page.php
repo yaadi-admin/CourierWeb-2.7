@@ -1,19 +1,19 @@
 <?php
 include 'includes/connect.php';
-$user_id = $_SESSION['user_id'];
 
-$result = mysqli_query($con, "SELECT * FROM users where id = $user_id");
-while($row = mysqli_fetch_array($result)){
-$name = $row['name'];	
-$address = $row['address'];
-$contact = $row['contact'];
-$email = $row['email'];
-$username = $row['username'];
-$phone_nt = $row['notphone'];
-$phone_nt2 = $row['notphone2'];
-}
 	if($_SESSION['restaurant_sid']==session_id())
 	{
+	    $user_id = $_SESSION['user_id'];
+        $result = mysqli_query($con, "SELECT * FROM users where id = $user_id");
+        while($row = mysqli_fetch_array($result)) {
+            $name = $row['name'];
+            $address = $row['address'];
+            $contact = $row['contact'];
+            $email = $row['email'];
+            $username = $row['username'];
+            $phone_nt = $row['notphone'];
+            $phone_nt2 = $row['notphone2'];
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,7 +100,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Restaurant</span></a></h1></li>
                     </ul>				
                 </div>
             </nav>
@@ -135,12 +135,12 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> Orders</a>
                             <div class="collapsible-body">
                                 <ul>
-								<li><a href="orders.php">All Orders</a>
+								<li><a href="all-r-orders.php">All Orders</a>
                                 </li>
 								<?php
 									$sql = mysqli_query($con, "SELECT DISTINCT status FROM orders WHERE customer_id = $user_id;");
 									while($row = mysqli_fetch_array($sql)){
-                                    echo '<li><a href="orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                    echo '<li><a href="all-r-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
 									}
 									?>
@@ -149,7 +149,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Reports <span class="badge" data-badge-caption="Beta 1!"><h6 style="font-size:10px;">Coming Soon</h6></span></a>
+            <li class="bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
             </li>
 			
         </ul>

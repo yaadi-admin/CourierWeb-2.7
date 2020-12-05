@@ -2,6 +2,22 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed Admin Homepage";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
+
+	    $admission = "";
+	    $admission2 = "";
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,8 +133,36 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                    <ul class="left">
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
+                    </ul>
+                    <ul class="right">
+
+                        <?php
+
+        $openclosed = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=1;");
+        while($row = mysqli_fetch_array($openclosed)) {
+
+            if ($row['admission'] == 1) {
+
+                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open" style="color: white;"><label class="white-text right" style="font-size: 6px;">Login</label></i></a></li>';
+            }
+            elseif ($row['admission'] == 0){
+                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock" style="color: white;"><label class="white-text left" style="font-size: 6px;">Login</label></i></a></li>';
+            }
+
+        }
+
+   $orderstats = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=2;");
+        while($row = mysqli_fetch_array($orderstats)) {
+            if ($row['admission'] == 0) {
+                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock" style="color: white;"><label class="white-text right" style="font-size: 6px;">Orders</label></i></a></li>';
+                            }
+            elseif ($row['admission'] == 1){
+                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open" style="color: white;"><label class="white-text right" style="font-size: 6px;">Orders</label></i></a></li>';
+            }
+                        }
+                        ?>
                     </ul>
                 </div>
             </nav>
@@ -150,7 +194,26 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             </li>
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders</a>
+                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders
+                                <?php
+
+                                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '0';");
+                                $count = 0;
+                                $total = 0;
+                                while($row = mysqli_fetch_array($getamount)) {
+                                    $count++;
+                                    $total = 0;
+                                    $total+=$count;
+                                }
+                                if ($total == 0){
+                                    echo '<span class="new badge">'.$total.'</span>';
+                                }
+                                else{
+                                    echo '<span class="new badge">'.$total.'</span>';
+                                }
+
+                                ?>
+                            </a>
                             <div class="collapsible-body">
                                 <ul>
 								<li><a href="all-orders.php">All Orders</a>
@@ -186,181 +249,90 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
-      <section id="content">
+
+        <div id="logac" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Close customer login?</h5>
+                <h6>Enter password</h6>
+                <input name="validatore" id="validatore" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/openclose.php" method="post">
+                    <input type="hidden" name="admission" value="<?php $admission = 1; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div id="logack" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Open customer login?</h5>
+                <h6>Enter password</h6>
+                <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/closeopen.php" method="post">
+                    <input type="hidden" name="admission" value="<?php $admission = 0; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
+                <section id="content">
           <div id="breadcrumbs-wrapper">
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Dashboard</h5>
               </div>
             </div>
           </div>
         </div>
-        <div class="container">
-          <p class="caption">Welcome to your dashboard, verify modifications before updating or submitting.</p>
-          <div class="divider"></div>
-		  <form class="formValidate" id="formValidate" method="post" action="routers/menu-router.php" novalidate="novalidate">
-            <div class="row">
-              
-              <div>
-    <div class="row">
-        <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image">
-          <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Delivery
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">View/modify rider information...</p>
-        </div>
-        <div class="card-action">
-          <a href="am_rd.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
-  
-                  
-    <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image">
-            <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Customers
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">View/modify customer information...</p>
-        </div>
-        <div class="card-action">
-          <a href="am_cust.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
-                  
-                  
-    <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image">
-            <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Restaurants
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">View/modify restaurant information...</p>
-        </div>
-        <div class="card-action">
-          <a href="am_rest.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image">
-            <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Account Recovery
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">Password reset and recovery...</p>
-        </div>
-        <div class="card-action">
-          <a href="am_pa.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
-        
-        
-</div>
-                  <div class="row">
-    <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image" style="border-radius:16px;">
-            <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Tickets
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">Respond to questions and concerns...</p>
-        </div>
-        <div class="card-action">
-          <a href="tickets.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
 
-    <div class="col s12 m3" style="border-radius:16px;">
-      <div class="card" style="border-radius:16px;">
-        <div class="card-image" style="border-radius:16px;">
-            <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-          <span class="card-title text-white"><blockquote style="border-radius:8px;">
-     Reports
-    </blockquote></span>
-        </div>
-        <div class="card-content">
-          <p class="text-black">Reports or overview...</p>
-        </div>
-        <div class="card-action">
-          <a href="am_rep.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-        </div>
-      </div>
-    </div>
+          <div class="container">
+              <ul class="collection with-header">
+                  <?php
+                  $date = date('l jS \of F Y');
+                  echo '<li class="collection-header"><h4>'.$name.' <span class="right" style="font-size: 8px;">'.$date.'</span></h4><p class="caption">Welcome to your dashboard</p></li>';
 
-                      <div class="col s12 m3" style="border-radius:16px;">
-                          <div class="card" style="border-radius:16px;">
-                              <div class="card-image" style="border-radius:8px;">
-                                  <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-                                  <span class="card-title text-white"><blockquote style="border-radius:8px;">
-                                          Push Notifications
-                                </blockquote></span>
-                              </div>
-                              <div class="card-content">
-                                  <p class="text-black">Send custom messages...</p>
-                              </div>
-                              <div class="card-action">
-                                  <a href="am_adv.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-                              </div>
-                          </div>
-                      </div>
+                  $orderstat = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=2;");
+                  while($row = mysqli_fetch_array($orderstat)) {
+                      if ($row['admission'] == 0) {
+                          echo '<li class="collection-item">Ordering <a href="all-orders.php"><span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></a></li>';
+                      } else if ($row['admission'] != 0) {
+                          echo '<li class="collection-item">Ordering <a href="all-orders.php"><span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></a></li>';
+                      }
+                  }
 
-                      <div class="col s12 m3" style="border-radius:16px;">
-                          <div class="card" style="border-radius:16px;">
-                              <div class="card-image" style="border-radius:8px;">
-                                  <img src="images/user-bg.jpg" width="100%;" height="100px;"  style="border-radius:8px; border: 1.5px solid antiquewhite;">
-                                  <span class="card-title text-white"><blockquote style="border-radius:8px;">
-                                          Advertisements
-                                </blockquote></span>
-                              </div>
-                              <div class="card-content">
-                                  <p class="text-black">Post Adverts to yaadi.co...</p>
-                              </div>
-                              <div class="card-action">
-                                  <a href="adverts.php" class="waves-effect waves-light btn text-white" style="border-radius:8px;">Manage</a>
-                              </div>
-                          </div>
-                      </div>
+                  $openclose = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=1;");
+                  while($row = mysqli_fetch_array($openclose)) {
 
-</div>
+                      if ($row['admission'] == 0) {
+                          echo '<li class="collection-item">Customer Login <span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></li>';
+                      } else if ($row['admission'] != 0) {
+                          echo '<li class="collection-item">Customer Login <span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></li>';
+                      }
+                  }
 
-                  <div class="row">
-              </div>
-            </div>
-			</form>
-            <div class="divider"></div>
-          </div>
+                  ?>
+                  <li class="collection-item"><a href="am_rd.php"><h4>Couriers</h4></a></li>
+                  <li class="collection-item"><a href="am_cust.php"><h4>Customers</h4></a></li>
+                  <li class="collection-item"><a href="am_rest.php"><h4>Restaurants</h4></a></li>
+                  <li class="collection-item"><a href="am_pa.php"><h4>Account Recovery</h4></a></li>
+                  <li class="collection-item"><a href="tickets.php"><h4>Tickets</h4></a></li>
+                  <li class="collection-item"><a href="am_rep.php"><h4>Reports</h4></a></li>
+                  <li class="collection-item"><a href="am_wal.php"><h4>Wallets</h4></a></li>
+                  <li class="collection-item"><a href="am_adv.php"><h4>Promotions</h4></a></li>
+              </ul>
           </section>
         </div>
 
+
+  </div>
       </div>
+
     <footer class="page-footer">
     <div class="footer-copyright">
       <div class="container">
@@ -379,86 +351,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
-	    <script type="text/javascript">
-    $("#formValidate").validate({
-        rules: {
-			<?php
-			$result = mysqli_query($con, "SELECT * FROM items");
-			while($row = mysqli_fetch_array($result))
-			{
-				echo $row["id"].'_name:{
-				required: true,
-				minlength: 5,
-				maxlength: 20 
-				},';
-				echo $row["id"].'_price:{
-				required: true,	
-				min: 0
-				},';				
-			}
-		echo '},';
-		?>
-        messages: {
-			<?php
-			$result = mysqli_query($con, "SELECT * FROM items");
-			while($row = mysqli_fetch_array($result))
-			{  
-				echo $row["id"].'_name:{
-				required: "Ener item name",
-				minlength: "Minimum length is 5 characters",
-				maxlength: "Maximum length is 20 characters"
-				},';
-				echo $row["id"].'_price:{
-				required: "Ener price of item",
-				min: "Minimum item price is Rs. 0"
-				},';				
-			}
-		echo '},';
-		?>
-        errorElement : 'div',
-        errorPlacement: function(error, element) {
-          var placement = $(element).data('error');
-          if (placement) {
-            $(placement).append(error)
-          } else {
-            error.insertAfter(element);
-          }
-        }
-     });
-    </script>
-    <script type="text/javascript">
-    $("#formValidate1").validate({
-        rules: {
-		name: {
-				required: true,
-				minlength: 5
-			},
-		price: {
-				required: true,
-				min: 0
-			},
-	},
-        messages: {
-		name: {
-				required: "Enter item name",
-				minlength: "Minimum length is 5 characters"
-			},
-		 price: {
-				required: "Enter item price",
-				minlength: "Minimum item price is Rs.0"
-			},
-	},
-		errorElement : 'div',
-        errorPlacement: function(error, element) {
-          var placement = $(element).data('error');
-          if (placement) {
-            $(placement).append(error)
-          } else {
-            error.insertAfter(element);
-          }
-        }
-     });
-    </script>
+
     <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}

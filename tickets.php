@@ -1,9 +1,14 @@
 <?php
 include 'includes/connect.php';
 include 'includes/wallet.php';
-
 	if($_SESSION['customer_sid']==session_id())
 	{
+	    $usr_address = "";
+        $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
+        while($row = mysqli_fetch_array($useraddress))
+        {
+            $usr_address = $row['address'];
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +29,8 @@ include 'includes/wallet.php';
    <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/data-tables/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
    <style type="text/css">
   .input-field div.error{
     position: relative;
@@ -92,76 +99,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
          <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">
-                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Open Sans', ;font-family: 'Akronim';">Yaadi<span style="font-size: 16px;color: mediumspringgreen;"> Food Delivery</span></a><span class="logo-text">Logo</span></h1></li>
+                    <ul style="background-color: white;">
+                        <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO <span id="nearby"></span></b></label>
+                        <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
                     </ul>
-
-                    <ul class="right" style="background-color: transparent;border: 0px;margin 0px;margin-bottom: 0px;">
-                        <li style="background-color: transparent;">
-                            <a class="waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i></a>
-                            <div class="collapsible-body" style="background-color: white;border: 0px;margin 0px;color: black;border-radius:8px;">
-                                <ul id="issues-collection" class="collection" style="border-radius:16px;">
-                                    <?php
-                                    $result = mysqli_query($con, "SELECT * FROM users where id= $user_id AND not deleted;");
-                                    while($row = mysqli_fetch_array($result))
-                                    {
-                                        $res_name = $row['name'];
-                                        $phone = $row["contact"];
-
-                                        echo '<li class="collection-item avatar">
-                        <i class="mdi-content-content-paste red circle"></i>
-                        <p><strong>Name:</strong> '.$name.'</p>
-                        <p><strong>Contact Number: '.$phone.'</strong></p>
-                        <a href="#." class="secondary-content"><i class="mdi-action-grade"></i></a>';
-                                    }
-                                    ?>
-                                    <?php
-                                    if(!empty($_SESSION["shopping_cart"]))
-                                    {
-                                        $total = 0;
-                                        foreach($_SESSION["shopping_cart"] as $keys => $values)
-                                        {
-                                            ?>
-                                            <li class="collection-item">
-                                                <div class="row">
-                                                    <div class="col s8">
-                                                        <p class="collections-title"><strong><span>#<?php echo $values["item_quantity"];?> </span></strong> <?php echo $values["item_name"]; ?></p>
-                                                    </div>
-
-                                                    <div class="col s4"><br>
-                                                        <span>$<?php echo $values["item_price"]; ?> JMD</span>
-                                                    </div>
-                                                    <div class="col s4">
-                                                        <a href="index.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger" style="color: darkred;">Remove</span></a>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <?php
-                                            $total = $total + ($values["item_quantity"] * $values["item_price"]);
-                                        }
-                                        ?>
-
-
-                                        <li class="collection-item">
-                                            <div class="row">
-                                                <div class="col s8">
-                                                    <p class="collections-title"> Total</p>
-                                                    <p>Select a restaurant to place your order.</p>
-                                                </div>
-                                                <div class="col s4"><br>
-                                                    <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php
-                                    }
-                                    ?>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-
                 </div>
             </nav>
         </div>
@@ -169,78 +110,77 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
    
   <div id="main">
      <div class="wrapper">
- 
-      <aside id="left-sidebar-nav">
-        <ul id="slide-out" class="side-nav fixed leftnavset">
-            <li class="user-details teal lighten-2">
-            <div class="row">
-                <div class="col col s4 m4 l4">
-                    <img src="images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
-                </div>
-				 <div class="col col s8 m8 l8">
-                    <ul id="profile-dropdown" class="dropdown-content">
-                        <li><a href="routers/logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col col s8 m8 l8">
-                    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?php echo $name;?> <i class="mdi-navigation-arrow-drop-down right"></i></a>
-                    <p class="user-roal"><?php echo $role;?></p>
-                </div>
-            </div>
-            </li>
-            <li class="bold"><a href="index.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i> Order Food</a>
-            </li>
-                <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> My Orders</a>
-                            <div class="collapsible-body">
-                                <ul>
-								<li><a href="orders.php">All Orders</a>
-                                </li>
-								<?php
-									$sql = mysqli_query($con, "SELECT DISTINCT status FROM orders WHERE customer_id = $user_id;");
-									while($row = mysqli_fetch_array($sql)){
-                                    echo '<li><a href="orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+
+         <aside id="left-sidebar-nav">
+             <ul id="slide-out" class="side-nav menu fixed leftnavset" style="border-top-right-radius: 8px;">
+                 <nav class="nav-extended">
+                     <li class="user-details teal lighten-2">
+                         <div class="row">
+                             <div class="col col s4 m4 l4">
+                                 <img src="images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
+                             </div>
+                             <div class="col col s8 m8 l8">
+                                 <ul id="profile-dropdown" class="dropdown-content">
+
+                                     <li><a href="routers/logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
+                                     </li>
+                                 </ul>
+                             </div>
+                             <div class="col col s8 m8 l8">
+                                 <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?php echo $name;?> <i class="mdi-navigation-arrow-drop-down right"></i></a>
+                                 <p class="user-roal"><?php echo $role;?></p>
+                             </div>
+                         </div>
+                     </li>
+                     <li class="bold"><a href="index.php"><i class="mdi-action-shop-two"></i> Order Food</a>
+                     <li class="no-padding">
+                         <ul class="collapsible collapsible-accordion">
+                             <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>My Orders</a>
+                                 <div class="collapsible-body">
+                                     <ul>
+                                         <li><a href="orders.php">My Orders</a>
+                                         </li>
+                                         <?php
+                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders WHERE customer_id = $user_id;");
+                                         while($row = mysqli_fetch_array($sql)){
+                                             echo '<li><a href="orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
-									}
-									?>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan active"><i class="mdi-action-question-answer"></i> Tickets</a>
-                            <div class="collapsible-body">
-                                <ul>
-								<li class="<?php
-								if(!isset($_GET['status'])){
-										echo 'active';
-									}?>
-									"><a href="tickets.php">All Tickets</a>
-                                </li>
-								<?php
-									$sql = mysqli_query($con, "SELECT DISTINCT status FROM tickets WHERE poster_id = $user_id AND not deleted;");
-									while($row = mysqli_fetch_array($sql)){
-									if(isset($_GET['status'])){
-										$status = $row['status'];
-									}
-                                    echo '<li class='.(isset($_GET['status'])?($status == $_GET['status'] ? 'active' : ''): '').'><a href="tickets.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                         }
+                                         ?>
+                                     </ul>
+                                 </div>
+                             </li>
+                         </ul>
+                     </li>
+                     <li class="no-padding">
+                         <ul class="collapsible collapsible-accordion">
+                             <li class="bold active"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-question-answer"></i>Tickets</a>
+                                 <div class="collapsible-body">
+                                     <ul>
+                                         <li class="bold active"><a href="tickets.php">My Tickets</a>
+                                         </li>
+                                         <?php
+                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM tickets WHERE poster_id = $user_id AND not deleted;");
+                                         while($row = mysqli_fetch_array($sql)){
+                                             echo '<li><a href="tickets.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
-									}
-									?>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>			
-            <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i> Account</a>
-            </li>				
-        </ul>
-        <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu" style="color: mediumaquamarine;"></i></a>
-        </aside>
+                                         }
+                                         ?>
+                                     </ul>
+                                 </div>
+                             </li>
+                         </ul>
+                     </li>
+                     <li class="bold"><a href="wallet.php" class="waves-effect waves-cyan"><i class="mdi-action-account-balance-wallet"></i>My Wallet</a>
+                     </li>
+                     <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-action-account-box"></i>Account</a>
+                     </li>
+                     <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-settings"></i>Settings</a>
+                     </li>
+                 </nav>
+             </ul>
+             <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan z-depth-0"><i class="mdi-navigation-menu" style="color: white;"></i></a>
+         </aside>
        
       <section id="content">
 

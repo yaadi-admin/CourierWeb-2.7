@@ -1,51 +1,16 @@
 <?php
 include 'includes/connect.php';
 include 'includes/wallet.php';
-
+//include 'includes/location.php';
 if($_SESSION['customer_sid']==session_id())
 {
+    $usr_address = "";
+    $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
+    while($row = mysqli_fetch_array($useraddress))
+    {
+       $usr_address = $row['address'];
+    }
     $counter = 0;
-    $image_di = "";
-    $image_di2 = "";
-    $image_di3 = "";
-
-    $result = mysqli_query($con, "SELECT * FROM users where id= '540' AND not deleted;");
-    while($row = mysqli_fetch_array($result))
-    {
-        $image = $row['image_dir'];
-
-        if ($image != ''){
-            $image_di = $image;
-        }
-        else if ($image == ''){
-            $image_di = 'images/yaadi-food.jpg';
-        }
-    }
-    $result2 = mysqli_query($con, "SELECT * FROM users where id= '486' AND not deleted;");
-    while($row = mysqli_fetch_array($result2))
-    {
-        $image = $row['image_dir'];
-
-        if ($image != ''){
-            $image_di2 = $image;
-        }
-        else if ($image == ''){
-            $image_di2 = 'images/yaadi-food.jpg';
-        }
-    }
-    $result3 = mysqli_query($con, "SELECT * FROM users where id= '524' AND not deleted;");
-    while($row = mysqli_fetch_array($result3))
-    {
-        $image = $row['image_dir'];
-
-        if ($image != ''){
-            $image_di3 = $image;
-        }
-        else if ($image == ''){
-            $image_di3 = 'images/yaadi-food.jpg';
-        }
-    }
-
     if(!empty($_SESSION["shopping_cart"]))
     {
         foreach($_SESSION["shopping_cart"] as $keys => $values) {
@@ -94,6 +59,8 @@ if($_SESSION['customer_sid']==session_id())
             }
         }
     }
+
+
     ?>
 
     <!DOCTYPE html>
@@ -103,7 +70,8 @@ if($_SESSION['customer_sid']==session_id())
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Order Food</title>
+        <title>Order Food Online | Have it delivered</title>
+        <!--         TODO: Add meta description for this page -->
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -117,19 +85,8 @@ if($_SESSION['customer_sid']==session_id())
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Raleway:900&display=swap" rel="stylesheet">
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('.carousel');
-                var instances = M.Carousel.init(elems, options);
-            });
-
-            // Or with jQuery
-
-            $(document).ready(function(){
-                $('.carousel').carousel();
-            });
-
-        </script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
         <style type="text/css">
             ul.side-nav.leftnavset{top:64px;overflow:hidden;  }
             .side-nav.fixed.leftnavset .collapsible-body li.active{background-color:rgba(0,0,0,0.04)}
@@ -151,9 +108,60 @@ if($_SESSION['customer_sid']==session_id())
                     margin-bottom: 20px;
                 }
             }
+            label{
+                color: black;
+            }
 
+            .tabs .indicator {
+                background-color: #a21318;
+            }
+            .scrolling-wrapper {
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;
+            }
+            .scrolling-wrapper .smallcard {
+                display: inline-block;
+            }
 
+            .scrolling-wrapper-flexbox {
+                display: -webkit-box;
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+            .scrolling-wrapper-flexbox .smallcard {
+                -webkit-box-flex: 0;
+                flex: 0 0 auto;
+                margin-right: 3px;
+            }
+
+            .smallcard {
+                width: 110px;
+                height: 60px;
+            }
+
+            .scrolling-wrapper,  {
+                height: 70px;
+                margin-bottom: 20px;
+                width: 100%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .scrolling-wrapper::-webkit-scrollbar, :-webkit-scrollbar {
+                display: none;
+            }
+
+            .chip{
+                background-color: white;
+                width: 120px;
+                height: inherit;
+            }
+            .chip img{
+                width: 48px;
+                height: 48px;
+            }
         </style>
+
     </head>
     <body>
     <div id="loader-wrapper">
@@ -165,18 +173,11 @@ if($_SESSION['customer_sid']==session_id())
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">
-                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Open Sans', ;font-family: 'Akronim';">Yaadi<span style="font-size: 16px;color: mediumspringgreen;"> Food Delivery</span></a><span class="logo-text">Logo</span></h1></li>
+                    <ul style="background-color: white;">
+                        <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO <span id="nearby"></span></b></label>
+                        <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
+                        <li class="right"><a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-shopping-basket" style="color: #a21318;"></i></a></li>
                     </ul>
-
-                    <ul class="right" style="background-color: transparent;border: 0px;margin 0px;margin-bottom: 0px;">
-                        <li>
-                            <a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1" style="color: white;"><i class="mdi-action-shopping-basket"></i></a>
-
-                        </li>
-
-                    </ul>
-
                 </div>
 
             </nav>
@@ -188,8 +189,8 @@ if($_SESSION['customer_sid']==session_id())
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
-                <ul id="slide-out" class="side-nav menu fixed leftnavset">
-                    <nav>
+                <ul id="slide-out" class="side-nav menu fixed leftnavset" style="border-top-right-radius: 8px;">
+                    <nav class="nav-extended">
                         <li class="user-details teal lighten-2">
                             <div class="row">
                                 <div class="col col s4 m4 l4">
@@ -197,7 +198,6 @@ if($_SESSION['customer_sid']==session_id())
                                 </div>
                                 <div class="col col s8 m8 l8">
                                     <ul id="profile-dropdown" class="dropdown-content">
-
                                         <li><a href="routers/logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
                                         </li>
                                     </ul>
@@ -208,7 +208,7 @@ if($_SESSION['customer_sid']==session_id())
                                 </div>
                             </div>
                         </li>
-                        <li class="bold active"><a href="index.php"><i class="mdi-editor-border-color"></i> Order Food</a>
+                        <li class="bold active"><a href="index.php"><i class="mdi-action-shop-two"></i> Order Food</a>
                         <li class="no-padding">
                             <ul class="collapsible collapsible-accordion">
                                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>My Orders</a>
@@ -247,504 +247,564 @@ if($_SESSION['customer_sid']==session_id())
                                 </li>
                             </ul>
                         </li>
-                        <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Account</a>
+                        <li class="bold"><a href="wallet.php" class="waves-effect waves-cyan"><i class="mdi-action-account-balance-wallet"></i>My Wallet</a>
+                        </li>
+                        <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-action-account-box"></i>Account</a>
+                        </li>
+                        <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-settings"></i>Settings</a>
                         </li>
                     </nav>
                 </ul>
-                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu" style="color: mediumaquamarine;"></i></a>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan z-depth-0"><i class="mdi-navigation-menu" style="color: white;"></i></a>
             </aside>
+            <div id="modal1" class="modal bottom-sheet" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
+                <div class="progress"><div class="indeterminate"></div></div>
+            </div>
+        </div>
 
-            <section id="content">
-                <div id="breadcrumbs-wrapper">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col s12 m12 l12" style="background: url(https://image.freepik.com/free-vector/food-pattern-design_1221-27.jpg) repeat fixed;border-radius: 8px;border-top-left-radius: 0px;border-top-right-radius: 0px;">
-                                <span style="background-color: mediumspringgreen;">
-                                    <h5 class="breadcrumbs-title" style="font-weight: 800;mso-bidi-font-style: oblique;color: #fff;width: 150px;background-color: #FFB03B;border-radius: 8px;text-align: center;">Order Food</h5>
-                                    </span>
+        <section class="content"><br>
+            <div class="scrolling-wrapper">
+                        <div class="smallcard">
+                                <div class="column">
+                                    <div>
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                                    <img src="images/fast-food.png">
+                                                <input type="hidden" name="category" value="0">
+                                                <input type="hidden" name="category_name" value="Fast Food">
+                                                Fast Food</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/burger.png">
+                                                    <input type="hidden" name="category" value="1">
+                                                    <input type="hidden" name="category_name" value="Burgers">
+                                            Burgers</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/pizza.png">
+                                                    <input type="hidden" name="category" value="2">
+                                                    <input type="hidden" name="category_name" value="Pizza">
+                                            Pizza</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/meat.png">
+                                                    <input type="hidden" name="category" value="3">
+                                                    <input type="hidden" name="category_name" value="Meat">
+                                            Lunch</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/dessert.png">
+                                                    <input type="hidden" name="category" value="4">
+                                                    <input type="hidden" name="category_name" value="Dessert">
+                                            Dessert</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/seafood.png">
+                                                    <input type="hidden" name="category" value="5">
+                                                    <input type="hidden" name="category_name" value="Seafood">
+                                            Seafood</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/breakfast.png">
+                                                    <input type="hidden" name="category" value="6">
+                                                    <input type="hidden" name="category_name" value="Breakfast">
+                                            Breakfast</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/chicken.png">
+                                                    <input type="hidden" name="category" value="7">
+                                                    <input type="hidden" name="category_name" value="Chicken">
+                                            Chicken</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/healthy.png">
+                                                    <input type="hidden" name="category" value="8">
+                                                    <input type="hidden" name="category_name" value="Healthy">
+                                            Healthy</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                            <form class="validate" action="options.php" method="post">
+                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;">
+                                            <img src="images/chinese.png">
+                                                    <input type="hidden" name="category" value="9">
+                                                    <input type="hidden" name="category_name" value="Chinese">
+                                            Chinese</button>
+                                            </form>
+                                        </div>
+
+                                    </div></div>
+                        </div>
+            </div>
+
+
+            <div class="row">
+                <div class="scrolling-wrapper" style="border-bottom: 1px solid lightgrey;border-top: 1px solid lightgrey;height: 180px;">
+                    <img src="images/footerban.jpg" width="100%" height="100%" style="object-fit: cover">
+                    <img src="images/adban.jpg" width="100%" height="100%" style="object-fit: cover">
+                    <img src="images/topban.jpg" width="100%" height="100%" style="object-fit: cover">
+                </div>
+            </div>
+
+
+<div class="col s12">
+    <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Favorites</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+    <div class="scrolling-wrapper" style="height: 250px;">
+        <?php
+                    $result = mysqli_query($con, "SELECT * FROM users where (role='Restaurant') AND not deleted AND ocassion='Fast Food' OR (id='331' OR id='430' OR id='80' OR id='294' OR id='8')  ORDER BY id='53' DESC, id='331' DESC, id='430' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+                    while($row = mysqli_fetch_array($result))
+                    {
+                        if ($row['id'] != "297"){
+                            $dis_fee = 0;
+                            $address = $row['address'];
+                            $addressFrom = $address;
+                            $addressTo   = $usr_address;
+                            $distance = 1.5;
+                            $image = $row['image_dir2'];
+                            $image_dir = '';
+                            $restaurant_id = $row['id'];
+                            $restaurant_name = $row['name'];
+
+                            $mon = $row['mon'];
+                            $monc = $row['monc'];
+
+                            if ($image != ''){
+                                $image_dir = $image;
+                            }
+                            else if ($image == ''){
+                                $image_dir = 'images/yaadi-food.jpg';
+                            }
+
+                            if($distance <= 0.5 && $distance > 0.0){
+                                $dis_fee = 350;
+                            }
+                            if($distance <= 1.0 && $distance > 0.5){
+                                $dis_fee = 400;
+                            }
+                            if($distance <= 1.5 && $distance > 1.0){
+                                $dis_fee = 450;
+                            }
+                            if($distance <= 2.0 && $distance >= 1.5){
+                                $dis_fee = 500;
+                            }
+                            if($distance <= 2.5 && $distance >= 2.0){
+                                $dis_fee = 550;
+                            }
+                            if($distance <= 3.0 && $distance >= 2.5){
+                                $dis_fee = 600;
+                            }
+                            if($distance <= 3.5 && $distance >= 3.0){
+                                $dis_fee = 650;
+                            }
+                            if($distance <= 4.0 && $distance >= 3.5){
+                                $dis_fee = 700;
+                            }
+                            if($distance <= 4.5 && $distance >= 4.0){
+                                $dis_fee = 750;
+                            }
+                            if($distance <= 5.0 && $distance >= 4.5){
+                                $dis_fee = 800;
+                            }
+                            if($distance <= 5.5 && $distance >= 5.0){
+                                $dis_fee = 850;
+                            }
+                            if($distance <= 6.0 && $distance >= 5.5){
+                                $dis_fee = 900;
+                            }
+                            if($distance <= 6.5 && $distance >= 6.0){
+                                $dis_fee = 950;
+                            }
+                            if($distance <= 7.0 && $distance >= 6.5){
+                                $dis_fee = 1000;
+                            }
+
+                            ?>
+        <div class="smallcard" style="width: 260px;">
+            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                <div class="column">
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                    <div class="card-image">
+                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                    </div></button>
+                                <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
+                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                    <label style="font-size: 10px;">⏱️ <b>45 - 60 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--Notice Board-->
-                <div class="container">
-                    <p class="caption">
-                    <blockquote style="border-radius:12px;">
-                        <b style="font-size: 12px;">Welcome to Yaadi food delivery ♨</b>
-
-                    <blockquote style="border-radius:8px;"><p class="caption" style="font-size: 16px;"><b style="font-family: Bangers, cursive;font-size: 18px;">Yaadi.co</b> | <b>Anywhere,</b> Anytime, <b>Online<b style="font-family: Bangers, cursive;font-size: 18px;">!</b></b></p></blockquote>
-                    </p>
-
-                </div>
-<!--                                End of notice board-->
-            </section>
-
-            <div id="modal1" class="modal bottom-sheet">
-                <div class="modal-content">
-                    <h6>My Cart</h6>
-                    <ul id="issues-collection" class="collection center-align" style="border-radius:16px;width: auto;">
-                        <?php
-                        $result = mysqli_query($con, "SELECT * FROM users where id= $user_id AND not deleted;");
-                        while($row = mysqli_fetch_array($result))
-                        {
-                            $res_name = $row['name'];
-                            $phone = $row["contact"];
-
-                            echo '<li class="collection-item avatar" style="width: 100%;">
-                        <i class="mdi-content-content-paste red circle"></i>
-                        <p><strong>Name:</strong> '.$name.'</p>
-                        <p><strong>Contact:</strong> '.$phone.'</p>
-                        </li>';
-                        }
-                        ?>
-                        <?php
-                        if(!empty($_SESSION["shopping_cart"]))
-                        {
-                            $total = 0;
-                            foreach($_SESSION["shopping_cart"] as $keys => $values)
-                            {
-                                ?>
-                                <li class="collection-item" style="width: 100%;">
-                                    <div class="row">
-                                        <div class="col s8">
-                                            <p class="collections-title"><strong><span style="background-color: mediumaquamarine;color: black;border-radius: 8px;width: 20px;">(<?php echo $values["item_quantity"];?>)</span></strong> <?php echo $values["item_name"]; ?></p>
-                                            <span style="font-size: 12px;"><?php echo $values["item_variation"]; ?></span>
-                                        </div>
-
-                                        <div class="col s4"><br>
-                                            <span>$<?php echo $values["item_price"]; ?> JMD</span>
-                                        </div>
-                                        <div class="col s4">
-                                            <a href="index.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger" style="color: darkred;">Remove</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <?php
-                                $total = $total + ($values["item_quantity"] * $values["item_price"]);
-                            }
-                            ?>
-
-                            <li class="collection-item" style="width: 100%;">
-                                <div class="row">
-                                    <div class="col s8">
-                                        <p class="collections-title"> Sub-total</p>
-                                        <p>Select a restaurant to place your order.</p>
-                                    </div>
-                                    <div class="col s4"><br>
-                                        <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
-                                    </div>
-                                </div>
-                            </li>
-                            <?php
-                        }
-                        ?>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="divider" style="height: inherit;background-color: whitesmoke;">
-                <span class="left" style="padding-left: 5px;"><button class="btn" style="border-radius: 4px;background-color: whitesmoke;border: 1px solid white;color: mediumaquamarine;"><i class="mdi-maps-pin-drop" style="font-size: 24px;"></i></button></span>
-
-
-
-                <span class="left" style="padding-left: 5px;"><button class="btn" style="border-radius: 4px;background-color: whitesmoke;border: 1px solid white;color: mediumaquamarine;"><i class="mdi-av-play-shopping-bag" style="font-size: 24px;"></i></button></span>
-
-
-                <span class="right" style="padding-right: 5px;"><button class="btn" style="border-radius: 4px;background-color: whitesmoke;border: 1px solid white;color: mediumaquamarine;"><i class="mdi-content-filter-list" style="font-size: 24px;"></i></button></span>
-            </div>
-
-            <!--                Start First Category-->
-
-            <section class="content">
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align"  style="font-weight: 300;width: 100%;text-align: center;color: teal;">
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;" disabled><span> Fast Food</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🍟️</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 45 - 60 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Fast Food' ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive" style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </section>
-
-            <div class="divider"></div>
-
-            <section class="content">
-
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align"  style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span>Jamaican Chinese</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🧆</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 30 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Jamaican Chinese' OR ocassion='Chinese' ORDER BY id='53' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive " style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-
-
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-
-
-            </section>
-
-            <div class="divider" style="height: 220px;"><img class="center" src="images/topban.jpg" style="width: 100%;object-fit: scale-down;"></div>
-
-            <section class="content">
-
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align"  style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span>Pizza</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🍕️</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 30 - 45 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Pizza' ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive " style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-
-
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </section>
-
-            <section class="content">
-
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align"  style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span>Deserts</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🍨</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 30 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Desert' ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive " style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-
-
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </section>
-
-            <div class="divider" style="height: 220px;"><img class="center" src="images/adban.jpg" style="width: 100%;object-fit: scale-down;"></div>
-
-            <section class="content">
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align"  style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span>Restaurant & Bar</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🍹️</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 30 - 45 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Restaurant & Bar' ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive " style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-
-
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-
-            </section>
-
-            <div class="divider"></div>
-
-            <section class="content">
-                <div class="responsive col-md-10 text-center" id="menu-filters">
-                    <ul class="center-align" style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span> Seafood</span></a></li>
-                        <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🦞️</span></a></li>
-                        <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 45 - 60 Min.</a></li>
-                    </ul>
-                </div>
-                <div class="scrolling-wrapper">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Seafood' ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $image = $row['image_dir'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-                            $address = $row['address'];
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="col s6 responsive " style="height: auto;">
-                                            <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                    <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                        <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                        <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                        <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                    </div>
-                                                </div></div></button></div>
-                                </form>
-
-
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-
-                <div class="divider"></div>
-
-                <section class="content">
-
-                    <div class="responsive col-md-10 text-center" id="menu-filters">
-                        <ul class="center-align"  style="font-weight: 800;width: 100%;text-align: center;color: teal;">
-                            <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;"><span>Restaurant</span></a></li>
-                            <li><a class="filter" style="border:1px solid #BBBBBB;"><span style="font-size:48px;">🧆</span></a></li>
-                            <li><a style="font-size: 12px;font-weight: 300;color: black;border: 1px solid floralwhite;">⏱️ 30-45 Min.</a></li>
-                        </ul>
-                    </div>
-                    <div class="scrolling-wrapper">
-                        <?php
-                        $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Jerk' OR ocassion='Restaurant' ORDER BY id='53' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                        while($row = mysqli_fetch_array($result))
-                        {
-                            if ($row['id'] != "297"){
-                                $image = $row['image_dir'];
-                                $image_dir = '';
-                                $restaurant_id = $row['id'];
-                                $restaurant_name = $row['name'];
-                                $address = $row['address'];
-                                $mon = $row['mon'];
-                                $monc = $row['monc'];
-
-                                if ($image != ''){
-                                    $image_dir = $image;
-                                }
-                                else if ($image == ''){
-                                    $image_dir = 'images/yaadi-food.jpg';
-                                }
-
-                                ?>
-                                <div class="smallcard"><form class="formValidate" id="formValidate" method="post" action="routers/c-router.php?pgid=<?php echo $restaurant_id; ?>" novalidate="novalidate">
-                                        <div class="column">
-                                            <div class="col s6 responsive " style="height: auto;">
-                                                <button style="border-radius: 16px; background-color: transparent;margin: 0; border: 0px;"><div class="card responsive z-depth-0" style="border-radius:16px;width:100%">
-                                                        <div class="card-image waves-effect waves-block waves-light" style="border-radius:16px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
-                                                            <img class="activator responsive" src="<?php echo $image_dir; ?>" style="width: 100%;height: 200px;object-fit: cover;a" alt="img">
-                                                            <span><span class="left" style="font-size: 10px; color: mediumseagreen;padding-left: 5px;">Open: <?php echo $mon; ?>AM</span> <span class="center" style="font-size: 12px; color: mediumaquamarine;padding-top: 5px;">|</span> <span class="right" style="font-size: 10px; color: darkred;padding-right: 5px;">Close: <?php echo $monc; ?>PM</span></span><br>
-                                                            <span class="text-black title" style="width: 100%;font-weight: 300;font-size: 12px;"><span id="open-status" class="left" style="font-size: 16px;padding-left: 5px;font-weight: 300;color: transparent;background-color: mediumaquamarine;border-radius: 2px;border-radius-bottom-left: 16px;width: 20px;height: 100%;"><b></b>.</span> <span class="center title center" style="padding-top: 2px;"><?php echo $restaurant_name; ?></span> <span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span><span class="right" style="color: darkgoldenrod;padding-top: 2px;padding-right: 5px;">☆</span></span>
-                                                        </div>
-                                                    </div></div></button></div>
-                                    </form>
-
-
-
-                                </div>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </div>
-
-
-                </section>
-
-            </section>
-            <div class="divider" style="height: 220px;"><img class="center" src="images/footerban.jpg" style="width: 100%;object-fit: scale-down;"></div>
+            </form>
 
         </div>
+                            <?php
+                        }
+                    }
+        ?>
+    </div>
 
     </div>
-    <!--    footer -->
+
+            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+
+            <div class="col s12">
+    <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Late Night Cravings</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+    <div class="scrolling-wrapper" style="height: 250px;">
+        <?php
+                    $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Restaurant') AND ocassion='Restaurant & Bar' AND not deleted");
+                    while($row = mysqli_fetch_array($result))
+                    {
+                        if ($row['id'] != "297"){
+                            $dis_fee = 0;
+                            $address = $row['address'];
+                            $addressFrom = $address;
+                            $addressTo   = $usr_address;
+                            $distance = 1.5;
+                            $image = $row['image_dir3'];
+                            $image_dir = '';
+                            $restaurant_id = $row['id'];
+                            $restaurant_name = $row['name'];
+
+                            $mon = $row['mon'];
+                            $monc = $row['monc'];
+
+                            if ($image != ''){
+                                $image_dir = $image;
+                            }
+                            else if ($image == ''){
+                                $image_dir = 'images/yaadi-food.jpg';
+                            }
+
+                            if($distance <= 0.5 && $distance > 0.0){
+                                $dis_fee = 350;
+                            }
+                            if($distance <= 1.0 && $distance > 0.5){
+                                $dis_fee = 400;
+                            }
+                            if($distance <= 1.5 && $distance > 1.0){
+                                $dis_fee = 450;
+                            }
+                            if($distance <= 2.0 && $distance >= 1.5){
+                                $dis_fee = 500;
+                            }
+                            if($distance <= 2.5 && $distance >= 2.0){
+                                $dis_fee = 550;
+                            }
+                            if($distance <= 3.0 && $distance >= 2.5){
+                                $dis_fee = 600;
+                            }
+                            if($distance <= 3.5 && $distance >= 3.0){
+                                $dis_fee = 650;
+                            }
+                            if($distance <= 4.0 && $distance >= 3.5){
+                                $dis_fee = 700;
+                            }
+                            if($distance <= 4.5 && $distance >= 4.0){
+                                $dis_fee = 750;
+                            }
+                            if($distance <= 5.0 && $distance >= 4.5){
+                                $dis_fee = 800;
+                            }
+                            if($distance <= 5.5 && $distance >= 5.0){
+                                $dis_fee = 850;
+                            }
+                            if($distance <= 6.0 && $distance >= 5.5){
+                                $dis_fee = 900;
+                            }
+                            if($distance <= 6.5 && $distance >= 6.0){
+                                $dis_fee = 950;
+                            }
+                            if($distance <= 7.0 && $distance >= 6.5){
+                                $dis_fee = 1000;
+                            }
+
+                            ?>
+        <div class="smallcard" style="width: 300px;">
+            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                <div class="column">
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                    <div class="card-image">
+                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                    </div></button>
+                                <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
+                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                    <label style="font-size: 10px;">⏱️ <b>40 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+                            <?php
+                        }
+                    }
+        ?>
+    </div>
+
+    </div>
+            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+
+ <div class="col s12">
+     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Special Offers</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+
+     <div class="scrolling-wrapper" style="height: 250px;">
+         <?php
+         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Restaurant'");
+         while($row = mysqli_fetch_array($result))
+         {
+             if ($row['id'] != "297"){
+                 $dis_fee = 0;
+                 $address = $row['address'];
+                 $addressFrom = $address;
+                 $addressTo   = $usr_address;
+                 $distance = 1.5;
+                 $image = $row['image_dir3'];
+                 $image_dir = '';
+                 $restaurant_id = $row['id'];
+                 $restaurant_name = $row['name'];
+                 $mon = $row['mon'];
+                 $monc = $row['monc'];
+
+                 if ($image != ''){
+                     $image_dir = $image;
+                 }
+                 else if ($image == ''){
+                     $image_dir = 'images/yaadi-food.jpg';
+                 }
+
+                 if($distance <= 0.5 && $distance > 0.0){
+                     $dis_fee = 350;
+                 }
+                 if($distance <= 1.0 && $distance > 0.5){
+                     $dis_fee = 400;
+                 }
+                 if($distance <= 1.5 && $distance > 1.0){
+                     $dis_fee = 450;
+                 }
+                 if($distance <= 2.0 && $distance >= 1.5){
+                     $dis_fee = 500;
+                 }
+                 if($distance <= 2.5 && $distance >= 2.0){
+                     $dis_fee = 550;
+                 }
+                 if($distance <= 3.0 && $distance >= 2.5){
+                     $dis_fee = 600;
+                 }
+                 if($distance <= 3.5 && $distance >= 3.0){
+                     $dis_fee = 650;
+                 }
+                 if($distance <= 4.0 && $distance >= 3.5){
+                     $dis_fee = 700;
+                 }
+                 if($distance <= 4.5 && $distance >= 4.0){
+                     $dis_fee = 750;
+                 }
+                 if($distance <= 5.0 && $distance >= 4.5){
+                     $dis_fee = 800;
+                 }
+                 if($distance <= 5.5 && $distance >= 5.0){
+                     $dis_fee = 850;
+                 }
+                 if($distance <= 6.0 && $distance >= 5.5){
+                     $dis_fee = 900;
+                 }
+                 if($distance <= 6.5 && $distance >= 6.0){
+                     $dis_fee = 950;
+                 }
+                 if($distance <= 7.0 && $distance >= 6.5){
+                     $dis_fee = 1000;
+                 }
+
+                 ?>
+                 <div class="smallcard" style="width: 260px;">
+                     <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                         <div class="column">
+                             <div class="row">
+                                 <div class="col s12 m6">
+                                     <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                     <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                         <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                             <div class="card-image">
+                                                 <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                             </div></button>
+                                         <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
+                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-radio-button-on right"></i></span><br>
+                                             <label style="font-size: 10px;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+
+                 </div>
+                 <?php
+             }
+         }
+         ?>
+     </div>
+
+</div>
+            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+
+ <div class="col s12">
+     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Fastest Near You</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+
+     <div class="scrolling-wrapper" style="height: 250px;">
+         <?php
+         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Pizza'  ORDER BY id='53' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+         while($row = mysqli_fetch_array($result))
+         {
+             if ($row['id'] != "297"){
+                 $dis_fee = 0;
+                 $address = $row['address'];
+                 $addressFrom = $address;
+                 $addressTo   = $usr_address;
+                 $distance = 1.5;
+                 $image = $row['image_dir2'];
+                 $image_dir = '';
+                 $restaurant_id = $row['id'];
+                 $restaurant_name = $row['name'];
+                 $mon = $row['mon'];
+                 $monc = $row['monc'];
+
+                 if ($image != ''){
+                     $image_dir = $image;
+                 }
+                 else if ($image == ''){
+                     $image_dir = 'images/yaadi-food.jpg';
+                 }
+
+                 if($distance <= 0.5 && $distance > 0.0){
+                     $dis_fee = 350;
+                 }
+                 if($distance <= 1.0 && $distance > 0.5){
+                     $dis_fee = 400;
+                 }
+                 if($distance <= 1.5 && $distance > 1.0){
+                     $dis_fee = 450;
+                 }
+                 if($distance <= 2.0 && $distance >= 1.5){
+                     $dis_fee = 500;
+                 }
+                 if($distance <= 2.5 && $distance >= 2.0){
+                     $dis_fee = 550;
+                 }
+                 if($distance <= 3.0 && $distance >= 2.5){
+                     $dis_fee = 600;
+                 }
+                 if($distance <= 3.5 && $distance >= 3.0){
+                     $dis_fee = 650;
+                 }
+                 if($distance <= 4.0 && $distance >= 3.5){
+                     $dis_fee = 700;
+                 }
+                 if($distance <= 4.5 && $distance >= 4.0){
+                     $dis_fee = 750;
+                 }
+                 if($distance <= 5.0 && $distance >= 4.5){
+                     $dis_fee = 800;
+                 }
+                 if($distance <= 5.5 && $distance >= 5.0){
+                     $dis_fee = 850;
+                 }
+                 if($distance <= 6.0 && $distance >= 5.5){
+                     $dis_fee = 900;
+                 }
+                 if($distance <= 6.5 && $distance >= 6.0){
+                     $dis_fee = 950;
+                 }
+                 if($distance <= 7.0 && $distance >= 6.5){
+                     $dis_fee = 1000;
+                 }
+
+                 ?>
+                 <div class="smallcard" style="width: 300px;">
+                     <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                         <div class="column">
+                             <div class="row">
+                                 <div class="col s12 m6">
+                                         <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                     <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                         <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                         <div class="card-image">
+                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                         </div></button>
+                                         <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
+                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-check-box right"></i></span><br>
+                                             <label style="font-size: 10px;">⏱️ <b>20 - 30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+
+                 </div>
+                 <?php
+             }
+         }
+         ?>
+     </div>
+
+</div>
+            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+
+ <div class="col s12">
+     <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><i class="mdi-navigation-arrow-forward black-text"></i></b></span></h5></a>
+
+ </div>
+</div>
+</section>
+
+
+
+    </div>
+
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
@@ -764,14 +824,85 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
-    <script type="text/javascript">
-        (function($) {
-            $("#viewcart").click(function() {
-                $("#cartview").toggle();
-            });
-
-        })(jQuery);</script>
     <script>
+        var instance = M.Tabs.init(el, options);
+
+        // Or with jQuery
+
+        $(document).ready(function(){
+            $('.tabs').tabs();
+        });
+    </script>
+    <script type='text/javascript' data-cfasync='false'>
+        window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
+            script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
+    </script>
+    <script>
+        $(document).ready(function(){
+
+
+
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            openTime();
+        //javascript function to display open/closed in the open hours page
+        function openTime() {
+            var d = new Date(); //get the time/date
+            var dy = d.getDay(); //what day is it
+            var moment = String(Date()).slice(16,21); //time as a string
+            var moment = moment.replace(":",""); //remove the colon
+            var open = String(document.getElementById('open')).slice(16,21);
+            var close = String(document.getElementById('closes')).slice(16,21);
+
+            if (dy == 0){//sunday: closed
+                Materialize.toast('Hey there, we are closed today', 4000);
+            }else{
+
+                if(moment > 830 && moment < 1730){//is the current time between 830am and 5:30pm
+                    <?php
+                    $openclosertime = "";
+                    $resultt = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND not deleted ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+                    while($row2 = mysqli_fetch_array($resultt))
+                    {
+
+                        $openclosee = mysqli_query($con, "SELECT * FROM incumbency WHERE id= 2");
+                        while ($row = mysqli_fetch_array($openclosee)) {
+                            $openclosertime = $row['admission'];
+                        }
+                    }
+                    if ($openclosertime == 0) {
+                        echo "Materialize.toast('Ordering is currently active 😊', 8000);";
+                    }
+                    if ($openclosertime == 1) {
+                        echo "Materialize.toast('Ordering is currently closed. <button>Schedule Order</button>', 4000);";
+                        }
+                    ?>
+                }else{
+                    <?php
+
+                        echo "Materialize.toast('Ordering is currently closed. <button>Schedule Order</button>', 4000);";
+                    ?>
+                }
+            }
+        }
+
+        window.setInterval(function(){
+            $('#modal1').html(
+                $.ajax({
+                    url: '../routers/getcart.php',
+                    method: 'post',
+                    data:{},
+                    success: function (data) {
+                        $('#modal1').html(data);
+
+                    }
+                }))
+        }, 4000);
+
+        })
+
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -787,6 +918,14 @@ else
     if($_SESSION['admin_sid']==session_id())
     {
         header("location:admin.php");
+    }
+    if($_SESSION['restaurant_sid']==session_id())
+    {
+        header("location:restaurant.php");
+    }
+    if($_SESSION['delivery_sid']==session_id())
+    {
+        header("location:delivery-dashboard.php");
     }
     else{
         header("location:login.php");

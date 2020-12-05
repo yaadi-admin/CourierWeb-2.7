@@ -9,6 +9,15 @@ if($_SESSION['customer_sid']==session_id())
     $counter = 0;
     $image_dir = "";
 
+    $usr_address = "";
+    $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
+    while($row = mysqli_fetch_array($useraddress))
+    {
+
+        $usr_address = $row['address'];
+
+    }
+
     $result = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
     while($row = mysqli_fetch_array($result))
     {
@@ -47,10 +56,14 @@ if($_SESSION['customer_sid']==session_id())
                     'item_name'               =>     $_POST["hidden_name"],
                     'item_price'          =>     $_POST["hidden_price"],
                     'item_quantity'          =>     $_POST["quantity"],
-                    'item_variation'        =>    $_POST["variation"]
+                    'item_variation'        =>    $_POST["variation"],
+                    'item_variation_type'        =>    $_POST["variation_typee"],
+                    'item_variation_side'        =>    $_POST["variation_side"],
+                    'item_variation_drink'        =>    $_POST["variation_drink"]
                 );
                 $_SESSION["shopping_cart"][$count] = $item_array;
                 $Itemnm = $_POST["hidden_name"];
+                echo '<script>Materialize.toast("'.$Itemnm.' was added to your cart", 4000);</script>';
                 echo '<script>alert("'.$Itemnm.' was added to your cart");</script>';
             }
             else
@@ -81,11 +94,12 @@ if($_SESSION['customer_sid']==session_id())
                 {
                     unset($_SESSION["shopping_cart"][$keys]);
                     echo '<script>alert("Item Removed")</script>';
-                    echo '<script>window.location="category.php?pgid='.$restid.'"</script>';
+//                    echo '<script>window.location="category.php?pgid='.$restid.'"</script>';
                 }
             }
         }
     }
+
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -107,6 +121,8 @@ if($_SESSION['customer_sid']==session_id())
         <link href="js/plugins/data-tables/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Bangers&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
         <style type="text/css">
             ul.side-nav.leftnavset{top:64px;overflow:hidden;  }
             .side-nav.fixed.leftnavset .collapsible-body li.active{background-color:rgba(0,0,0,0.04)}
@@ -155,6 +171,9 @@ if($_SESSION['customer_sid']==session_id())
                     width: 100%;
                 }
             }
+            label{
+                color: black;
+            }
         </style>
     </head>
     <body>
@@ -168,16 +187,10 @@ if($_SESSION['customer_sid']==session_id())
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">
-                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Open Sans', ;font-family: 'Akronim';">Yaadi<span style="font-size: 16px;color: mediumspringgreen;"> Food Delivery</span></a><span class="logo-text">Logo</span></h1></li>
-                    </ul>
-
-                    <ul class="right" style="background-color: transparent;border: 0px;margin 0px;margin-bottom: 0px;">
-                        <li>
-                            <a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1" style="color: white;"><i class="mdi-action-shopping-basket"></i></a>
-
-                        </li>
-
+                    <ul style="background-color: white;">
+                        <label class="center" style="font-size: 8px;color: #a21318;font-weight: 600;"><b>DELIVERING TO</b></label>
+                        <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
+                        <li class="right"><a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-shopping-basket" style="color: #a21318;"></i></a></li>
                     </ul>
 
                 </div>
@@ -189,7 +202,7 @@ if($_SESSION['customer_sid']==session_id())
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
-                <ul id="slide-out" class="side-nav menu fixed leftnavset">
+                <ul id="slide-out" class="side-nav menu fixed leftnavset" style="border-top-right-radius: 8px;">
                     <nav>
                         <li class="user-details teal lighten-2">
                             <div class="row">
@@ -208,7 +221,7 @@ if($_SESSION['customer_sid']==session_id())
                                 </div>
                             </div>
                         </li>
-                        <li class="bold active"><a href="index.php"><i class="mdi-editor-border-color"></i>Order Food</a>
+                        <li class="bold active"><a href="index.php"><i class="mdi-action-shop-two"></i>Order Food</a>
                         <li class="no-padding">
                             <ul class="collapsible collapsible-accordion">
                                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>My Orders</a>
@@ -247,45 +260,159 @@ if($_SESSION['customer_sid']==session_id())
                                 </li>
                             </ul>
                         </li>
-                        <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Account</a>
+                        <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-action-account-box"></i>Account</a>
+                        </li>
+                        <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-settings"></i>Settings</a>
                         </li>
                     </nav>
                 </ul>
-                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu" style="color: mediumaquamarine;"></i></a>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only z-depth-0" style="color: #a21318"><i class="mdi-navigation-menu" style="color: white;"></i></a>
             </aside>
 
             <section id="content">
                 <div id="breadcrumbs-wrapper">
                     <div class="container">
                         <div class="row">
-                            <div class="col s12 m12 l12" style="background: url(<?php echo $image_dir; ?>) repeat fixed center;border-radius: 16px;border-top-left-radius: 0px;border-top-right-radius: 0px;">
+                            <div class="col s12 m12 l12">
                                 <div class="col s4 m4 l4">
-                                    <img src="<?php echo  $image_dir; ?>" alt="" class="circle responsive-img valign profile-image" width="80px;" height="80px;" style="object-fit: scale-down;">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--Notice Board-->
-                <div class="container">
-                    <p class="caption">
-                    <blockquote style="border-radius: 8px;">
+            </section>
 
-                        <b>Welcome to <?php echo $Rnme; ?> ♨️</b>
-                        <div class="responsive col-md-10 text-center" id="menu-filters">
-                            <ul>
+            <div id="modal1" class="modal bottom-sheet" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
+                <?php
+                $GetRest_id = "";
+                ?>
+                <div class="modal-content">
+                    <h5>My Cart</h5>
+                    <ul id="issues-collection" class="collection center-align" style="border-radius:16px;width: auto;">
+                        <?php
+                        $result = mysqli_query($con, "SELECT * FROM users where id= $user_id AND not deleted;");
+                        while($row = mysqli_fetch_array($result))
+                        {
+                            $res_name = $row['name'];
+                            $phone = $row["contact"];
+
+                            echo '<li class="collection-item avatar" style="width: 100%;">
+                        <i class="mdi-content-content-paste red circle"></i>
+                        <p><strong>Name:</strong> '.$name.'</p>
+                        <p><strong>Contact:</strong> '.$phone.'</p>
+                        </li>';
+                        }
+                        ?>
+                        <?php
+                        if(!empty($_SESSION["shopping_cart"]))
+                        {
+                            $total = 0;
+                            foreach($_SESSION["shopping_cart"] as $keys => $values)
+                            {
+                                $mealid = $values['item_id'];
+
+                                $getresttoplace = mysqli_query($con, "SELECT * FROM items where id= $mealid AND not deleted;");
+                                while($row = mysqli_fetch_array($getresttoplace))
+                                {
+                                    $GetRest_id = $row['restaurantid'];
+                                }
+
+                                ?>
+                                <li class="collection-item" style="width: 100%;">
+                                    <div class="row">
+                                        <div class="col s8">
+                                            <h6><span style="background-color: mediumaquamarine;color: black;border-radius: 8px;font-size: 12px;">(<?php echo $values["item_quantity"];?>)</span></h6>
+                                            <p class="collections-title"><?php echo $values["item_name"]; ?></p>
+                                            <?php
+                                            if (isset($values["item_variation"])) {
+                                                echo ' 
+                                                                <label>Flavor: </label><label>'.$values["item_variation"].'</label><br>';
+                                            }
+
+                                            if (isset($values["item_variation_type"])){
+                                                echo '   
+                                                                <label>Type: </label><label>'.$values["item_variation_type"].'</label><br>';
+                                            }
+
+                                            if (isset($values["item_variation_side"])){
+                                                echo '  
+                                                                <label>Side: </label><label>'.$values["item_variation_side"].'</label><br>';
+                                            }
+
+                                            if (isset($values["item_variation_drink"])) {
+                                                echo '  
+                                                                <label>Drink: </label><label>'.$values["item_variation_drink"].'</label><br>';
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <div class="col s4"><br>
+                                            <span>$<?php echo $values["item_price"]; ?> <span style="font-size: 6px;">JMD</span></span><br>
+                                            <a href="category.php?action=delete&id=<?php echo $values["item_id"]; ?>&pgid=<?php echo $restid; ?>"><i class="mdi-navigation-close" style="font-size: 20px;color: maroon;"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
 
                                 <?php
+                                $total = $total + ($values["item_quantity"] * $values["item_price"]);
+                            }
+                            ?>
 
-                                $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
-                                while($row = mysqli_fetch_array($result3))
-                                {
-                                    $restid = $selec_rest;
-                                    $Rnme = $row['name'];
+                            <li class="collection-item" style="width: 100%;">
+                                <div class="row">
+                                    <div class="col s7">
+                                        <p class="collections-title"> Subtotal</p>
+                                        <div class="card-action">
+                                        </div>
+                                    </div>
+                                    <div class="col s5"><br>
+                                        <span><strong>$<?php echo number_format($total); ?> <span style="font-size: 6px;">JMD</span></strong></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <?php
+                    if ($GetRest_id != ""){
+                        $opencloser = "";
+                        $openclose = mysqli_query($con, "SELECT * FROM incumbency WHERE id= 2");
+                        while ($row = mysqli_fetch_array($openclose)) {
+                            $opencloser = $row['admission'];
+                        }
 
-                                    if ($row['name'] == "O M G") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        if ($opencloser == 0) {
+                            echo '<form action="place-order.php?pgid=' . $GetRest_id . '" method="post">
+                        <button class="waves-effect waves-green btn-flat" type="submit" name="action" style="border-radius:6px;">Checkout
+                            <i class="mdi-action-shopping-cart right"></i></button>
+                    </form>';
+                        }
+                        else {
+                            echo '<p class="center">Ordering currently closed<span class="right" style="border-radius: 16px;"><i class="mdi-action-shopping-cart" style="color: maroon;"></i></span></p>';
+                        }
+                    }
+                    else{
+                        echo '<a href="#!" class="modal-close waves-effect waves-green btn-flat">Close <i class="mdi-navigation-close right"></a></i>';
+                    }
+
+                    ?>
+                </div>
+            </div>
+
+            <div class="responsive col-md-10 text-center" id="menu-filters">
+                <ul>
+                    <?php
+                    $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
+                    while($row = mysqli_fetch_array($result3))
+                    {
+                        $restid = $selec_rest;
+                        $Rnme = $row['name'];
+                        if ($row['name'] == "O M G") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -309,10 +436,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "K.F.C") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "K.F.C") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -331,13 +458,14 @@ if($_SESSION['customer_sid']==session_id())
                                                           <li class="left"><a class="filter" data-filter=".desserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
                                                           <li class="right"><a class="filter" data-filter=".drinks" style="background-color: white;color: black;font-weight: 800;">🍹 Drinks</a></li>
                                                           <li class="left"><a class="filter" data-filter=".catering" style="background-color: white;color: black;font-weight: 800;">🍗 Catering</a></li>
+                                                          <li class="left"><a class="filter" data-filter=".secretrecipe" style="background-color: white;color: black;font-weight: 800;">🤫 Secret Recipe</a></li>
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "Burger King") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Burger King") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -352,11 +480,11 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                   
         ';
-                                    }
+                        }
 
-                                    else if ($row['name'] == "Gizmos Chillspot") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        else if ($row['name'] == "Gizmos Chillspot") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -376,10 +504,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                   
         ';
-                                    }
-                                    else if ($row['name'] == "Pizza Hut") {
-                                        echo '<div class="fixed-action-btn" style="width: 220px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Pizza Hut") {
+                            echo '<div class="fixed-action-btn" style="width: 220px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -393,10 +521,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "Mothers") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Mothers") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -413,10 +541,29 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                
         ';
-                                    }
-                                    else if ($row['name'] == "Dominos") {
-                                        echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+
+                        else if ($row['name'] == "Island Grill") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+    <i class="mdi-maps-restaurant-menu teal"></i>
+  </a>
+  <ul class="" style="width: inherit;height: inherit;">
+    <li class="left"><a class="filter active" data-filter=".islandgrillfeatured" style="background-color: white;color: black;font-weight: 800;">🥖 Featured</a></li>
+                                                         <li class="right"><a class="filter " data-filter=".islandgrillchicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+                                                         <li class="left"><a class="filter" data-filter=".islandgrillyabba" style="background-color: white;color: black;font-weight: 800;">🍗 Yabba</a></li>
+                                                         <li class="right"><a class="filter" data-filter=".islandgrillsandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Sandwiches</a></li>
+                                                          <li class="left"><a class="filter" data-filter=".islandgrillsoups" style="background-color: white;color: black;font-weight: 800;">🍲 Soup</a></li>
+                                                          <li class="right"><a class="filter" data-filter=".islandgrillsides" style="background-color: white;color: black;font-weight: 800;">🍟  Sides</a></li>
+                                                          <li class="left"><a class="filter" data-filter=".islandgrillbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+                                                          <li class="right"><a class="filter" data-filter=".islandgrillnuggets" style="background-color: white;color: black;font-weight: 800;">🍲 Nuggets</a></li>
+  </ul>
+</div>                                                
+        ';
+                        }
+                        else if ($row['name'] == "Dominos") {
+                            echo '<div class="fixed-action-btn" style="width: 300px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -428,10 +575,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                   
         ';
-                                    }
-                                    else if ($row['name'] == "Tha Ville") {
-                                        echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Tha Ville") {
+                            echo '<div class="fixed-action-btn" style="width: 300px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -446,10 +593,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "Pablos 2020") {
-                                        echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Pablos 2020") {
+                            echo '<div class="fixed-action-btn" style="width: 300px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -462,10 +609,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "GL Steakhouse") {
-                                        echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "GL Steakhouse") {
+                            echo '<div class="fixed-action-btn" style="width: 300px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -482,10 +629,10 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
         ';
-                                    }
-                                    else if ($row['name'] == "Flamin Wok") {
-                                        echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+                        }
+                        else if ($row['name'] == "Flamin Wok") {
+                            echo '<div class="fixed-action-btn" style="width: 320px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul class="" style="width: inherit;height: inherit;">
@@ -504,11 +651,11 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                  
         ';
-                                    }
-                                    else if ($row['name'] == "Naufragada") {
-                                        echo '
+                        }
+                        else if ($row['name'] == "Naufragada") {
+                            echo '
 <div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul style="width: inherit;height: inherit;">
@@ -523,12 +670,24 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>                                                   
         ';
-                                    }
-                                    else {
-                                        echo '
+                        }
+                        else if ($row['name'] == "Ros Cake-house") {
+                            echo '
+<div class="fixed-action-btn" style="width: 300px;">
+  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+    <i class="mdi-maps-restaurant-menu teal"></i>
+  </a>
+  <ul style="width: inherit;height: inherit;">
+    <li class="left"><a class="filter active" data-filter=".rosall" style="background-color: white;color: black;font-weight: 800;">🥟 All</a></li>
+  </ul>
+</div>                                                   
+        ';
+                        }
+                        else {
+                            echo '
 
                                           <div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-4">
+  <a id="menu" class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
     <i class="mdi-maps-restaurant-menu teal"></i>
   </a>
   <ul style="width: inherit;">
@@ -540,1920 +699,3014 @@ if($_SESSION['customer_sid']==session_id())
   </ul>
 </div>
 ';
-                                    }
-                                }
-
-
-                                ?>
-
-                            </ul>
-                        </div>
-                    </blockquote>
-
-                     </p>
-                </div>
-                <!--                End of notice board-->
-            </section>
-
-            <div id="modal1" class="modal bottom-sheet">
-                <div class="modal-content">
-                    <h6>My Cart</h6>
-                    <ul id="issues-collection" class="collection center-align" style="border-radius:16px;width: auto;">
-                        <?php
-                        $result = mysqli_query($con, "SELECT * FROM users where id= $user_id AND not deleted;");
-                        while($row = mysqli_fetch_array($result))
-                        {
-                            $res_name = $row['name'];
-                            $phone = $row["contact"];
-
-                            echo '<li class="collection-item avatar" style="width: 100%;">
-                        <i class="mdi-content-content-paste red circle"></i>
-                        <p><strong>Name:</strong> '.$name.'</p>
-                        <p><strong>Contact:</strong> '.$phone.'</p>
-                        </li>';
                         }
-                        ?>
-                        <?php
-                        if(!empty($_SESSION["shopping_cart"]))
-                        {
-                            $total = 0;
-                            foreach($_SESSION["shopping_cart"] as $keys => $values)
-                            {
-                                ?>
-                                <li class="collection-item" style="width: 100%;">
-                                    <div class="row">
-                                        <div class="col s8">
-                                            <p class="collections-title"><strong><span style="background-color: mediumaquamarine;color: black;border-radius: 8px;width: 20px;">(<?php echo $values["item_quantity"];?>)</span></strong> <?php echo $values["item_name"]; ?></p>
-                                            <span style="font-size: 12px;"><?php echo $values["item_variation"]; ?></span>
-                                        </div>
-
-                                        <div class="col s4"><br>
-                                            <span>$<?php echo $values["item_price"]; ?> JMD</span>
-                                        </div>
-                                        <div class="col s4">
-                                            <a href="category.php?action=delete&id=<?php echo $values["item_id"]; ?>&pgid=<?php echo $restid; ?>"><span class="text-danger" style="color: darkred;">Remove</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <?php
-                                $total = $total + ($values["item_quantity"] * $values["item_price"]);
-                            }
-                            ?>
+                    }
 
 
-                            <li class="collection-item" style="width: 100%;">
-                                <div class="row">
-                                    <div class="col s8">
-                                        <p class="collections-title"> Sub-total</p>
-                                    </div>
-                                    <div class="col s4"><br>
-                                        <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
-                                    </div>
-                                </div>
-                            </li>
+                    ?>
 
-                            <li class="collection-item" style="width: 100%;">
-                                <div class="row">
-                                    <div class="col s7">
-                                    </div>
-                                    <div class="col s3 left">
-                                        <div class="card-action">
-                                            <form action="place-order.php?pgid=<?php echo $restid ?>" method="post">
-                                                <button value="<?php echo number_format($total); ?>" class="btn cyan waves-effect waves-light center" type="submit" name="action" style="border-radius:8px;">Order
-                                                    <i class="mdi-content-send right"></i></button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div></li>
-                            <?php
-                        }
-                        ?>
-                    </ul>
-                </div>
+                </ul>
             </div>
 
-            <div class="divider"></div>
-
             <section id="menu-list" class="responsive">
-                <div class="container">
-                    <div class="row">
+                <div class="container" style="border: 0px solid transparent;">
+                    <div class="row" style="border: 0px solid transparent;">
+
 
                         <?php
                         $result4 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
                         while($row = mysqli_fetch_array($result4))
                         {
                             ?>
-                            <div id="menu-wrapper">
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='0' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                            <div id="menu-wrapper" style="border: 0px solid transparent;">
+                                <ul class="collection with-header" style="border: 0px solid transparent;">
+                                    <img src="<?php echo ''.$row['image_dir'].''; ?>" height="200px;" width="100%" style="object-fit: cover;border-top-left-radius: 8px;border-top-right-radius: 8px;">
+                                    <li class="collection-header"><h4><?php echo ''.$row['name'].''; ?></h4><p class="caption"><i class="mdi-action-home"></i> <?php echo ''.$row['address'].''; ?><br><i class="mdi-action-perm-phone-msg"></i> <?php echo ''.$row['contact'].''; ?><br><i class="mdi-av-timer"></i> <?php echo ''.$row['monc'].''; ?> PM<br><i class="mdi-action-shop-two"></i> Deals<br />
+
+                                            <?php
+
+                                            if ($row['id'] == 53){
+                                                echo '<h5><label>Promotion</label><br>KFC Secret Recipe</h5>
+                                                <h6>The great taste of KFC Original Recipe for a limited time</h6>';
+                                            }
+                                            else{
+                                                echo '<h6>No current deals</h6>';
+                                            }
+
+                                            ?>
+
+
+
+
+                                        </p></li>
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='0' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="casuals Starttheday bigdeal bkburgers gizmosalads pizzahutamazin motherspatties dominosspecialtypizza thavillechicken pablos2020breakfast glsteakhouseappetizers flaminlunchboxmeals naufragadaomlets menu-restaurant rosall islandgrillfeatured" style="border: 0px solid transparent;border-radius: 8px;width: 100%;">
+
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+
+                                            </div>
+                                            <?php
                                         }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="casuals Starttheday bigdeal bkburgers gizmosalads pizzahutamazin motherspatties dominosspecialtypizza thavillechicken pablos2020breakfast glsteakhouseappetizers flaminlunchboxmeals naufragadaomlets menu-restaurant" style="border: .5px solid #ddd;border-radius: 2px;width: 100%;">
-        <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='1' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    ?>
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='1' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="entrees LunchBeyond mealdeal otherfavourites gizmoplatters pizzahutwings motherschicken dominoschicken thavillefish pablos2020lunch glsteakhousesoupofday flaminfat2fitsalads naufragadasalads menu-restaurant islandgrillchicken" style="border: 0px solid transparent;border-radius: 2px; width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="entrees LunchBeyond mealdeal otherfavourites gizmoplatters pizzahutwings motherschicken dominoschicken thavillefish pablos2020lunch glsteakhousesoupofday flaminfat2fitsalads naufragadasalads menu-restaurant" style="border: .5px solid #ddd;border-radius: 2px; width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='2' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    ?>
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='2' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="sides Subs zingers bksalads gizmoburgers pizzahutsides mothersburgers dominosides thavillesides pablos2020dinner glsteakhouseentrees flaminlunchboxspecials naufragadaspecialtyburger menu-restaurant islandgrillyabba" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="sides Subs zingers bksalads gizmoburgers pizzahutsides mothersburgers dominosides thavillesides pablos2020dinner glsteakhouseentrees flaminlunchboxspecials naufragadaspecialtyburger menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='3' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    ?>
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='3' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="beverages Wraps bigsix bkbeverages gizmowrapsquesadilla pizzahutbeverages mothersbreakfastsandwiches dominosdrinks thavilleservedwith pablos2020dessert glsteakhousesteak flaminsoups&appetizers naufragadapancakeswaffles menu-restaurant islandgrillsandwiches" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;border: 0px solid transparent;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="beverages Wraps bigsix bkbeverages gizmowrapsquesadilla pizzahutbeverages mothersbreakfastsandwiches dominosdrinks thavilleservedwith pablos2020dessert glsteakhousesteak flaminsoups&appetizers naufragadapancakeswaffles menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='4' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='4' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="ChineseFare buckets bksides gizmopasta pizzahutdesserts motherbreakfastsmeals dominosdesserts thavillemeat pablos2020sides glsteakhouseseafood flaminchickendishes naufragadaparfaits menu-restaurant islandgrillsoup" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="ChineseFare buckets bksides gizmopasta pizzahutdesserts motherbreakfastsmeals dominosdesserts thavillemeat pablos2020sides glsteakhouseseafood flaminchickendishes naufragadaparfaits menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='5' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='5' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="JamaicanFare bigboxes bkdesserts gizmovegetarian pizzahutpasta motherssandwiches thavillebeverages pablos2020soupoftheday glsteakhousechicken flaminchopsuey naufragadawraps menu-restaurant islandgrillsides" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="JamaicanFare bigboxes bkdesserts gizmovegetarian pizzahutpasta motherssandwiches thavillebeverages pablos2020soupoftheday glsteakhousechicken flaminchopsuey naufragadawraps menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='6' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='6' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Roti wings kingdeal menu-restaurant pizzahutcombos mothersbeverages thavilledonetoorder gizmoluncspecial glsteakhousesideorder flamintofudishes naufragadataconacho islandgrillbeverages" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Roti wings kingdeal menu-restaurant pizzahutcombos mothersbeverages thavilledonetoorder gizmoluncspecial glsteakhousesideorder flamintofudishes naufragadataconacho" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='7' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='7' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Soups krispers bkkingjr menu-restaurant motherssoups gizmodesert thavillepastries glsteakhousesauces flaminporkdishes naufragadagyros islandgrillnuggets" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Soups krispers bkkingjr menu-restaurant motherssoups gizmodesert thavillepastries glsteakhousesauces flaminporkdishes naufragadagyros" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='8' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='8' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Appetizers value menu-restaurant mothersicecream gizmomain glsteakhousedessert flaminnoodledishes" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Appetizers value menu-restaurant mothersicecream gizmomain glsteakhousedessert flaminnoodledishes" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='9' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='9' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Salads kfsides menu-restaurant motherspastry gizmomixdrink glsteakhousebeverages flaminseafooddishes" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Salads kfsides menu-restaurant motherspastry gizmomixdrink glsteakhousebeverages flaminseafooddishes" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='10' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='10' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Seafood popcornchicken menu-restaurant gizmosideorder flaminfriedrice" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Seafood popcornchicken menu-restaurant gizmosideorder flaminfriedrice" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='11' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='11' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Poultry kfsalads menu-restaurant gizmostarter flamindrinks" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Poultry kfsalads menu-restaurant gizmostarter flamindrinks" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='12' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='12' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="FromtheGrill desserts menu-restaurant gizmospecial" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="FromtheGrill desserts menu-restaurant gizmospecial" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='13' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='13' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Vegetarian drinks menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Vegetarian drinks menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='14' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='14' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="PastaFusion catering menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="PastaFusion catering menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='15' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='15' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="EatMeetSipTalk secretrecipe menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="EatMeetSipTalk menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='16' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='16' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Sides menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Sides menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='17' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='17' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Mothersdayspecial menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Mothersdayspecial menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                                <?php
-                                $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='18' AND not deleted ORDER BY id ASC;");
-                                if(mysqli_num_rows($result) > 0)
-                                {
-                                    while($row = mysqli_fetch_array($result))
+                                    <?php
+                                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='18' AND not deleted ORDER BY id ASC;");
+                                    if(mysqli_num_rows($result) > 0)
                                     {
-                                        $detail = "";
-                                        $size = "";
-                                        if ($row['size'] == 0){
-                                            $size = "Mini";
+                                        while($row = mysqli_fetch_array($result))
+                                        {
+                                            $detail = "";
+                                            $size = "";
+                                            if ($row['size'] == 0){
+                                                $size = "Mini";
+                                            }
+                                            else if ($row['size'] == 1){
+                                                $size = "Small";
+                                            }
+                                            else if ($row['size'] == 2){
+                                                $size = "Medium";
+                                            }
+                                            else if ($row['size'] == 3){
+                                                $size = "Large";
+                                            }
+
+
+                                            if ($row['description'] == ""){
+                                                $detail = "No detail available";
+                                            }
+
+                                            else {
+                                                $detail = $row['description'];
+                                            }
+                                            ?>
+                                            <div class="Fathersdayspecial menu-restaurant" style="border: 0px solid transparent;border-radius: 4px;width: 100%;">
+                                                <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
+                                                <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
+                                                    <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
+                                                        <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
+                                                        <p class="title"><label for="quantity">Quantity:</label>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                        <?php
+                                                        if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
+                                                            echo '';
+                                                        }
+                                                        else{
+                                                            echo '
+                                                       <p>
+                                                    <label for="variation">Choose Flavor</label>
+                                                    <select name="variation">';
+                                                            if ($row["typeone"] !== ""){
+                                                                echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
+                                                            }
+                                                            if ($row["type2"] !== ""){
+                                                                echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
+                                                            }
+                                                            if ($row["type3"] !== ""){
+                                                                echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
+                                                            }
+                                                            if ($row["type4"] !== ""){
+                                                                echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
+                                                            }
+
+                                                            echo'
+                                                    </select>
+                                                </p>';
+                                                        }
+                                                        ?>
+                                                        <?php
+                                                        if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
+                                                        }
+                                                        else{
+                                                            echo '<p>
+                                                    <label for="variation_typee">Choose type</label>
+                                                    <select name="variation_typee">';
+
+                                                            if ($row["type5"] !== ""){
+                                                                echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
+                                                            }
+                                                            if ($row["type6"] !== ""){
+                                                                echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
+                                                            }
+                                                            if ($row["type7"] !== ""){
+                                                                echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
+                                                            }
+                                                            if ($row["type8"] !== ""){
+                                                                echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
+                                                            }
+
+                                                            echo '
+                                                    </select>
+
+                                                </p>';
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_side">Choose Side</label>
+                                                        <select name="variation_side">';
+
+                                                            if ($row["type9"] !== ""){
+                                                                echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
+                                                            }
+                                                            if ($row["type10"] !== ""){
+                                                                echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
+                                                            }
+                                                            if ($row["typeeleven"] !== ""){
+                                                                echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
+                                                            }
+                                                            if ($row["typetwelve"] !== ""){
+                                                                echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+
+                                                        ?>
+
+                                                        <?php
+                                                        if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
+                                                        }
+                                                        else{
+                                                            echo '
+                                                    <p>
+                                                        <label for="variation_drink">Choose Drink</label>
+                                                        <select name="variation_drink">';
+                                                            if ($row["typethirteen"] !== ""){
+                                                                echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
+                                                            }
+                                                            if ($row["typefourteen"] !== ""){
+                                                                echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
+                                                            }
+                                                            if ($row["typefifteen"] !== ""){
+                                                                echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
+                                                            }
+                                                            if ($row["typesixteen"] !== ""){
+                                                                echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
+                                                            }
+                                                            echo '
+                                                        </select>
+                                                    </p>';
+                                                        }
+                                                        ?>
+                                                        <?php echo $detail; ?>
+                                                        <button type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
+                                                        <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                                    </form>
+                                                </li>
+                                            </div>
+                                            <?php
                                         }
-                                        else if ($row['size'] == 1){
-                                            $size = "Small";
-                                        }
-                                        else if ($row['size'] == 2){
-                                            $size = "Medium";
-                                        }
-                                        else if ($row['size'] == 3){
-                                            $size = "Large";
-                                        }
-
-
-                                        if ($row['description'] == ""){
-                                            $detail = "No detail available";
-                                        }
-
-                                        else {
-                                            $detail = $row['description'];
-                                        }
-                                        ?>
-                                        <div class="Fathersdayspecial menu-restaurant" style="border: .5px solid #ddd;border-radius: 4px;width: 100%;">
-            <span class="clearfix">
-          <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>">
-
-               <table border="1" style="border-radius: 16px;background-color: white;">
-                <tr>
-
-                    <img class="mySlides product_drag" src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "")
-                    {
-                        echo $row['img_addr'];
-                    }
-                    else
-                        echo "images/itemdefault.png"; ?>"
-
-                         style="<?php if ($row['img_addr'] != "0"){
-                             echo "border: 1px solid #ddd;border-radius: 32px;padding: 5px;width: 100%;object-fit: fit;";
-                         }
-                         else
-                             echo "border: 1px solid #ddd;border-radius: 4px;padding: 5px;width: 100%;height: 250px;";?>"
-                         data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-price="<?php echo $row['price']; ?>">
-                </tr>
-
-                <tr class="left">
-                    <td style="width: 200px;text-align:center;background-color: white;color: teal;font-size:20px;font-weight: 400;">
-                        <span class="left" style="background-color: white;border-radius: 4px;color: black;width: inherit;font-size: 12px;"> $<?php echo $row["price"]; ?> </span><br>
-                        <span style="color: black;font-size: 26px;"><?php echo $row["name"]; ?></span><br>
-                        <select name="variation">
-                        <option value="<?php echo $row["type1"]; ?>"><?php echo $row["type1"]; ?></option>
-                            <option value="<?php echo $row["type2"]; ?>"><?php echo $row["type2"]; ?></option>
-                            <option value="<?php echo $row["type3"]; ?>"><?php echo $row["type3"]; ?></option>
-                            <option value="<?php echo $row["type4"]; ?>"><?php echo $row["type4"]; ?></option>
-                            </select>
-                         <span style="font-size: 12px;color: black;"><?php echo $detail; ?></span>
-                    </td>
-                </tr>
-
-                <tr class="right">
-
-                    <td style="text-align:center;font-size:15px;background-color: antiquewhite;border-top-left-radius: 20px;">
-                        <h6>Meal Rating</h6>
-                        <span style="width: 100%;">
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        <span class="mdi-toggle-star-outline" style="width: 15%;"></span>
-                        </span>
-                    <br>
-                        <span><input style="color: darkred;width: 100%;" type="number" max="10" min="1" name="quantity" value="1"/></span>
-                        <span><button type="submit" name="add_to_cart" style="margin-top:5px;border-radius: 8px;font-family: Open Sans, ;font-family: Akronim;font-size:16px;width: 100px;" class="btn-floating" value="" style="border-radius:6px;"><i class="mdi-action-shopping-basket"></i></button></span><br>
-                    </td>
-                 </tr>
-
-                <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-
-             </table>
-
-           </form>
-        </span>
-                                        </div>
-                                        <?php
                                     }
-                                }
-                                ?>
-
+                                    ?>
+                                </ul>
                             </div>
-
                             <?php
                         }
                         ?>
-
                     </div>
                 </div>
             </section>
-
-
         </div>
     </div>
-    <!--    footer -->
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
@@ -2473,13 +3726,6 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
     <script type="text/javascript">
-
-        $('.fixed-action-btn').floatingActionButton({
-            toolbarEnabled: true
-        });
-    </script>
-
-    <script type="text/javascript">
         (function($) {
             $("#menu-filters li a").click(function() {
                 $("#menu-filters li a").removeClass('active');
@@ -2490,31 +3736,17 @@ if($_SESSION['customer_sid']==session_id())
                     $(selectedFilter).slideDown();
                 }, 100);
             });
-
-        })(jQuery);</script>
-
-    <script type="text/javascript">
-        (function($) {
-            $("#viewcart").click(function() {
-                $("#cartview").toggle();
-            });
-
-        })(jQuery);</script>
-
+        })(jQuery);
+    </script>
     </body>
     </html>
-
-
     <?php
-
 }
-
-
 else
 {
     if($_SESSION['restaurant_sid']==session_id())
     {
-        header("location:admin.php");
+        header("location:restaurant.php");
     }
     else{
         header("location:login.php");

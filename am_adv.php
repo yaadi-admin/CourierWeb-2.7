@@ -2,39 +2,24 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
-        $textadvert = "";
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed email accounts for promo";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
         $count = 0;
-        $count2 = 0;
-        $count3 = 0;
-        $count4 = 0;
-        $sql = mysqli_query($con, "SELECT * FROM users WHERE not deleted;");
-        while($row = mysqli_fetch_array($sql)){
-
-            if ($row["contact"] != "" && $row["contact"] != 0){
-                $count++;
-            }
-
-            $mystring = $row["contact"];
-            $findme   = '1876';
-            $findme2   = '876';
-            $pos = strpos($mystring, $findme);
-            $pos2 = strpos($mystring, $findme2 );
-
-            if ($pos === false) {
-                $count4++;
-
-            } else {
-                $count2++;
-            }
-
-            if ($pos2 === false) {
-            } else {
-                $count3++;
-            }
-
-
-            
-
+        $result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer' AND email not LIKE '';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $count++;
         }
 		?>
 <!DOCTYPE html>
@@ -44,7 +29,7 @@ include 'includes/connect.php';
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>Push Notifications</title>
+  <title>Promotions</title>
   <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
   <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
   <meta name="msapplication-TileColor" content="#00bcd4">
@@ -121,11 +106,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul>                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> YAADi</a><span class="logo-text">Logo</span></h1></li>
+                    <ul>
+                        <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
                     <ul class="right">
-                      <li><a href="globalpush.php">Send Advert</a></li>
+                        <li><a href="routers/email-promo.php"><i class="mdi-file-file-download"></i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -158,7 +143,26 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             </li>
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders</a>
+                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders
+                                <?php
+
+                                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '0';");
+                                $counter = 0;
+                                $total = 0;
+                                while($row = mysqli_fetch_array($getamount)) {
+                                    $counter++;
+                                    $total = 0;
+                                    $total+=$counter;
+                                }
+                                if ($total == 0){
+                                    echo '<span class="new badge">'.$total.'</span>';
+                                }
+                                else{
+                                    echo '<span class="new badge">'.$total.'</span>';
+                                }
+
+                                ?>
+                            </a>
                             <div class="collapsible-body">
                                 <ul>
 								<li><a href="all-orders.php">All Orders</a>
@@ -194,87 +198,51 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
       <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Push Notifications
-                  </h5>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
-          <p class="caption">This is the customer accounts, push advertisements to them </p>
-
           <div class="divider"></div>
           <div id="editableTable" class="section">
             <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Customers</h4>
-              </div>
-              <div>
-<table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:33.33%;">Action</th>
-                        <th data-field="name" style="width:33.33%;">Customer</th>
-                        <th data-field="price" style="width:33.33%;">Wallet</th>
-                      </tr>
-                    </thead>
+                <ul class="collection with-header collapsible z-depth-0">
+                    <li class="collection-header"><h4>Promotions <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Emails</span></span></h4><p class="caption">Promotions advertise products and services to customers via email. <span class="right"><a class="waves-effect waves-light modal-trigger" href="#broadcast"><i class="mdi-communication-messenger"></i></a></span></p></li>
 
-                    <tbody>
-				<?php
-				$result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
-				while($row = mysqli_fetch_array($result))
-				{
-                    $name =  $row["name"];
-                    $username = $row["username"];
-                    $email = $row["email"];
-                    $contact = $row["contact"];
-                    $address = $row["address"];
-                    $paw = $row['password'];
-                    $hours = $row['opentime'];
-                    $type = $row['ocassion'];
-                    
-                    $cust_text = "";
-                    
-                    echo '<tr><td><form class="formValidate" id="formValidate1" method="post" action="am_adv_info.php?cust='.$row["id"].'" novalidate="novalidate">
-                    
-                    <button type="submit" name="action" style="border-radius: 8px;"><span class="text-black" style="font-weight: 300;">Message</span>
-                                <i class="mdi-content-send right"></i>
-                              </button></form></td>';
-                    
-					echo '<td>
-<div><span class="text-black" style="font-weight: 300;">'.$name.'</span></div>
-<div><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" disabled><div class="errorTxt01"></div></div>
-</td>';
+                    <div id="broadcast" class="modal modal-fixed-footer">
+                        <form class="formValidate" id="formValidate" method="post" action="routers/promo.php" novalidate="novalidate">
+                        <div class="modal-content">
+                            <h6>Enter Promotion Message</h6>
+                            <textarea spellcheck="true" name="promomsg" id="promomsg" class="materialize-textarea validate" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;"> </textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="modal-close waves-effect waves-green btn-flat submit" type="submit" style="font-size: 12px;">Send <i class="mdi-content-send" style="font-size: 12px;"></i></button>
+                        </div>
+                        </form>
+                    </div>
 
 
-					$key = $row['id'];
-					$sql = mysqli_query($con,"SELECT * from wallet WHERE customer_id = $key;");
-					if($row1 = mysqli_fetch_array($sql)){
-						$wallet_id = $row1['id'];
-						$sql1 = mysqli_query($con,"SELECT * from wallet_details WHERE wallet_id = $wallet_id;");
-						if($row2 = mysqli_fetch_array($sql1)){
-							$balance = $row2['balance'];
-						}
-					}
-					echo '<td><label for="balance">Balance</label><input id="balance" name="'.$row['id'].'_balance" value="'.$balance.'" type="number" data-error=".errorTxt01" disabled><div class="errorTxt01"></div></td></tr>';
-				}
-				?>
-                    </tbody>
-</table>
+        <?php
+        $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Customer' AND email not LIKE '') AND not deleted;");
+        while($row = mysqli_fetch_array($result)) {
 
-            <div class="divider"></div>
+
+                    echo '<li class="collection-item avatar" style="background-color: white;color: black;">
+      <img src="images/yaadi-icon.png" alt="" class="circle">
+      <span class="title">' . $row["name"] . '</span>
+      <p>Email: ' . $row["email"] . '<br>
+      Contact: ' . $row["contact"] . '
+      </p>
+      <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-action-info-outline" style="font-size: 21px;"></i></a>
+      </li>';
+
+        }
+
+            ?>
             
-          </div>
+                </ul>
         </div>
         </section>      
     </div>
@@ -283,84 +251,45 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   <footer class="page-footer">
     <div class="footer-copyright">
       <div class="container">
-        <span>Copyright © 2019 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi® Ltd</a> All rights reserved.</span>
+        <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi.Co</a> All rights reserved.</span>
         <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
         </div>
     </div>
   </footer>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>    
-    <!--angularjs-->
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
-    <!--materialize js-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <!--scrollbar-->
     <script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
-    	
     <script type="text/javascript" src="js/plugins.min.js"></script>
-
-    <script type="text/javascript" src="js/custom-script.js">
-    $("#formValidate").validate({
-        rules: {
-            username: {
-                required: true,
-                minlength: 5,
-            },
-            password: {
-                required: true,
-                minlength: 5,
-            },
-            name: {
-                required: true,
-                minlength: 5,
-			},
-            contact: {
-                required: true,
-                minlength: 4,
-			},
-            address: {
-                minlength: 10,
-			},		
-            balance: {
-                required: true,
-			},				
-		},
-        messages: {
-           username:{
-                required: "Enter a username",
-                minlength: "Enter at least 5 characters"
-            },	
-           password:{
-                required: "Provide a prove",
-                minlength: "Password must be atleast 5 characters long",
-            },	
-           name:{
-                required: "Please provide CVV number",
-                minlength: "Enter at least 5 characters",		
-            },	
-           contact:{
-                required: "Please provide card number",
-                minlength: "Enter at least 4 digits",
-            },	
-           address:{
-                minlength: "Address must be atleast 10 characters long",		
-            },		
-           balance:{
-                required: "Please provide a balance.",		
-            },				
-		},
-        errorElement : 'div',
-        errorPlacement: function(error, element) {
-          var placement = $(element).data('error');
-          if (placement) {
-            $(placement).append(error)
-          } else {
-            error.insertAfter(element);
+  <script>
+      $("#formValidate").validate({
+          rules: {
+              promotionmsg: {
+                  required: true,
+                  minlength: 10,
+                  maxlength: 100
+              },
+          },
+          messages: {
+              contact: {
+                  required: "Enter the promotion message",
+                  minlength: "Minimum 10 characters are required.",
+                  maxlength: "Maximum 100 characters are allowed"
+              },
+          },
+          errorElement : 'div',
+          errorPlacement: function(error, element) {
+              var placement = $(element).data('error');
+              if (placement) {
+                  $(placement).append(error)
+              } else {
+                  error.insertAfter(element);
+              }
           }
-        }
-     }); 
-    </script>
+      });
+  </script>
     <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -368,28 +297,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 
   gtag('config', 'UA-153638148-1');
 </script>
-    <script>
-        const body = document.querySelector('body');
-const searchBtn = document.querySelector('#search');
-const searchInput = document.querySelector('#search-input');
-let active = false;
-
-body.addEventListener('click', (e) => {
-  if(e.target.id === 'search' || e.target.id === 'search-input' || e.target.id === 'search-icon') {
-    if(!active) {
-      searchBtn.classList.add('active');
-      searchInput.classList.add('active');
-      active = true;
-    }
-  } else {
-      searchBtn.classList.remove('active');
-      searchInput.classList.remove('active');
-      searchInput.value = '';
-      active = false;
-  }
-});</script>
 </body>
-
 </html>
 <?php
 	}

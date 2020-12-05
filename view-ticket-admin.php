@@ -4,7 +4,17 @@ include 'includes/wallet.php';
 $continue=0;
 if($_SESSION['admin_sid']==session_id())
 {
-		$ticket_id = $_GET['id'];
+    $ticket_id = $_GET['id'];
+    $user_id = $_SESSION['admin_sid'];
+    $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+    $date->setTimezone(new DateTimeZone('America/Jamaica'));
+    $timestamp = $date->format('Y-m-d H:i:sP');
+    $url = $_SERVER['REQUEST_URI'];
+    $action = "Viewed ticket ID: $ticket_id";
+    $sql2 = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$user_id', '$action', '$url', '$timestamp')";
+    $con->query($sql2);
+
+
 		$sql1 = "SELECT * FROM tickets WHERE id = $ticket_id;";
 		if(mysqli_num_rows(mysqli_query($con,$sql1))>0){
 			$row  = $con->query($sql1)->fetch_assoc();
@@ -107,8 +117,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> YAADi</a><span class="logo-text">Logo</span></h1></li>
+                    <ul class="left">
+                        <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
                     <ul class="right hide-on-med-and-down">                        
                         <li><a href="#" class="waves-effect waves-block waves-light"><i class="mdi-editor-attach-money"><?php echo $balance;?></i></a>
@@ -181,7 +191,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-social-person"></i> Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>				
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>

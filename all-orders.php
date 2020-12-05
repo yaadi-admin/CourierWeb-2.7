@@ -2,6 +2,19 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed all Orders";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +48,9 @@ ul.side-nav.leftnavset li.user-details #profile-dropdown a{padding:8px 15px}
 ul.side-nav.leftnavset .profile-btn{margin:0;text-transform:capitalize;padding:0;text-shadow:1px 1px 1px #444;font-size:15px}
 ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 .side-nav.fixed.leftnavset .collapsible-body li.active>a{color:#A82128}ul.side-nav.leftnavset li.active>a{color:#A82128}
+        label{
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +64,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans';font-family: 'Akronim';font-size:42px;"><a href="admin.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
+                    </ul>
+                    <ul class="right">
+                        <li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open"></i></a></li>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock"></i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -122,12 +142,39 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                             </div>
                         </li>
                     </ul>
-                </li>			
-            <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+                </li>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>				
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
+
+        <div id="logac" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Close ordering?</h5>
+                <h6>Enter password</h6>
+                <input name="validatore" id="validatore" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/act-orders.php" method="post">
+                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 1; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div id="logack" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Activate ordering?</h5>
+                <h6>Enter password</h6>
+                <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/deac-orders.php" method="post">
+                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 0; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
       <section id="content">
           <div id="breadcrumbs-wrapper">
           <div class="container">
@@ -139,8 +186,17 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           </div>
         </div>
         <div class="container">
-          <p class="caption">List of orders by customers with details</p>
-          <div class="divider"></div>
+          <p class="caption"><?php
+              $orderstat = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=2;");
+              while($row = mysqli_fetch_array($orderstat)) {
+
+                  if ($row['admission'] == 0) {
+                      echo '<p class="caption">Ordering <a href="all-orders.php"><span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></a></p>';
+                  } else if ($row['admission'] != 0) {
+                      echo '<p class="caption">Ordering <a href="all-orders.php"><span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></a></p>';
+                  }
+              }
+          ?></p>
             <div id="work-collections" class="section">
              
 					<?php
@@ -153,20 +209,29 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 					$sql = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE '$status';");
 					echo '<div class="row">
                 <div>
-                    <h4 class="header">List</h4>
                     <ul id="issues-collection" class="collection">';
 					while($row = mysqli_fetch_array($sql))
 					{
+                        $filler = $row['assignedto'];
+                        $fillername = "Not yet filled";
+
+                        $getname = mysqli_query($con, "SELECT * FROM users WHERE id = $filler;");
+                        while($row5 = mysqli_fetch_array($getname))
+                        {
+                            $fillername = $row5['name'];
+                        }
+
 						$status = $row['status'];
 						$deleted = $row['deleted'];
 						echo '<li class="collection-item avatar" id="'.$row['id'].'">
                               <i class="mdi-content-content-paste red circle"></i>
                               <span class="collection-header">Order No. '.$row['id'].'</span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
-                              <p><strong>Delivery Region:</strong> '.$row['payment_type'].'</p>
+                              <p><strong>Filled By:</strong> '.$fillername.'</p>
                               <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>							  
 							  <p><strong>Status:</strong> '.($deleted ? $status : '
 							  <form method="post" action="routers/edit-orders.php">
+							  <input type="hidden" value="'.$cus.'" name="cos">
 							    <input type="hidden" value="'.$row['id'].'" name="id">
 								<select name="status">
 								<option value="Yet to be delivered" '.($status=='Yet to be delivered' ? 'selected' : '').'>Yet to be delivered</option>
@@ -188,6 +253,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 							while($row3 = mysqli_fetch_array($sql3))
 							{
                                 $phone = $row3['contact'];
+                                $cus = $customer_id;
 							echo '<li class="collection-item">
                             <div class="row">
 							<p><strong>Name: </strong>'.$row3['name'].'</p>
@@ -204,41 +270,89 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 							while($row2 = mysqli_fetch_array($sql2))
                                 
 								$item_name = $row2['name'];
-							echo '<li class="collection-item">
+                            echo '<li class="collection-item">
                             <div class="row">
-                            <div class="col s5">
-                            <p class="collections-title"><strong style="background-color: mediumaquamarine;border-radius: 8px;color: black;">('.$row1['quantity'].')</strong> '.$item_name.'</p>
+                            <div class="col s1">
+                            <span style="background-color: mediumaquamarine;border-radius: 8px;color: black;">('.$row1['quantity'].')</span>
                             </div>
-                            <div class="col s2">
-                            <span>'.$row1['restaurant'].'</span>
+                            <div class="col s5">
+                            <p class="collections-title">'.$item_name.'</p>';
+                            if (isset($row1["variation"])) {
+                                echo ' 
+                                                                <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
+                            }
+
+                            if (isset($row1["variation_type"])){
+                                echo '   
+                                                                <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
+                            }
+
+                            if (isset($row1["variation_side"])){
+                                echo '  
+                                                                <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
+                            }
+
+                            if (isset($row1["variation_drink"])) {
+                                echo '  
+                                                                <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
+                            }
+
+                            echo'
+                                </div>
+                                <div class="col s3">
+                            <label>'.$row1['restaurant'].'</label>
                             </div>
                             <div class="col s3">
-                            <span>$'.$row1['price'].' JMD</span>
+                            <span>$'.number_format($row1['price']).' <span style="font-size: 6px;">JMD</span></span>
                             </div>
                             </div>
                             </li>';
 						}
-								echo'<li class="collection-item">
+                        echo'<li class="collection-item">
                                         <div class="row">
                                             <div class="col s7">
-                                                <p class="collections-title"> Total</p>
+                                                <p class="collections-title">Service Fee</p>
                                             </div>
                                             <div class="col s2">
 											<span> </span>
                                             </div>
                                             <div class="col s3">
-                                                <span><strong>$'.$row['total'].'</strong></span>
+                                                <span>$'.number_format($row['service_fee']).' <span style="font-size: 6px;">JMD</span></span>
+                                            </div></li>
+                                            
+                                            <li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s7">
+                                                <p class="collections-title">Delivery Fee</p>
+                                            </div>
+                                            <div class="col s2">
+											<span> </span>
+                                            </div>
+                                            <div class="col s3">
+                                                <span>$'.number_format($row['fee']).' <span style="font-size: 6px;">JMD</span></span>
+                                            </div></li>
+                                            
+                                            <li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s9">
+                                                <p class="collections-title"> Total</p>
+                                            </div>
+                                            <div class="col s3">
+                                                <span><strong style="font-size: 16px;">$'.number_format($row['total']).' <span style="font-size: 6px;">JMD</span></strong></span>
                                             </div>';										
 								if(!$deleted){
 
-								echo '<button class="btn waves-effect waves-light right submit" type="submit" name="action" style="border-radius:8px">Update
-                                              <i class="mdi-content-clear right"></i> 
+								echo '<br><br><button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid maroon;width: 100%;">Update Order #'.$order_id.'
+                                              <i class="mdi-action-thumbs-up-down right"></i> 
 										</button>
 										</form>
 										
-										<div class="row col s7"><form class="formValidate" id="formValidate1" method="post" action="routers/disc_03.php?phone='.$phone.'&order='.$order_id.'" novalidate="novalidate">
-                              <input type="text" name="custom-promo" placeholder="Paste payment link..." style="color: black; border-bottom: 1.5px solid antiquewhite;border-radius: 8px;">
-                    <button class="btn cyan waves-effect waves-light left" type="submit" name="action" style="border-radius: 8px;">Send
+										<div class="row col s12"><form class="formValidate" id="formValidate1" method="post" action="routers/disc_03.php" novalidate="novalidate">
+                              <textarea class="materialize-textarea" type="text" name="custom-promo" placeholder="Enter custom message..." style="color: black; border-bottom: 1.5px solid antiquewhite;border-radius: 0px;height: 40px;"></textarea>
+                              <input type="hidden" name="phoneto" value="'.$phone.'">
+                              <input type="hidden" name="orderid" value="'.$order_id.'">
+                    <button class="waves-effect waves-green btn-flat left" type="submit" name="action" style="border-radius: 10px;border: 1px solid maroon;width: 100%;">Send Message
+                    <i class="mdi-communication-message right"></i>
                               </button></form></div>';
 								}
 								echo'</div></li>';

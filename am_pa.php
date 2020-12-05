@@ -2,6 +2,19 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed account recovery page";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +100,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
                 </div>
             </nav>
@@ -156,30 +169,72 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
       <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Accounts</h5>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
-          <p class="caption">Welcome to account recovery. Set default passwords below and notify customer of change.</p>
+
           <div class="divider"></div>
           <div id="editableTable" class="section">
             <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Accounts</h4>
-              </div>
-              <div>
+                <ul class="collection with-header collapsible z-depth-0">
+                    <li class="collection-header"><h4>Account Recovery</h4><p class="caption">Welcome to account recovery. Set default passwords below and notify customer of change.</p></li>
+        <?php
+        $result = mysqli_query($con, "SELECT * FROM users");
+        while($row = mysqli_fetch_array($result))
+        {
+            $rowid = $row['id'];
+            $name =  $row["name"];
+            $username = $row["username"];
+            $email = $row["email"];
+            $contact = $row["contact"];
+            $address = $row["address"];
+            $paw = $row['password'];
+
+            echo '<li class="collection-item avatar" style="background-color: white;color: black;">
+      <img src="images/yaadi-icon.png" alt="" class="circle">
+      <span class="title">' . $row["name"] . '</span>
+      <p>Phone: ' . $row["contact"] . ' <br>
+         Email: ' . $email . '
+      </p>
+      <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-action-info-outline" style="font-size: 21px;"></i></a>
+      <div class="collapsible-body">
+      <table id="data-table-admin" class="responsive centered highlight striped" cellspacing="1">
+                    <thead class="teal lighten-2">
+                      <tr>
+                        <th data-field="name" style="width:50%;">Reset & Notify</th>
+                        <th data-field="name" style="width:50%;">Details</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr><td>
+                              <div><form class="formValidate" id="formValidate1" method="post" action="routers/dfp.php" novalidate="novalidate">
+                              <input name="dfp" value="'.$contact.'" hidden>
+                              <input name="dfpd" value="'.$rowid.'" hidden>
+                              <button type="submit" name="action" style="border-radius:16px;"><span class="text-black" style="font-weight: 300;">Notify</span>
+                                <i class="mdi-content-send right"></i>
+                              </button></form></div></td>
+                              
+                              <td><div><span class="text-black" style="font-weight: 300;">'.$contact.'</span></div>
+<div><span class="text-black" style="font-weight: 300;">'.$row['role'].'</span></div>
+</td></tr>
+
+</tbody>
+</table>
+			</form>
+			
+      </div></li>';
+            }
+
+            ?>
+
+                </ul>
+
+
                   <table id="data-table-admin" class="responsive centered highlight striped" cellspacing="1">
                     <thead class="teal lighten-2">
                       <tr>
@@ -202,7 +257,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     $paw = $row['password'];
                     
                     echo '<tr><td>
-                              <div><form class="formValidate" id="formValidate1" method="post" action="routers/dfp.php?phone='.$contact.'&id='.$rowid.'" novalidate="novalidate"><button type="submit" name="action" style="border-radius:16px;"><span class="text-black" style="font-weight: 300;">Notify</span>
+                              <div><form class="formValidate" id="formValidate1" method="post" action="routers/dfp.php" novalidate="novalidate">
+                              <input name="dfp" value="'.$contact.'" hidden>
+                              <input name="dfpd" value="'.$rowid.'" hidden>
+                              <button type="submit" name="action" style="border-radius:16px;"><span class="text-black" style="font-weight: 300;">Notify</span>
                                 <i class="mdi-content-send right"></i>
                               </button></form></div>
                               </td>';
@@ -216,10 +274,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 				?>
                     </tbody>
 </table>
-              </div>
             </div>
 			</form>
-		    <div class="divider"></div>
+
+
           </div>
         </div>
         </section>

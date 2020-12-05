@@ -19,7 +19,10 @@
   <link href="css/custom/custom.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="css/layouts/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="css/custom/log.css" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection"> 
+  <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <style type="text/css">
   .input-field div.error{
     position: relative;
@@ -101,9 +104,9 @@
       <div class="loader-section section-left"></div>
       <div class="loader-section section-right"></div>
   </div>
-   <div id="login-page" class="row">
-    <div class="col s12 z-depth-4 card-panel">
-      <form method="post" action="routers/forget-router.php" class="login-form" id="validate">
+   <div id="login-page" class="row" style="border-radius: 8px;">
+    <div class="col s12 z-depth-4 card-panel" style="border-radius: 8px;border: 1px solid maroon;">
+      <form method="post" class="login-form" id="validate">
         <div id="highlighted" class="hl-basic hidden-xs">
   <div class="container-fluid">
     <div class="row">
@@ -123,21 +126,21 @@
       <div class="col-sm-9 col-md-9 col-lg-10 content equal-height">
         <div class="content-area-right">
           <div class="content-crumb-div">
-            <a href="login.php">LOGIN</a> | PASSWORD RECOVERY
+            <a href="login.php">LOGIN</a> | Account Recovery
           </div>
           <div class="row">
             <div class="col-md-5 forgot-form">
-              <p>Please enter the phone number connected to your account, then await new password.</p>
+              <p>Please enter the phone number connected to your account, then await your text message</p>
               <div class="row margin">
           <div class="input-field col s12">
             <i class="mdi-communication-phone prefix"></i>
-            <input name="phone" id="phone" type="number" data-error=".errorTxt4" style="border-radius: 8px;border-bottom: 4px solid #b5796d;">
-            <label for="phone" style="color: #b5796d">Phone</label>
+            <input name="phone" id="phone" type="tel" data-error=".errorTxt4" style="border-bottom-right-radius: 8px;">
+            <label for="phone">Phone</label>
 			<div class="errorTxt4"></div>			
           </div>
         </div>
                 <div class="row">
-			<a href="javascript:void(0);" onclick="document.getElementById('validate').submit();" class="btn waves-effect waves-light col s5" style="color: white;border-radius: 8px;">Request</a>
+                    <button id="reset" class="btn waves-effect waves-light col s12" style="color: white;border-radius: 8px;">Request</button>
           </div>
             </div>
           </div>
@@ -148,6 +151,7 @@
 </div>
           </form>
         </div>
+       <span id="message"></span>
     </div>
     <script type="text/javascript">
     $("#formValidate").validate({
@@ -176,6 +180,32 @@
         }
      });
     </script>
+  <script>
+      $(document).ready(function () {
+          RRequest();
+      })
+
+      function RRequest() {
+          $(document).on('click', "#reset", function (e) {
+              e.preventDefault();
+              var phone = $('#phone').val();
+
+              if (phone === ''){
+                  Materialize.toast('Please enter your phone number', 5000);
+              }
+              else {
+                  $.ajax({
+                      url: '../routers/forget-router.php',
+                      method: 'post',
+                      data:{phone:phone},
+                      success: function (data) {
+                          $('#message').html(data);
+                      }
+                  })
+              }
+          })
+      }
+  </script>
   <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
   <script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>

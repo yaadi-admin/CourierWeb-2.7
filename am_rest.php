@@ -2,6 +2,43 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed restaurants page";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
+        $count = 0;
+        $count2 = 0;
+        $count3 = 0;
+        $count4 = 0;
+        $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $count++;
+        }
+        $results = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND verified='1';");
+        while($row = mysqli_fetch_array($results))
+        {
+            $count2++;
+        }
+        $getndeleted = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND deleted='0';");
+        while($row = mysqli_fetch_array($getndeleted))
+        {
+            $count3++;
+        }
+        $getdeleted = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND deleted='1';");
+        while($row = mysqli_fetch_array($getdeleted))
+        {
+            $count4++;
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,7 +138,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
+                    </ul>
+                    <ul class="right">
+                        <li><a class="modal-trigger" href="#info"><i class="mdi-action-info-outline"></i></a></li>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#addrestaurant" style="color: white;"><i class="mdi-social-person-add"></i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -169,140 +210,174 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
-      <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Restaurants</h5>
-              </div>
+
+        <div id="info" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Information</h5>
+                <p>Restaurants Enabled: <?php echo $count3; ?></p>
+                <p>Restaurants Disabled: <?php echo $count4; ?></p>
             </div>
-          </div>
         </div>
+
+      <section id="content">
         <div class="container">
-          <p class="caption">Enable, Disable or Modify Restaurant Accounts.</p>
           <div class="divider"></div>
           <div id="editableTable" class="section">
-		  <form class="formValidate" id="formValidate1" method="post" action="routers/arest-router.php" enctype="multipart/form-data" novalidate="novalidate">
             <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Accounts</h4>
-              </div>
-              <div>
-<table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:25%;">Name</th>
-                        <th data-field="price" style="width:25%;">Info</th>
-                        <th data-field="price" style="width:25%;">More Info</th>
-                        <th data-field="price" style="width:25%;">Availability</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-				<?php
-				$result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant';");
-				while($row = mysqli_fetch_array($result))
-				{
-                    $name =  $row["name"];
-                    $username = $row["username"];
-                    $email = $row["email"];
-                    $contact = $row["contact"];
-                    $address = $row["address"];
-                    $paw = $row['password'];
-                    $hours = $row['opentime'];
-                    $type = $row['ocassion'];
-                    $mon = $row['mon'];
-                    $tue = $row['tue'];
-                    $wed = $row['wed'];
-                    $thurs = $row['thurs'];
-                    $fri = $row['fri'];
-                    $sat = $row['sat'];
-                    $sun = $row['sun'];
+                  <ul class="collection with-header collapsible z-depth-0">
+                      <li class="collection-header"><h4>Restaurants <span class="right"><?php echo $count2; ?><label style="font-size: 6px;"> Partnered</label></span> <span class="right"><?php echo $count; ?><label style="font-size: 6px;"> Restaurants</label></span></h4><p class="caption">Add, Enable, Disable or Modify Restaurant.</p>
+                          </li>
 
-                    $monc = $row['monc'];
-                    $tuec = $row['tuec'];
-                    $wedc = $row['wedc'];
-                    $thursc = $row['thurc'];
-                    $fric = $row['fric'];
-                    $satc = $row['satc'];
-                    $sunc = $row['sunc'];
+                      <?php
 
-                    $ulong = $row['ulong'];
-                    $ulat = $row['ulat'];
-
-                    echo '<tr>
-<td>
-<img class="col s12" src="'.$row["image_dir"].'" width="100%" alt="Item Image" height="200px" style="object-fit: scale-down;" style="border-radius:8px;">
-                    <form action="routers/upload.php?id='.$row["id"].'&resname='.$name.'" method="post" enctype="multipart/form-data">
-                              <input type="file" name="fileToUpload" id="fileToUpload" style="content: \'Select some files\';display: inline-block;background: antiquewhite;
-  border: 1px solid #999;border-radius: 3px;padding: 5px 8px;outline: none;white-space: nowrap;-webkit-user-select: none;cursor: pointer;text-shadow: 1px 1px #fff;font-weight: 700;font-size: 10pt;"><br /><br />
-                              <button class="btn-flat waves-effect waves-light teal-text" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;" type="submit" value="Upload Image" name="submit">Upload <i class="mdi-content-send right"></i></button>
-                            </form><br><br>
-<span style="width: 100%;font-weight: 600;color: darkred;">'.$name.'</span><br>
+                      $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant';");
+                      while($row = mysqli_fetch_array($result))
+                      {
+                          $name =  $row["name"];
+                          $username = $row["username"];
+                          $email = $row["email"];
+                          $contact = $row["contact"];
+                          $address = $row["address"];
+                          $paw = $row['password'];
+                          $type = $row['ocassion'];
+                          $mon = $row['mon'];
+                          $monc = $row['monc'];
+                          $ulong = $row['ulong'];
+                          $ulat = $row['ulat'];
 
 
-<label for="monday">Monday</label><input id="monday" name="'.$row['id'].'_monday" value="'.$mon.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="mondayclose">Monday Close</label><input id="mondayclose" name="'.$row['id'].'_mondayclose" value="'.$monc.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
+                          echo '<li class="collection-item avatar" style="background-color: white;color: black;">
+      <img src="'.$row["image_dir"].'" alt="" class="circle">';
+                          if ($row['verified'] == 0){
+                              echo '<span class="title" style="font-weight: 600;">' . $row["name"] . '</span>';
+                          }
+                          else if ($row['verified'] == 1){
+                              echo '<span class="title" style="font-weight: 600;">' . $row["name"] . '</span> <i class="mdi-action-check-circle" style="color: mediumseagreen;"></i>';
+                          }
+                      echo '<p>Phone: ' . $row["contact"] . ' <br>
+         Email: ' . $email . '
+      </p>
+      <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-notification-more" style="font-size: 21px;"></i></a>
+      ';
 
-</td>';
+                          echo '<ul class="collapsible z-depth-0" data-collapsible="accordion">';
+                          echo '
+						<li>
+							<div class="collapsible-header"><i class="mdi-image-add-to-photos"></i>Image</div>
+							<div class="collapsible-body">';
+                          echo '<div>
+                    <form method="post" enctype="multipart/form-data">
+                    <span><div class="btn col s12">
+                   <input type="file" name="fileToUpload" id="fileToUpload"">
+                  </div></span><br>
+                              <input type="hidden" id="rest" name="rest" value="'.$row["id"].'">
+                              <p><button id="uploadimage" class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Upload
+                              <i class="mdi-image-blur-on right" style="color: maroon;"></i>
+                              </button></p>
+                            </form>
+                            </div>';
+                          echo'
+							</div>
+						</li>';
 
-                    echo '<td>
-<label for="email">Email</label><input id="email" name="'.$row['id'].'_email" value="'.$email.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="tuesday">Tuesday</label><input id="tuesday" name="'.$row['id'].'_tuesday" value="'.$tue.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="tuesdayclose">Tuesday Close</label><input id="tuesdayclose" name="'.$row['id'].'_tuesdayclose" value="'.$tuec.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="wednesday">Wednesday</label><input id="wednesday" name="'.$row['id'].'_wednesday" value="'.$wed.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="wednesdayclose">Wednesday Close</label><input id="wednesdayclose" name="'.$row['id'].'_wednesdayclose" value="'.$wedc.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-</td>';
+                          echo '</ul>';
 
 
-                    echo '<td>
-<label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="ocassion">Type</label><input id="ocassion" name="'.$row['id'].'_ocassion" value="'.$type.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-
-
-<label for="thursday">Thursday</label><input id="thursday" name="'.$row['id'].'_thursday" value="'.$thurs.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="thursdayclose">Thursday Close</label><input id="thursdayclose" name="'.$row['id'].'_thursdayclose" value="'.$thursc.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="friday">Friday</label><input id="friday" name="'.$row['id'].'_friday" value="'.$fri.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="fridayclose">Friday Close</label><input id="fridayclose" name="'.$row['id'].'_fridayclose" value="'.$fric.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-</td>';
-
-					echo '<td>
-                    <select name="'.$row['id'].'_deleted" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;">
+                          echo '<ul class="collapsible z-depth-0" data-collapsible="accordion">';
+                          echo '
+						<li>
+							<div class="collapsible-header"><i class="mdi-image-add-to-photos"></i>Enable / Disable</div>
+							<div class="collapsible-body">';
+                          echo '
+                          <form action="routers/arest-router.php" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                          <input type="hidden" name="rest" value="'.$row["id"].'">
+                          <select name="'.$row['id'].'_deleted" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;">
                       <option value="1"'.($row['deleted'] ? 'selected' : '').'>Disable</option>
                       <option value="0"'.(!$row['deleted'] ? 'selected' : '').'>Enable</option>
                     </select>
                     
-                    
-<label for="saturday">Saturday</label><input id="saturday" name="'.$row['id'].'_saturday" value="'.$sat.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="saturdayclose">Saturday Close</label><input id="saturdayclose" name="'.$row['id'].'_saturdayclose" value="'.$satc.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="sunday">Sunday</label><input id="sunday" name="'.$row['id'].'_sunday" value="'.$sun.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="sundayclose">Sunday Close</label><input id="sundayclose" name="'.$row['id'].'_sundayclose" value="'.$sunc.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
+                    <select name="' . $row['id'] . '_verified">
+                      <option value="1"' . ($row['verified'] ? 'selected' : '') . '>Verified</option>
+                      <option value="0"' . (!$row['verified'] ? 'selected' : '') . '>Not Verified</option>
+                    </select>
+                            <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                              <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
+                              </button></p>                    
+                              </form>';
+                          echo'
+							</div>
+						</li>';
 
-<label for="lon">Longitude</label><input id="longitude" name="'.$row['id'].'_longitude" value="'.$ulong.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-<label for="lat">Latitude</label><input id="Latitude" name="'.$row['id'].'_latitude" value="'.$ulat.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 3px solid antiquewhite;"><div class="errorTxt01"></div>
-                    
-                    </td>';
+                          echo '</ul>';
 
-				}
-				?>
+
+
+                          echo '<ul class="collapsible z-depth-0" data-collapsible="accordion">';
+                          echo '
+						<li>
+							<div class="collapsible-header"><i class="mdi-image-add-to-photos"></i>Hours</div>
+							<div class="collapsible-body">';
+                          echo '<form action="routers/arest-router.php" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                          <p class="col s6"><label for="mondayopen">Open: AM</label><input id="mondayopen" name="'.$row['id'].'_mondayopen" value="'.$mon.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
+<p class="col s6"><label for="mondayclose">Close: PM</label><input id="mondayclose" name="'.$row['id'].'_mondayclose" value="'.$monc.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>
+                          <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                              <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
+                              </button></p>
+                              </form>
+                          ';
+                          echo'
+							</div>
+						</li>';
+
+                          echo '</ul>';
+
+
+      echo '<div class="collapsible-body" style="background-color: white;">
+      <form class="formValidate" id="formValidate1" method="post" action="routers/arest-router.php" enctype="multipart/form-data" novalidate="novalidate">
+                      <table class="responsive centered highlight striped">
+                          <tbody>
+      <tr style="background-color: white;"><td>           
+';
+
+                          echo '
+                    
+<p class="col s4"><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
+<p class="col s8"><label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;""><div class="errorTxt01"></div></p>
+<p class="col s8"><label for="ocassion">Restaurant Type</label><input id="ocassion" name="'.$row['id'].'_ocassion" value="'.$type.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></div></p>                   
+<p class="col s4"><label for="lon">Location Longitude</label><input id="longitude" name="'.$row['id'].'_longitude" value="'.$ulong.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>
+<p class="col s12"><label for="lat">Location Latitude</label><input id="Latitude" name="'.$row['id'].'_latitude" value="'.$ulat.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>
+                    
+                    </td></tr>
                     </tbody>
 </table>
-              </div>
-			  <div class="input-field col s12">
-                              <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:8px;">Update
-                                <i class="mdi-content-send right"></i>
-                              </button>
-                            </div>
+                  
+                  <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                              <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
+                              </button></p>
+                  </form></div>
+    </li>';
+
+                      }
+                      ?>
+                  </ul>
+
+
+
             </div>
-			</form>
+
+
+              <div id="addrestaurant" class="modal modal-fixed-footer">
+                  <div class="modal-content">
+                      <h4>Add Restaurant</h4>
+                      <p>Here you can add a new restaurant.</p>
 		  <form class="formValidate" id="formValidate" method="post" action="routers/add-rest.php" novalidate="novalidate">
-            <div class="row">
+            <div class="row" id="add">
               <div class="col s12 m4 l3">
                 <h4 class="header">Enroll</h4>
               </div>
@@ -310,9 +385,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 <table class="responsive centered highlight striped">
                     <thead class="teal lighten-2">
                       <tr>
-                        <th data-field="name">Identity</th>
-                        <th data-field="name">Password & Location</th>
-                        <th data-field="name">Role</th>
+                        <th data-field="name" style="width: 100%;">Information</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -321,16 +394,16 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 <div><label for="username">Username</label><input id="username" name="username" type="text" data-error=".errorTxt02" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"><div class="errorTxt02"></div></div>
 <div><label for="name">Name</label><input id="name" name="name" type="text" data-error=".errorTxt04" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"><div class="errorTxt04"></div></div>
 <div><label for="contact">Phone Number</label><input id="contact" name="contact" type="number" data-error=".errorTxt05" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"><div class="errorTxt05"></div></div>
-</td>';
+';
 
 
-					echo '<td>
+					echo '
 <div><label for="password">Password</label><input id="password" name="password" type="password" data-error=".errorTxt03" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"><div class="errorTxt03"></div></div>
 <div><label for="email">Email</label><input id="email" name="email" type="email" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"></div>
 <div><label for="address">Address</label><input id="address" name="address" type="text" data-error=".errorTxt06" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt06"><div class="errorTxt06"></div></div>
-</td>';
+';
 
-					echo '<td>
+					echo '
 <div><select name="role">
                       <option value="Restaurant">Restaurant</option>
                     </select></div>
@@ -354,18 +427,24 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                               </button>
                             </div>
             </div>
-			</form>			
-            <div class="divider"></div>
-            
+                  </div>
+
+                  <div class="modal-footer">
+                      <button class="waves-effect waves-green btn-flat" type="submit" name="action">Add</button>
+                  </div>
+                  </form>
+              </div>
+
           </div>
         </div>
+          <span id="message"></span>
         </section>
     </div>
 </div>
   <footer class="page-footer">
     <div class="footer-copyright">
       <div class="container">
-        <span>Copyright © 2019 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi® Ltd</a> All rights reserved.</span>
+        <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi.Co</a> All rights reserved.</span>
         <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
         </div>
     </div>
@@ -377,6 +456,36 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 	<script type="text/javascript" src="js/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
+  <script>
+      $(document).ready(function () {
+          SImage();
+      })
+
+      function SImage() {
+          $(document).on('click', "#uploadimage", function (e) {
+              e.preventDefault();
+              var file = $('#fileToUpload').val();
+              var restaurant = $('#rest').val();
+
+              if (file == '' || restaurant == ''){
+                  Materialize.toast('You need to select an image', 2000);
+              }
+              else {
+                  $.ajax({
+                      url: '../routers/up-restaurant.php',
+                      method: 'post',
+                      data:{fileToUpload:file,rest:restaurant},
+                      success: function (data) {
+                          Materialize.toast(data, 2000);
+
+                      }
+                  })
+              }
+          })
+      }
+
+
+  </script>
     <script type="text/javascript" src="js/custom-script.js">
     $("#formValidate").validate({
         rules: {

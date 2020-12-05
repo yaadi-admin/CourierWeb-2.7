@@ -1,17 +1,34 @@
 <?php
 include 'includes/connect.php';
-$user_id = $_SESSION['user_id'];
+include 'includes/wallet.php';
 
-$result = mysqli_query($con, "SELECT * FROM users where id = $user_id");
-while($row = mysqli_fetch_array($result)){
-$name = $row['name'];	
-$address = $row['address'];
-$contact = $row['contact'];
-$email = $row['email'];
-$username = $row['username'];
-}
 	if($_SESSION['delivery_sid']==session_id())
 	{
+        $id = "";
+        $pro_pic = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+            $pro_pic = $row['image_dir'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed Account Page";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
+
+        $user_id = $_SESSION['user_id'];
+        $result = mysqli_query($con, "SELECT * FROM users where id = $id");
+        while($row = mysqli_fetch_array($result)){
+            $name = $row['name'];
+            $address = $row['address'];
+            $contact = $row['contact'];
+            $email = $row['email'];
+            $username = $row['username'];
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,9 +113,12 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
-                    </ul>				
+                    <ul class="left">
+                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="delivery-dashboard.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Open Sans', ;font-family: 'Akronim';">Yaadi<span style="font-size: 16px;color: mediumspringgreen;"> Delivery</span></a><span class="logo-text">Logo</span></h1></li>
+                    </ul>
+                    <ul class="right">
+                      <li><a style="font-size: 20px;">$<?php echo $balance; ?></a></li>
+                    </ul>
                 </div>
             </nav>
         </div>
@@ -110,12 +130,12 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <li class="user-details cyan darken-2">
             <div class="row">
                 <div class="col col s4 m4 l4">
-                    <img src="images/avatar.jpg" alt="Ambassador Avatar" class="circle responsive-img valign profile-image" width="50px" height="50px">
+                    <img src="<?php echo $pro_pic; ?>" alt="Ambassador Avatar" class="circle responsive-img valign profile-image" width="50px" height="50px">
                 </div>
 				 <div class="col col s8 m8 l8">
                     <ul id="profile-dropdown" class="dropdown-content">
                         <li><a href="delivery-account.php"><i class="mdi-social-person"></i>Account</a></li>
-                        <li><a href="routers/del-logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
+                        <li><a href="routers/logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -125,28 +145,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                 </div>
             </div>
             </li>
-            <li class="bold"><a href="delivery-dashboard.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i> Dashboard</a>
+            <li class="bold"><a href="delivery-dashboard.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i> Active Orders</a>
             </li>
-                <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders</a>
-                            <div class="collapsible-body">
-                                <ul>
-								<li><a href="all-deliveries.php">All Orders</a>
-                                </li>
-								<?php
-									$sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
-									while($row = mysqli_fetch_array($sql)){
-                                    echo '<li><a href="all-deliveries.php?status='.$row['status'].'">'.$row['status'].'</a>
-                                    </li>';
-									}
-									?>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-book"></i>History</a>
+            </li>
+            <li class="bold"><a href="delivery-finance.php" class="waves-effect waves-cyan"><i class="mdi-editor-attach-money"></i>Finance</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
@@ -162,74 +165,91 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           </div>
         </div>
         <div class="container">
-          <p class="caption">Edit your information here, data is required for deliveries, transactions and contact.</p>
+          <p class="caption">TRN, Full Name, Contact, Email, Address & Password</p>
           <div class="divider"></div>
             <div class="row">
               <div class="col s12 m4 l3">
-                <h4 class="header">Details</h4>
               </div>
                 <div>
-                <div class="card-panel">
-                  <div class="row">
-                    <form class="formValidate" id="formValidate" method="post" action="routers/restaurant-details-router.php" novalidate="novalidate"class="col s12">
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-account-circle prefix"></i>
-                          <input name="username" id="username" type="text" value="<?php echo $username;?>" data-error=".errorTxt1">
-                          <label for="username" class="">Username</label>
-						  <div class="errorTxt1"></div>
+
+
+                    <div class="card-panel col s11" style="padding-left: 10px;border-radius: 10px;">
+                        <div class="row" style="padding-left: 10px;">
+                            <form class="formValidate" id="formValidate" method="post" action="routers/restaurant-details-router.php" novalidate="novalidate"class="col s10">
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <i class="mdi-action-supervisor-account prefix"></i>
+                                        <input name="username" id="username" type="number" value="<?php echo $username;?>" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;" disabled>
+                                        <label for="username" class="">TRN ( Tax Registration Number ) *</label>
+                                        <div class="errorTxt1"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <i class="mdi-action-perm-contact-cal prefix"></i>
+                                        <input name="name" id="name" type="text" value="<?php echo $name;?>" data-error=".errorTxt2" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                                        <label for="name" class="">Full Name *</label>
+                                        <div class="errorTxt2"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <i class="mdi-action-perm-phone-msg prefix"></i>
+                                        <input name="phone" id="phone" type="number" value="<?php echo $contact;?>" data-error=".errorTxt5" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                                        <label for="phone" class="">Phone Number *</label>
+                                        <div class="errorTxt5"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <i class="mdi-communication-email prefix"></i>
+                                        <input name="email" id="email" type="email" value="<?php echo $email;?>" data-error=".errorTxt3" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                                        <label for="email" class="">Email</label>
+                                        <div class="errorTxt3"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <i class="mdi-action-home prefix"></i>
+                                        <textarea spellcheck="true" name="address" id="address" class="materialize-textarea validate" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;"><?php echo $address;?></textarea>
+                                        <label for="address" class="">Address *</label>
+                                        <div class="errorTxt6"></div>
+                                    </div>
+                                    <div class="row" style="padding-left: 10px;">
+                                        <div class="input-field col s11">
+                                            <i class="mdi-action-lock-outline prefix"></i>
+                                            <input name="password" id="password" type="password" data-error=".errorTxt4" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                                            <label for="password" class="">Confirm Password </label>
+                                            <div class="errorTxt4"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s10">
+                                            <a class="waves-effect waves-light btn modal-trigger right text-black" href="#modal1" style="color: black;border-radius:8px;background-color: white;border-bottom: 3px solid antiquewhite;">Update</a>
+
+
+                                            <div id="modal1" class="modal bottom-sheet">
+                                                <div class="modal-content">
+                                                    <h4>Save Changes?</h4>
+                                                    <p>Are you sure you want to commit to these changes?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn-flat cyan waves-effect waves-light right text-white" type="submit" name="action" style="color: white;border-radius:8px;background-color: white;border-bottom: 3px solid antiquewhite;">Confirm
+                                                        <i class="mdi-content-send right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <br /><br />
+                                </div>
+                            </form>
+                            <!---->
                         </div>
-                      </div>					
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-account-circle prefix"></i>
-                          <input name="name" id="name" type="text" value="<?php echo $name;?>" data-error=".errorTxt2">
-                          <label for="name" class="">Name</label>
-						   <div class="errorTxt2"></div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-communication-email prefix"></i>
-                          <input name="email" id="email" type="email" value="<?php echo $email;?>" data-error=".errorTxt3">
-                          <label for="email" class="">Email</label>
-						  <div class="errorTxt3"></div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-lock-outline prefix"></i>
-                          <input name="password" id="password" type="password" data-error=".errorTxt4">
-                          <label for="password" class="">Password</label>
-						  <div class="errorTxt4"></div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-account-circle prefix"></i>
-                          <input name="phone" id="phone" type="number" value="<?php echo $contact;?>" data-error=".errorTxt5">
-                          <label for="phone" class="">Contact</label>
-						  <div class="errorTxt5"></div>
-                        </div>
-                      </div>					  
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-home prefix"></i>
-                          <textarea name="address" id="address" class="materialize-textarea validate" data-error=".errorTxt6"><?php echo $address;?></textarea>
-                          <label for="address" class="">Address</label>
-						  <div class="errorTxt6"></div>
-                        </div>
-                        <div class="row">
-                          <div class="input-field col s12">
-                            <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:16px;">Submit
-                              <i class="mdi-content-send right"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                    </div>
+
+
               </div>
             <div class="divider"></div>
             </div>
@@ -256,11 +276,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
     <script type="text/javascript">
     $("#formValidate").validate({
         rules: {
-            username: {
-                required: true,
-                minlength: 5,
-				maxlength: 15
-            },
             name: {
                 required: true,
                 minlength: 5,

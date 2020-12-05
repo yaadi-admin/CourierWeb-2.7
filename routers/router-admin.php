@@ -1,38 +1,34 @@
 <?php
 include '../includes/connect.php';
 $success=false;
-
-$username = $_POST['username'];
-$password = $_POST['password'];
-
-$hash = password_hash($password, PASSWORD_BCRYPT);
-
-$result = mysqli_query($con, "SELECT * FROM users WHERE username= '$username' AND role='Administrator' AND not deleted;");
-while($row = mysqli_fetch_array($result))
-{
-if(password_verify($password, $row['password'])) {
-	$success = true;
-	$user_id = $row['id'];
-	$name = $row['name'];
-	$role= $row['role'];
-    echo 'true';
-} else {
-    echo 'Something is not quiet right here....!';
-}
-}
-if($success == true)
-{	
-	session_start();
-	$_SESSION['admin_sid']=session_id();
-	$_SESSION['user_id'] = $user_id;
-	$_SESSION['role'] = $role;
-	$_SESSION['name'] = $name;
-    $to = 'yaadiltd@gmail.com'; 
-$subject = 'Account Login';
-$message = '
+if (isset($_POST['username'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $hash = password_hash($password, PASSWORD_BCRYPT);
+    $result = mysqli_query($con, "SELECT * FROM users WHERE username= '$username' AND role='Administrator' AND not deleted;");
+    while ($row = mysqli_fetch_array($result)) {
+        if (password_verify($password, $row['password'])) {
+            $success = true;
+            $user_id = $row['id'];
+            $name = $row['name'];
+            $role = $row['role'];
+            echo 'true';
+        } else {
+            echo 'Something is not quiet right here....!';
+        }
+    }
+    if ($success == true) {
+        session_start();
+        $_SESSION['admin_sid'] = session_id();
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['role'] = $role;
+        $_SESSION['name'] = $name;
+        $to = 'yaadiltd@gmail.com';
+        $subject = 'Admin Login';
+        $message = '
 <html>
 <head>
-  <title>YAADI™ | '.$date.'</title>
+  <title>YAADI™ | ' . $date . '</title>
 </head>
 <body>
   <div class="es-wrapper-color">
@@ -244,7 +240,7 @@ $message = '
                                                                                                         <h4>Full Name</h4>
                                                                                                     </td>
                                                                                                     <td width="20%">
-                                                                                                        <h4>'.$name.'</h4>
+                                                                                                        <h4>' . $name . '</h4>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -276,7 +272,7 @@ $message = '
                                                                                                         <p>User Role</p>
                                                                                                     </td>
                                                                                                     <td style="padding: 5px 0" width="20%" align="left">
-                                                                                                        <p>'.$role.'</p>
+                                                                                                        <p>' . $role . '</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -308,7 +304,7 @@ $message = '
                                                                                                         <h4>DATE</h4>
                                                                                                     </td>
                                                                                                     <td width="20%">
-                                                                                                        <h4>'.$date.'</h4>
+                                                                                                        <h4>' . $date . '</h4>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -429,17 +425,15 @@ $message = '
 </body>
 </html>
 ';
-$headers[] = 'MIME-Version: 1.0';
-$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-$headers[] = 'From: akemeedwards@icloud.com';
-mail($to, $subject, $message, implode("\r\n", $headers));
-	header("location: ../admin.php");
-}
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: akemeedwards@icloud.com';
+        mail($to, $subject, $message, implode("\r\n", $headers));
+        header("location: ../admin.php");
+    } else {
 
-else
-{
-
-    echo 'Something is not quiet right here....!';
-    header("location: ../admin-login.php");
+        echo 'Something is not quiet right here....!';
+        header("location: ../admin-login.php");
+    }
 }
 ?>

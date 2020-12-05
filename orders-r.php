@@ -52,7 +52,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> YAADi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"> Yaadi</a><span class="logo-text">Logo</span></h1></li>
                     </ul>
                     <ul class="right hide-on-med-and-down">                        
                         <li><a href="#"  class="waves-effect waves-block waves-light"><i class="mdi-editor-attach-money"><?php echo $balance;?></i></a>
@@ -202,6 +202,30 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 								echo'<li class="collection-item">
                                         <div class="row">
                                             <div class="col s7">
+                                                <p class="collections-title"> ™ Service Fee</p>
+                                            </div>
+                                            <div class="col s2">
+											<span> </span>
+                                            </div>
+                                            <div class="col s3">
+                                                <span>$'.$row['service_fee'].' <span style="font-size: 6px;">JMD</span></span>
+                                            </div></li>
+                                            
+                                    <li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s7">
+                                                <p class="collections-title"> ™ Delivery Fee</p>
+                                            </div>
+                                            <div class="col s2">
+											<span> </span>
+                                            </div>
+                                            <div class="col s3">
+                                                <span>$'.$row['fee'].' <span style="font-size: 6px;">JMD</span></span>
+                                            </div></li>
+                                            
+                                            <li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s7">
                                                 <p class="collections-title"> Total</p>
                                             </div>
                                             <div class="col s2">
@@ -216,7 +240,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 										<input type="hidden" value="'.$id.'" name="id">
 										<input type="hidden" value="Cancelled by Customer" name="status">	
 										<input type="hidden" value="'.$row['payment_type'].'" name="payment_type">											
-										<button class="btn waves-effect waves-light right submit" type="submit" name="action">Cancel Order
+										<button class="btn waves-effect waves-light right" type="submit" name="action">Cancel Order
                                               <i class="mdi-content-clear right"></i> 
 										</button>
 										</form>';

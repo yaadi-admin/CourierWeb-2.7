@@ -2,6 +2,25 @@
 include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
+        $id = "";
+        $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $id = $row['id'];
+        }
+        $date = new DateTime(date('Y-m-d H:i:sP'), new DateTimeZone('America/Jamaica'));
+        $date->setTimezone(new DateTimeZone('America/Jamaica'));
+        $timestamp = $date->format('Y-m-d H:i:sP');
+        $url = $_SERVER['REQUEST_URI'];
+        $action = "Viewed customer page";
+        $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
+        $con->query($sql);
+        $count = 0;
+        $result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
+        while($row = mysqli_fetch_array($result))
+        {
+            $count++;
+        }
 		?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,10 +107,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul>                      
-                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi</a><span class="logo-text">Logo</span></h1></li>
+                      <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
                     <ul class="right">
-                        <li><i class="mdi-action-search"></i></li>
                     </ul>
                 </div>
             </nav>
@@ -159,98 +177,112 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
-            <li class="bold"><a href="log-book-admin.php" class="waves-effect waves-cyan"><i class="mdi-social-person"></i>Logs</a>
+            <li class="bold"><a href="am_active.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>My Activity</a>
             </li>
         </ul>
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
       <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Customers
-                  </h5>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
-          <p class="caption">Enable, Disable or Modify Users Accounts.</p>
-          <div class="divider"></div>
           <div id="editableTable" class="section">
             <div class="row">
-              <div class="col s12 m4 l3">
-                <h4 class="header">Customers</h4>
-              </div>
-              <div>
-<table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:33.33%;">Name</th>
-                        <th data-field="name" style="width:33.33%;">Details</th>
-                        <th data-field="price" style="width:33.33%;">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-				<?php
-				$result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
-				while($row = mysqli_fetch_array($result))
-				{
-                    $name =  $row["name"];
-                    $username = $row["username"];
-                    $email = $row["email"];
-                    $contact = $row["contact"];
-                    $address = $row["address"];
-                    $paw = $row['password'];
-                    $hours = $row['opentime'];
-                    $type = $row['ocassion'];
+                  <ul class="collection with-header collapsible z-depth-0">
+                      <li class="collection-header"><h4>Customers <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Customers</span></span></h4><p class="caption">Enable or Disable Customer Accounts.</p></li>
 
-                    echo '<tr><td>
+                      <?php
 
-        <div><form class="formValidate" id="formValidate1" method="post" action="am_cust_info.php?cust='.$row["id"].'" novalidate="novalidate">
-                    <button class="" type="submit" name="action" style="border-radius:8px;"><span class="text-black" style="font-weight: 300;">'.$name.'</span>
-                                <i class="mdi-content-send right"></i>
-                              </button></form></div><br>
-    <div><label for="email">Email</label><input id="email" name="'.$row['id'].'_email" value="'.$email.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div>
-                            </td>';
-                    
-                    echo '<td>
-<div><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-<div><label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div>
-
-</td>';
+                      $getriders = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
+                      while($row = mysqli_fetch_array($getriders)) {
+                          $name = $row["name"];
+                          $id = $row["id"];
+                          $username = $row["username"];
+                          $email = $row["email"];
+                          $contact = $row["contact"];
+                          $address = $row["address"];
+                          $paw = $row['password'];
+                          $type = $row['ocassion'];
 
 
-                    $key = $row['id'];
-                    $sql = mysqli_query($con,"SELECT * from wallet WHERE customer_id = $key;");
-                    if($row1 = mysqli_fetch_array($sql)){
-                        $wallet_id = $row1['id'];
-                        $sql1 = mysqli_query($con,"SELECT * from wallet_details WHERE wallet_id = $wallet_id;");
-                        if($row2 = mysqli_fetch_array($sql1)){
-                            $balance = $row2['balance'];
-                        }
-                    }
+                          echo '<li class="collection-item avatar" style="background-color: white;color: black;">
+      <img src="images/yaadi-icon.png" alt="" class="circle">
+      <span class="title">' . $row["name"] . '</span>
+      <p>Phone: ' . $row["contact"] . ' <br>
+         Email: ' . $email . '
+      </p>';
 
-                    echo '<td>
-                    <div><select name="'.$row['id'].'_verified">
+                          echo '<ul class="collapsible z-depth-0" data-collapsible="accordion">';
+                          echo '
+						<li>
+							<div class="collapsible-header"><i class="mdi-image-add-to-photos"></i>Enable / Disable</div>
+							<div class="collapsible-body">';
+                          echo '<form action="routers/arest-router.php" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                          <select name="'.$row['id'].'_verified">
                       <option value="1"'.($row['verified'] ? 'selected' : '').'>Verified</option>
                       <option value="0"'.(!$row['verified'] ? 'selected' : '').'>Not Verified</option>
-                    </select></div>
+                    </select>
                     
-                    <div><select name="'.$row['id'].'_deleted">
+                    <select name="'.$row['id'].'_deleted">
                       <option value="1"'.($row['deleted'] ? 'selected' : '').'>Disable</option>
                       <option value="0"'.(!$row['deleted'] ? 'selected' : '').'>Enable</option>
-                    </select></div>
+                    </select>
                     
-                    <div><label for="balance">Balance</label><input id="balance" name="'.$row['id'].'_balance" value="'.$balance.'" type="number" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-                    </td></tr>';
+                    <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                              <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
+                              </button></p>
+                              </form>
+                          ';
+                          echo'
+							</div>
+						</li>';
 
-				}
-				?>
+                          echo '</ul>';
+
+
+     echo' <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-action-info-outline" style="font-size: 21px;"></i></a>
+      <div class="collapsible-body" style="background-color: white;">
+      <form class="formValidate" id="formValidate1" method="post" action="routers/ard-router.php" novalidate="novalidate">
+      <table class="responsive centered highlight striped">
+                    <tbody>
+      <tr><td>
+    <p class="col s7"><label for="email">Email</label><input id="email" name="'.$row['id'].'_email" value="'.$email.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
+    <p class="col s5"><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
+    <p class="col s12"><label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;></p>
+
+';
+
+                          $key = $row['id'];
+                          $sql = mysqli_query($con, "SELECT * from wallet WHERE customer_id = $key;");
+                          if ($row1 = mysqli_fetch_array($sql)) {
+                              $wallet_id = $row1['id'];
+                              $sql1 = mysqli_query($con, "SELECT * from wallet_details WHERE wallet_id = $wallet_id;");
+                              if ($row2 = mysqli_fetch_array($sql1)) {
+                                  $balance = $row2['balance'];
+                              }
+                          }
+
+                          echo '
+                    <p class="col s7"><label for="balance">Balance</label><input id="balance" name="'.$row['id'].'_balance" value="'.$balance.'" type="number" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
+                    </td></tr>
+                    
                     </tbody>
-</table>
-              </div>
+                  </table>
+                  
+                  <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                              <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
+                              </button></p>
+                  </form></div>
+    </li>';
+
+                      }
+                      ?>
+                  </ul>
+
+
+
+
+
+
+
             </div>
 
             <div class="divider"></div>
