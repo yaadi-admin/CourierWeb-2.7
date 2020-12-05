@@ -260,6 +260,8 @@ if($_SESSION['customer_sid']==session_id())
                                 </li>
                             </ul>
                         </li>
+                        <li class="bold"><a href="wallet.php" class="waves-effect waves-cyan"><i class="mdi-action-account-balance-wallet"></i>My Wallet</a>
+                        </li>
                         <li class="bold"><a href="details.php" class="waves-effect waves-cyan"><i class="mdi-action-account-box"></i>Account</a>
                         </li>
                         <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-settings"></i>Settings</a>
@@ -770,7 +772,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -795,7 +797,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -824,7 +826,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -852,7 +854,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -925,7 +927,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -950,7 +952,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -979,7 +981,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1007,7 +1009,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1079,7 +1081,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1104,7 +1106,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1133,7 +1135,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1161,7 +1163,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1235,7 +1237,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1260,7 +1262,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1289,7 +1291,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1317,7 +1319,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1392,7 +1394,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1417,7 +1419,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1446,7 +1448,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1474,7 +1476,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1549,7 +1551,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1574,7 +1576,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1603,7 +1605,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1631,7 +1633,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1705,7 +1707,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1730,7 +1732,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1759,7 +1761,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1787,7 +1789,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -1861,7 +1863,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -1886,7 +1888,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -1915,7 +1917,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -1943,7 +1945,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2017,7 +2019,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2042,7 +2044,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2071,7 +2073,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2099,7 +2101,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2173,7 +2175,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2198,7 +2200,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2227,7 +2229,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2255,7 +2257,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2330,7 +2332,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2355,7 +2357,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2384,7 +2386,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2412,7 +2414,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2486,7 +2488,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2511,7 +2513,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2540,7 +2542,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2568,7 +2570,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2643,7 +2645,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2668,7 +2670,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2697,7 +2699,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2725,7 +2727,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2800,7 +2802,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2825,7 +2827,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -2854,7 +2856,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -2882,7 +2884,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -2958,7 +2960,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -2983,7 +2985,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -3012,7 +3014,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -3040,7 +3042,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -3115,7 +3117,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -3140,7 +3142,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -3169,7 +3171,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -3197,7 +3199,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -3272,7 +3274,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -3297,7 +3299,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -3326,7 +3328,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -3354,7 +3356,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -3429,7 +3431,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -3454,7 +3456,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -3483,7 +3485,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -3511,7 +3513,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -3586,7 +3588,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -3611,7 +3613,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -3640,7 +3642,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -3668,7 +3670,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }

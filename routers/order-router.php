@@ -21,7 +21,12 @@ if($_SESSION['customer_sid']==session_id()) {
         $address = "";
         $restname = '';
         $pay_type = htmlspecialchars($_POST['pay_type']);
-        $description = htmlspecialchars($_POST['note']);
+        if (isset($_POST['note'])) {
+            $description = htmlspecialchars($_POST['note']);
+        }
+        if (!isset($_POST['note'])){
+            $description = "No note added";
+        }
         $usrph = "";
         $admn = "18763622910";
         $admn2 = "18767004142";
@@ -50,7 +55,7 @@ if($_SESSION['customer_sid']==session_id()) {
             $total = $_POST['total'];
             $service_fee = $_POST['servicefee'];
 
-            $sql = "INSERT INTO orders (customer_id, payment_type, address, total, description, service_fee, fee, date, restaurantid, pay_type) VALUES ($user_id, '$payment_type', '$address', $total, '$description', $service_fee, $fee, '$timestamp', $restid, '$pay_type')";
+            $sql = "INSERT INTO orders (customer_id, payment_type, address, total, description, service_fee, fee, date, restaurantid, pay_type) VALUES ('$user_id', '$payment_type', '$address', '$total', '$description', '$service_fee', '$fee', '$timestamp', '$restid', '$pay_type')";
 
             if ($con->query($sql) === TRUE) {
 
@@ -69,7 +74,7 @@ if($_SESSION['customer_sid']==session_id()) {
                     while ($row = mysqli_fetch_array($result)) {
                         $price = $row['price'];
                     }
-                    $sql = "INSERT INTO order_details (order_id, item_id, quantity, price, restaurant, variation, variation_type, variation_side, variation_drink) VALUES ($order_id, $id, '$quantity', $price, '$restname', '$variation', '$variation_type', '$variation_side', '$variation_drink')";
+                    $sql = "INSERT INTO order_details (order_id, item_id, quantity, price, restaurant, variation, variation_type, variation_side, variation_drink) VALUES ('$order_id', '$id', '$quantity', '$price', '$restname', '$variation', '$variation_type', '$variation_side', '$variation_drink')";
                     $con->query($sql) === TRUE;
                 }
 

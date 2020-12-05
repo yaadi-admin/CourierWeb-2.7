@@ -8,11 +8,8 @@ if($_SESSION['customer_sid']==session_id())
     $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
     while($row = mysqli_fetch_array($useraddress))
     {
-
         $usr_address = $row['address'];
-
     }
-
     $selec_rest = $_GET['pgid'];
     $restid = $_GET['pgid'];
     $restaddress = "";
@@ -345,11 +342,11 @@ if($_SESSION['customer_sid']==session_id())
 
             <section id="content">
 
-                <ul class="collection with-header z-depth-0">
+                <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                     <form class="formValidate col s12 m12 l6" id="formValidate" method="post" action="confirm-order.php?id=<?php echo $restid ?>" novalidate="novalidate">
-                        <li class="collection-header"><h4>Payment & Delivery</h4></li>
-                        <li class="collection-item" style="height: 260px;"><label for="payment_type">How will you pay?</label><br><br>
-                            <select id="pay_type" name="pay_type">
+                        <li class="collection-header" style="border-top-right-radius: 8px;border-top-left-radius: 8px;"><h5>Payment Method</h5></li>
+                        <li class="collection-item" style="height: auto;"><label for="payment_type">How will you pay?</label>
+                            <select class="browser-default" id="pay_type" name="pay_type">
                                 <option value="Select how you pay" <?php if(!$verified) echo 'disabled';?> selected>Select how you pay</option>
                                 <option value="Cash" <?php if(!$verified) echo 'disabled';?>>Cash - Pay via cash</option>
                                 <option value="Online Card" <?php if(!$verified) echo 'disabled';?>>Online Card - Visa, Mastercard</option>
@@ -366,16 +363,14 @@ if($_SESSION['customer_sid']==session_id())
                         <?php
                         $addressFrom = $restaddress;
                         $addressTo   = $address;
-                        //                                                Get distance in km
+//                      Get distance in km
                         $distance = getDistance($addressFrom, $addressTo, "K");
                         ?>
-                        <li class="collection-item" style="height: auto;">
+                        <li class="collection-item" style="height: auto;border-top-right-radius: 8px;border-top-left-radius: 8px;">
                             <?php
 
                             if ($distance > 30 && $address !== ""){
-                                echo 'Cannot locate address, <strong>Delivery fee will be Estimated</strong>
-                                                    <input name="distance" id="distance" for="distance" value="1.5" hidden>
-                                                    ';
+                                echo 'Cannot locate address, <strong>Delivery fee will be Estimated</strong><input name="distance" id="distance" for="distance" value="1.5" hidden>';
                             }
                             else if ($distance < 30 && $address !== "") {
                                 echo "<p><label>Delivering to</label> <br>$address</p>";
@@ -384,11 +379,10 @@ if($_SESSION['customer_sid']==session_id())
                             ?>
                         </li>
                 </ul>
-
             </section>
 
             <section>
-                <ul class="collection with-header z-depth-0">
+                <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                         <li class="collection-header"><h4>
 
                                 <?php
@@ -402,7 +396,7 @@ if($_SESSION['customer_sid']==session_id())
             </section>
 
             <section>
-                <ul class="collection with-header z-depth-0">
+                <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                     <li class="collection-item">
                         <?php
                         if(!empty($_POST['note']))
@@ -429,21 +423,13 @@ if($_SESSION['customer_sid']==session_id())
             </section>
 
             <section>
-                <ul class="collection with-header z-depth-0">
-                        <li class="collection-item">
-                            <a class="waves-effect waves-light btn modal-trigger z-depth-0" href="#modal1" style="width:100%;border-radius: 6px;background-color: white;border: 1px solid antiquewhite;font-size: 12px;color: black;">Change Address</a>
-                        </li>
-                </ul>
-            </section>
-
-            <section>
-                <ul class="collection with-header z-depth-0">
+                <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                         <li class="collection-item">
                             <?php
 
                             if ($address === ""){
                             }
-                            else if ($address !== "" && $distance != 0.00) {
+                            else if ($address !== '' && $distance != 0.00) {
                                 echo '<button id="confirm" class="btn cyan waves-effect waves-light" type="submit" name="action" style="width:100%;background-color: white;border: 1px solid antiquewhite;border-radius: 6px;font-size: 12px;">Checkout
                                                         <i class="mdi-action-shopping-cart right"></i>
                                                     </button>';
@@ -456,12 +442,12 @@ if($_SESSION['customer_sid']==session_id())
 
 
             <section>
-                <ul class="collection with-header z-depth-0">
+                <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                     <li class="collection-item">
                         <div id="work-collections" class="section" >
                             <div class="row">
                                 <div>
-                                    <ul id="issues-collection" class="collection">
+                                    <ul id="issues-collection" class="collection" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                                         <?php
                                         if(!empty($_SESSION["add_note"]))
                                         {
@@ -574,7 +560,7 @@ if($_SESSION['customer_sid']==session_id())
 
 
 
-                            <div id="modal1" class="modal bottom-sheet">
+                            <div id="modal1" class="modal bottom-sheet" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                                 <form class="formValidate col s12 m12 l6" id="formValidate" method="post" action="routers/up-address-router.php" novalidate="novalidate">
                                     <div class="modal-content">
                                         <div class="row">
@@ -593,7 +579,7 @@ if($_SESSION['customer_sid']==session_id())
                                 </form>
                             </div>
 
-                            <div id="addnote" class="modal modal-fixed-footer">
+                            <div id="addnote" class="modal bottom-sheet" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                                 <form action="place-order.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid ?>" method="post">
                                     <div class="modal-content">
                                         <h4>Add a side note</h4>
