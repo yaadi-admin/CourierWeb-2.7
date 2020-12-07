@@ -1224,9 +1224,8 @@ if($_SESSION['customer_sid']==session_id())
                     $('#latenightcravings').show();
                 }
 
-                else{
+                else if (moment > 1800 && moment < 2400){
                     <?php
-
                         echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
                     ?>
                 }

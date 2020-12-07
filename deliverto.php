@@ -4,7 +4,7 @@ include 'includes/wallet.php';
 //include 'includes/location.php';
 if($_SESSION['customer_sid']==session_id())
 {
-    $usr_address = "";
+    $usr_address = '';
     $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
     while($row = mysqli_fetch_array($useraddress))
     {
@@ -169,7 +169,6 @@ if($_SESSION['customer_sid']==session_id())
         </div>
     </header>
 
-
     <div id="main">
         <div class="wrapper">
             <section class="section">
@@ -187,7 +186,7 @@ if($_SESSION['customer_sid']==session_id())
                     </form>
                 </div>
                 <?php
-                if($usr_address !== ''){
+                if($usr_address !== '' && isset($usr_address)){
                 ?>
                 <div class="row">
                 <h5 class="center">OR</h5>
