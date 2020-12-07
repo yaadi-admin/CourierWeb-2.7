@@ -378,6 +378,11 @@ if($_SESSION['customer_sid']==session_id())
                     <img src="images/adban.jpg" width="100%" height="100%" style="object-fit: cover">
                     <img src="images/topban.jpg" width="100%" height="100%" style="object-fit: cover">
                 </div>
+                <h6 class="center">
+                    <span class="center"><i class="mdi-image-looks-one"></i></span>
+                    <span class="center"><i class="mdi-image-looks-two"></i></span>
+                    <span class="center"><i class="mdi-image-looks-3"></i></span>
+                </h6>
             </div>
 
 
@@ -462,7 +467,7 @@ if($_SESSION['customer_sid']==session_id())
                             <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                 <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
                                     <div class="card-image">
-                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
                                     <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
@@ -483,13 +488,115 @@ if($_SESSION['customer_sid']==session_id())
 
     </div>
 
-            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
 
-            <div class="col s12">
+            <div class="col s12" id="breakfast" hidden>
+                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Breakfast</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+                <div class="scrolling-wrapper" style="height: 250px;">
+                    <?php
+                    $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Restaurant') AND id='331' OR ocassion='Dessert' AND not deleted");
+                    while($row = mysqli_fetch_array($result))
+                    {
+                        if ($row['id'] != "297"){
+                            $dis_fee = 0;
+                            $address = $row['address'];
+                            $addressFrom = $address;
+                            $addressTo   = $usr_address;
+                            $distance = 1.5;
+                            $image = $row['image_dir3'];
+                            $image_dir = '';
+                            $restaurant_id = $row['id'];
+                            $restaurant_name = $row['name'];
+
+                            $mon = $row['mon'];
+                            $monc = $row['monc'];
+
+                            if ($image != ''){
+                                $image_dir = $image;
+                            }
+                            else if ($image == ''){
+                                $image_dir = 'images/yaadi-food.jpg';
+                            }
+
+                            if($distance <= 0.5 && $distance > 0.0){
+                                $dis_fee = 350;
+                            }
+                            if($distance <= 1.0 && $distance > 0.5){
+                                $dis_fee = 400;
+                            }
+                            if($distance <= 1.5 && $distance > 1.0){
+                                $dis_fee = 450;
+                            }
+                            if($distance <= 2.0 && $distance >= 1.5){
+                                $dis_fee = 500;
+                            }
+                            if($distance <= 2.5 && $distance >= 2.0){
+                                $dis_fee = 550;
+                            }
+                            if($distance <= 3.0 && $distance >= 2.5){
+                                $dis_fee = 600;
+                            }
+                            if($distance <= 3.5 && $distance >= 3.0){
+                                $dis_fee = 650;
+                            }
+                            if($distance <= 4.0 && $distance >= 3.5){
+                                $dis_fee = 700;
+                            }
+                            if($distance <= 4.5 && $distance >= 4.0){
+                                $dis_fee = 750;
+                            }
+                            if($distance <= 5.0 && $distance >= 4.5){
+                                $dis_fee = 800;
+                            }
+                            if($distance <= 5.5 && $distance >= 5.0){
+                                $dis_fee = 850;
+                            }
+                            if($distance <= 6.0 && $distance >= 5.5){
+                                $dis_fee = 900;
+                            }
+                            if($distance <= 6.5 && $distance >= 6.0){
+                                $dis_fee = 950;
+                            }
+                            if($distance <= 7.0 && $distance >= 6.5){
+                                $dis_fee = 1000;
+                            }
+
+                            ?>
+                            <div class="smallcard" style="width: 300px;">
+                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                    <div class="column">
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                        <div class="card-image">
+                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                        </div></button>
+                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <label style="font-size: 10px;">⏱️ <b>40 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+            </div>
+
+            <div class="col s12" id="latenightcravings" hidden>
     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Late Night Cravings</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
     <div class="scrolling-wrapper" style="height: 250px;">
         <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Restaurant') AND ocassion='Restaurant & Bar' AND not deleted");
+                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Restaurant & Bar' AND not deleted ORDER BY id DESC;");
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
@@ -566,7 +673,7 @@ if($_SESSION['customer_sid']==session_id())
                             <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                 <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
                                     <div class="card-image">
-                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
                                     <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
@@ -584,16 +691,15 @@ if($_SESSION['customer_sid']==session_id())
                     }
         ?>
     </div>
-
+                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
     </div>
-            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
 
  <div class="col s12">
      <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Special Offers</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
 
      <div class="scrolling-wrapper" style="height: 250px;">
          <?php
-         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Restaurant'");
+         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Dessert') AND not deleted ORDER BY id DESC;");
          while($row = mysqli_fetch_array($result))
          {
              if ($row['id'] != "297"){
@@ -669,7 +775,7 @@ if($_SESSION['customer_sid']==session_id())
                                      <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                          <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
                                              <div class="card-image">
-                                                 <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                                 <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                              </div></button>
                                          <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
                                              <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-radio-button-on right"></i></span><br>
@@ -689,14 +795,116 @@ if($_SESSION['customer_sid']==session_id())
      </div>
 
 </div>
-            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+
+            <div class="col s12" id="lunch" hidden>
+                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Best of Lunch</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+                <div class="scrolling-wrapper" style="height: 250px;">
+                    <?php
+                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Fast Food' OR ocassion='Restaurant' AND not deleted ORDER BY id DESC;");
+                    while($row = mysqli_fetch_array($result))
+                    {
+                        if ($row['id'] != "297"){
+                            $dis_fee = 0;
+                            $address = $row['address'];
+                            $addressFrom = $address;
+                            $addressTo   = $usr_address;
+                            $distance = 1.5;
+                            $image = $row['image_dir3'];
+                            $image_dir = '';
+                            $restaurant_id = $row['id'];
+                            $restaurant_name = $row['name'];
+
+                            $mon = $row['mon'];
+                            $monc = $row['monc'];
+
+                            if ($image != ''){
+                                $image_dir = $image;
+                            }
+                            else if ($image == ''){
+                                $image_dir = 'images/yaadi-food.jpg';
+                            }
+
+                            if($distance <= 0.5 && $distance > 0.0){
+                                $dis_fee = 350;
+                            }
+                            if($distance <= 1.0 && $distance > 0.5){
+                                $dis_fee = 400;
+                            }
+                            if($distance <= 1.5 && $distance > 1.0){
+                                $dis_fee = 450;
+                            }
+                            if($distance <= 2.0 && $distance >= 1.5){
+                                $dis_fee = 500;
+                            }
+                            if($distance <= 2.5 && $distance >= 2.0){
+                                $dis_fee = 550;
+                            }
+                            if($distance <= 3.0 && $distance >= 2.5){
+                                $dis_fee = 600;
+                            }
+                            if($distance <= 3.5 && $distance >= 3.0){
+                                $dis_fee = 650;
+                            }
+                            if($distance <= 4.0 && $distance >= 3.5){
+                                $dis_fee = 700;
+                            }
+                            if($distance <= 4.5 && $distance >= 4.0){
+                                $dis_fee = 750;
+                            }
+                            if($distance <= 5.0 && $distance >= 4.5){
+                                $dis_fee = 800;
+                            }
+                            if($distance <= 5.5 && $distance >= 5.0){
+                                $dis_fee = 850;
+                            }
+                            if($distance <= 6.0 && $distance >= 5.5){
+                                $dis_fee = 900;
+                            }
+                            if($distance <= 6.5 && $distance >= 6.0){
+                                $dis_fee = 950;
+                            }
+                            if($distance <= 7.0 && $distance >= 6.5){
+                                $dis_fee = 1000;
+                            }
+
+                            ?>
+                            <div class="smallcard" style="width: 300px;">
+                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                    <div class="column">
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                        <div class="card-image">
+                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                        </div></button>
+                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <label style="font-size: 10px;">⏱️ <b>40 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+            </div>
 
  <div class="col s12">
      <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Fastest Near You</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
 
      <div class="scrolling-wrapper" style="height: 250px;">
          <?php
-         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Pizza'  ORDER BY id='53' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND ocassion='Pizza' AND not deleted ORDER BY id DESC;");
          while($row = mysqli_fetch_array($result))
          {
              if ($row['id'] != "297"){
@@ -772,7 +980,7 @@ if($_SESSION['customer_sid']==session_id())
                                      <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                          <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
                                          <div class="card-image">
-                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 32px">
+                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                          </div></button>
                                          <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
                                              <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-check-box right"></i></span><br>
@@ -792,7 +1000,109 @@ if($_SESSION['customer_sid']==session_id())
      </div>
 
 </div>
-            <div class="row" style="height: 8px;background-color: lightgray;border: 1px solid darkgray;"></div>
+            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+
+            <div class="col s12" id="dinner" hidden>
+                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Dinner</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+                <div class="scrolling-wrapper" style="height: 250px;">
+                    <?php
+                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Seafood' OR ocassion='Jamaican Chinese' OR ocassion='Chinese') AND not deleted ORDER BY id DESC;");
+                    while($row = mysqli_fetch_array($result))
+                    {
+                        if ($row['id'] != "297"){
+                            $dis_fee = 0;
+                            $address = $row['address'];
+                            $addressFrom = $address;
+                            $addressTo   = $usr_address;
+                            $distance = 1.5;
+                            $image = $row['image_dir3'];
+                            $image_dir = '';
+                            $restaurant_id = $row['id'];
+                            $restaurant_name = $row['name'];
+
+                            $mon = $row['mon'];
+                            $monc = $row['monc'];
+
+                            if ($image != ''){
+                                $image_dir = $image;
+                            }
+                            else if ($image == ''){
+                                $image_dir = 'images/yaadi-food.jpg';
+                            }
+
+                            if($distance <= 0.5 && $distance > 0.0){
+                                $dis_fee = 350;
+                            }
+                            if($distance <= 1.0 && $distance > 0.5){
+                                $dis_fee = 400;
+                            }
+                            if($distance <= 1.5 && $distance > 1.0){
+                                $dis_fee = 450;
+                            }
+                            if($distance <= 2.0 && $distance >= 1.5){
+                                $dis_fee = 500;
+                            }
+                            if($distance <= 2.5 && $distance >= 2.0){
+                                $dis_fee = 550;
+                            }
+                            if($distance <= 3.0 && $distance >= 2.5){
+                                $dis_fee = 600;
+                            }
+                            if($distance <= 3.5 && $distance >= 3.0){
+                                $dis_fee = 650;
+                            }
+                            if($distance <= 4.0 && $distance >= 3.5){
+                                $dis_fee = 700;
+                            }
+                            if($distance <= 4.5 && $distance >= 4.0){
+                                $dis_fee = 750;
+                            }
+                            if($distance <= 5.0 && $distance >= 4.5){
+                                $dis_fee = 800;
+                            }
+                            if($distance <= 5.5 && $distance >= 5.0){
+                                $dis_fee = 850;
+                            }
+                            if($distance <= 6.0 && $distance >= 5.5){
+                                $dis_fee = 900;
+                            }
+                            if($distance <= 6.5 && $distance >= 6.0){
+                                $dis_fee = 950;
+                            }
+                            if($distance <= 7.0 && $distance >= 6.5){
+                                $dis_fee = 1000;
+                            }
+
+                            ?>
+                            <div class="smallcard" style="width: 300px;">
+                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                    <div class="column">
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                        <div class="card-image">
+                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                        </div></button>
+                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <label style="font-size: 10px;">⏱️ <b>40 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+            </div>
 
  <div class="col s12">
      <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><i class="mdi-navigation-arrow-forward black-text"></i></b></span></h5></a>
@@ -847,42 +1157,77 @@ if($_SESSION['customer_sid']==session_id())
     <script>
         $(document).ready(function(){
             openTime();
-        //javascript function to display open/closed in the open hours page
         function openTime() {
-            var d = new Date(); //get the time/date
-            var dy = d.getDay(); //what day is it
-            var moment = String(Date()).slice(16,21); //time as a string
-            var moment = moment.replace(":",""); //remove the colon
+            var d = new Date();
+            var dy = d.getDay();
+            var moment = String(Date()).slice(16,21);
+            var moment = moment.replace(":","");
             var open = String(document.getElementById('open')).slice(16,21);
             var close = String(document.getElementById('closes')).slice(16,21);
 
-            if (dy == 0){//sunday: closed
-                Materialize.toast('Hey there, we are closed today', 4000);
-            }else{
+            if (dy == 0){
+                Materialize.toast('Hey there, we are closed today 😴', 8000);
 
-                if(moment > 830 && moment < 1730){//is the current time between 830am and 5:30pm
+                if (moment > 800 && moment < 1130){
+                    $('#breakfast').show();
+                }
+
+                if (moment > 1130 && moment < 1500){
+                    $('#lunch').show();
+                }
+
+                if (moment > 1500 && moment < 2000){
+                    $('#dinner').show();
+                }
+
+                if (moment > 1900 && moment < 2400){
+                    $('#latenightcravings').show();
+                }
+            }
+            else{
+
+                if (moment > 800 && moment < 1800){
                     <?php
                     $openclosertime = "";
-                    $resultt = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND not deleted ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row2 = mysqli_fetch_array($resultt))
+                    $openclose = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND not deleted ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+                    while($row2 = mysqli_fetch_array($openclose))
                     {
-
                         $openclosee = mysqli_query($con, "SELECT * FROM incumbency WHERE id= 2");
                         while ($row = mysqli_fetch_array($openclosee)) {
                             $openclosertime = $row['admission'];
                         }
                     }
+
                     if ($openclosertime == 0) {
-                        echo "Materialize.toast('Ordering is currently active 😊', 8000);";
+                        echo "Materialize.toast('Ordering is currently active 😋', 8000);";
                     }
                     if ($openclosertime == 1) {
-                        echo "Materialize.toast('Ordering is currently closed. <button>Schedule Order</button>', 4000);";
+                        echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
                         }
                     ?>
-                }else{
+
+                }
+
+                if (moment > 800 && moment < 1130){
+                    $('#breakfast').show();
+                }
+
+                if (moment > 1130 && moment < 1500){
+                    $('#lunch').show();
+                }
+
+                if (moment > 1500 && moment < 2000){
+                    $('#dinner').show();
+                }
+
+                if (moment > 1900 && moment < 2400){
+                    $('#latenightcravings').show();
+                }
+
+                else{
                     <?php
 
-                        echo "Materialize.toast('Ordering is currently closed. <button>Schedule Order</button>', 4000);";
+                        echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
                     ?>
                 }
             }

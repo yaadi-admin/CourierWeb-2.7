@@ -22,7 +22,7 @@ else{
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Create Account - Yaadi</title>
+        <title>Register</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -138,12 +138,13 @@ else{
             button, a:active {
                 box-shadow: inset 1px 1px 2px #BABECC, inset -1px -1px 2px #FFF;
                 color: #b5796d;
+                background-color: white;
             }
             button .icon {
                 margin-right: 8px;
             }
             button.unit {
-                border-radius: 8px;
+                border-radius: 32px;
                 line-height: 0;
                 width: 48px;
                 height: 48px;
@@ -178,21 +179,21 @@ else{
     </div>
 
     <div id="login-page" class="row">
-        <div class="col s12 z-depth-4 card-panel" style="border: 2px solid mediumaquamarine;border-radius: 8px;">
-            <form class="formValidate" id="formValidate" method="post" action="routers/register-router.php" novalidate="novalidate" class="col s12">
+        <div class="col s12 z-depth-4 card-panel" style="border: 2px solid #a0381b;border-radius: 8px;">
+            <form class="formValidate" id="formValidate" method="post" novalidate="novalidate">
                 <div class="row">
                     <div class="input-field col s12 center">
                         <h4 class="teal-text" style="font-weight: 800;">Create Account</h4>
                         <img id="logoimg" src="images/yaadi-icon.png">
                         <br>
-                        <span class="text-black bold" style="font-size: 15px;font-weight: 800;"><span class="left teal-text">Sign up, </span> it's free and always will be.</span>
+                        <h6 class="text-black bold" style="font-size: 12px;font-weight: 800;"><span class="teal-text">Create an account, </span>it's free & always will be</h6>
                     </div>
                 </div>
                 <div class="row margin">
                     <div class="input-field col s12">
-                        <i class="mdi-action-perm-contact-cal prefix" style="color: #a0381b;"></i>
+                        <i class="mdi-action-account-box prefix" style="color: #a0381b;"></i>
                         <input name="name" id="name" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-top-left: 1px solid white;border-top-right: 1px solid white;border-bottom: 1px solid black;">
-                        <label for="name" class="center-align">Name</label>
+                        <label for="name" class="center-align">Full name</label>
                         <div class="errorTxt1"></div>
                     </div>
                 </div>
@@ -206,6 +207,14 @@ else{
                 </div>
                 <div class="row margin">
                     <div class="input-field col s12">
+                        <i class="mdi-communication-email prefix" style="color: #a0381b;"></i>
+                        <input name="email" id="email" type="email" data-error=".errorTxt3" style="border-bottom-right-radius: 8px;border-top-left: 1px solid white;border-top-right: 1px solid white;border-bottom: 1px solid black;">
+                        <label for="email">Email</label>
+                        <div class="errorTxt3"></div>
+                    </div>
+                </div>
+                <div class="row margin">
+                    <div class="input-field col s12">
                         <i class="mdi-hardware-security prefix" style="color: #a0381b;"></i>
                         <input name="password" id="password" type="password" data-error=".errorTxt4" style="border-bottom-right-radius: 8px;border-top-left: 1px solid white;border-top-right: 1px solid white;border-bottom: 1px solid black;">
                         <label for="password">Password</label>
@@ -215,20 +224,17 @@ else{
                 <div class="row">
                     <p class="margin center medium-small sign-up" style="font-size: 10px">Signing up, automatically agrees to our <a href="tercon.php" target="_blank">Terms & Conditions</a></p>
                     <div style="height:5px;"></div>
-                    <div class="row col s12">
-                        <button value="submit" class="icon ion-md-lock btn waves-effect waves-light center col s12" onclick="document.getElementById('formValidate').check();" type="submit" style="color: white;font-family: Open Sans, ;font-family: Akronim;font-size:18px;border-radius: 8px;" name="action">Create Account</button>
-                    </div>
+                    <p class="col s12">
+                        <button value="submit" class="icon ion-md-lock btn waves-effect waves-light center col s12" id="registerbtn" onclick="document.getElementById('formValidate').check();" type="submit" style="color: white;font-family: Open Sans, ;font-family: Akronim;font-size:18px;border-radius: 8px;" name="action">Create Account</button>
+                    </p>
                     <div class="row">
                         <div class="segment">
                             <div class="btn-group">
+                                <p class="margin center medium-small sign-up" style="font-size:12px;color:black;"><label>Already have an account?</label><a class="left" href="login.php" style="font-size:15px;color:#a0381b;"><button class="unit" type="button" style="border: 3px solid #a0381b;color: #a0381b;"><i class="mdi-action-verified-user prefix"></i></button></a></p>
                                 <div class="divider"></div>
-                                <div style="height:5px;"></div>
-                                <p class="margin center medium-small sign-up" style="font-size:12px;color:#b5796d;height: 5px">Already have an account<a href="login.php" style="font-size:15px;color:#b5796d;"><button class="unit" type="button" style="border: 3px solid antiquewhite;color: #b5796d;"><i class="mdi-social-people prefix"></i></button></a></p>
+                                <p class="center-align"><label id="message"></label></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="input-field col s12">
-
                     </div>
                 </div>
             </form>
@@ -242,6 +248,10 @@ else{
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            RegisterUser();
+        })
+
         $("#formValidate").validate({
             rules: {
                 name: {
@@ -252,6 +262,11 @@ else{
                     required: true,
                     minlength: 5,
                     maxlength: 10,
+                },
+                email: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 32,
                 },
                 phone: {
                     required: true,
@@ -271,6 +286,11 @@ else{
                     minlength: "Minimum 5 characters are required.",
                     maxlength: "Maximum 10 Characters allowed"
                 },
+                email: {
+                    required: "Enter your email",
+                    minlength: "Minimum 5 characters are required.",
+                    maxlength: "Maximum 32 Characters allowed"
+                },
                 phone:{
                     required: "Specify contact number +1 876XXXXXXX.",
                     minlength: "Minimum 10 digits are required.",
@@ -287,6 +307,31 @@ else{
                 }
             }
         });
+
+        function RegisterUser() {
+            $(document).on('click', "#registerbtn", function (e) {
+                e.preventDefault();
+                var name = $('#name').val();
+                var password = $('#password').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+
+                if (password === '' || phone === '' || email === '' || name === ''){
+                    Materialize.toast('Fields are empty', 8000);
+                }
+                else {
+                    $.ajax({
+                        url: '../routers/register-router.php',
+                        method: 'post',
+                        data:{phone:phone,name:name,email:email,password:password},
+                        success: function (data) {
+                            $('#message').html(data);
+
+                        }
+                    })
+                }
+            })
+        }
     </script>
     <script>
         window.dataLayer = window.dataLayer || [];

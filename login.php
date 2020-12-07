@@ -205,7 +205,7 @@ else{
             </div>
             <div class="row margin">
                 <div class="input-field col s12">
-                    <span<a><i class="mdi-hardware-security prefix" style="color: #a0381b;"></i></a></span>
+                    <i class="mdi-hardware-security prefix" style="color: #a0381b;"></i>
                     <input name="password" id="password" type="password" data-error=".errorTxt2" style="border-bottom-right-radius: 8px;border-top-left: 5px solid white;border-top-right: 5px solid white;border-bottom: 1px solid black;">
                     <label for="password" style="font-size:12px;">Password</label>
                     <div class="errorTxt2"></div>
@@ -282,8 +282,9 @@ else{
                         var phone = $('#contact').val();
                         var password = $('#password').val();
 
-                        if (password == "" || phone == ""){
-                            $('#modaltop').html('<h5>All fields are not filled</h5>');
+                        if (password === '' || phone === ''){
+                           Materialize.toast('Enter credentials <button onclick="Register()" class="btn" style="border-radius: 8px;">Create account</button>', 8000);
+
                         }
                         else {
                             $.ajax({
@@ -298,6 +299,10 @@ else{
                         }
                     })
                 }
+
+    function Register() {
+        window.location=" ../register.php";
+    }
 
         var scrollSpeed = 100;
         var current = 0;

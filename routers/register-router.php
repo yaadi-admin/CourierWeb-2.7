@@ -1,12 +1,11 @@
 <?php
 include '../includes/connect.php';
-require '../src/Twilio/autoload.php';
-use Twilio\Rest\Client;
 if (isset($_POST['phone'])) {
     $name = htmlspecialchars($_POST['name']);
     $password = htmlspecialchars($_POST['password']);
     $date = date('Y-m-d');
     $phone = $_POST['phone'];
+    $email = $_POST['email'];
     $hsh = password_hash($password, PASSWORD_BCRYPT);
     function number($length)
     {
@@ -19,8 +18,7 @@ if (isset($_POST['phone'])) {
     }
 
     if ($_POST['name'] && $_POST['phone'] != '') {
-
-        $sql = "INSERT INTO users (name, password, contact, verified) VALUES ('$name', '$hsh', '$phone', 1);";
+        $sql = "INSERT INTO users (name, email, password, contact, verified) VALUES ('$name', '$email', '$hsh', '$phone', 1);";
         if ($con->query($sql) == true) {
             $user_id = $con->insert_id;
             $sql = "INSERT INTO wallet(customer_id) VALUES ($user_id)";
@@ -31,7 +29,6 @@ if (isset($_POST['phone'])) {
                 $sql = "INSERT INTO wallet_details(wallet_id, number, cvv) VALUES ($wallet_id, $cc_number, $cvv_number)";
                 $con->query($sql);
             }
-
 
             $to = 'yaadiltd@gmail.com';
             $subject = '' . $name . ' Registered';
@@ -63,9 +60,9 @@ if (isset($_POST['phone'])) {
             $headers[] = 'Content-type: text/html; charset=iso-8859-1';
             $headers[] = 'From: <register@yaadi.co>';
             mail($to, $subject, $message, implode("\r\n", $headers));
+            echo "<script>alert('Account successfully created, Please login');</script>";
+            echo '<script>window.location=" ../login.php";</script>';
         }
-        echo '<script>alert("Account Created! \nWelcome to Yaadi, Please log in.");</script>';
-        echo '<script>window.location=" ../login.php"</script>';
     }
 }
 ?>
