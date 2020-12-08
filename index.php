@@ -1,7 +1,6 @@
 <?php
 include 'includes/connect.php';
 include 'includes/wallet.php';
-//include 'includes/location.php';
 if($_SESSION['customer_sid']==session_id())
 {
     $usr_address = "";
@@ -396,9 +395,6 @@ if($_SESSION['customer_sid']==session_id())
                         if ($row['id'] != "297"){
                             $dis_fee = 0;
                             $address = $row['address'];
-                            $addressFrom = $address;
-                            $addressTo   = $usr_address;
-                            $distance = 1.5;
                             $image = $row['image_dir2'];
                             $image_dir = '';
                             $restaurant_id = $row['id'];
@@ -414,49 +410,6 @@ if($_SESSION['customer_sid']==session_id())
                                 $image_dir = 'images/yaadi-food.jpg';
                             }
 
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
-
                             ?>
         <div class="smallcard" style="width: 260px;">
             <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
@@ -464,6 +417,7 @@ if($_SESSION['customer_sid']==session_id())
                     <div class="row">
                         <div class="col s12 m6">
                             <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
                             <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                 <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
                                     <div class="card-image">
@@ -471,7 +425,7 @@ if($_SESSION['customer_sid']==session_id())
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
                                     <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
-                                    <label style="font-size: 10px;">⏱️ <b>45 - 60 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<?php echo number_format($dis_fee); ?> Delivery</label>
+                                    <label style="font-size: 10px;">⏱️ <b>45 - 60 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="deliveryfee"></span> Delivery</label>
                                 </div>
                             </div>
                         </div>
@@ -1106,14 +1060,11 @@ if($_SESSION['customer_sid']==session_id())
 
  <div class="col s12">
      <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><i class="mdi-navigation-arrow-forward black-text"></i></b></span></h5></a>
-
+ </div>
+            <span id="message"></span>
  </div>
 </div>
 </section>
-
-
-
-    </div>
 
     <footer class="page-footer">
         <div class="footer-copyright">
@@ -1149,9 +1100,18 @@ if($_SESSION['customer_sid']==session_id())
     </script>
     <script>
         $(document).ready(function(){
-
-
-
+            var restaurant = $('#rest_address').val();
+            var customer = <?php echo $usr_address; ?>;
+            window.setInterval(function(){
+                $.ajax({
+                    url: '../includes/location.php',
+                    method: 'post',
+                    data:{restaurant:restaurant,customer:customer},
+                    success: function (data) {
+                        $('#deliveryfee').html(data);
+                    }
+                })
+            }, 5000);
         });
     </script>
     <script>

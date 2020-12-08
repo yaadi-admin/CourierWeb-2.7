@@ -1,14 +1,6 @@
 <?php
 include 'includes/connect.php';
 
-$result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND not deleted AND ocassion='Fast Food'  ORDER BY id='53' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-while($row = mysqli_fetch_array($result)) {
-    $addressFrom = $row['address'];
-    $addressTo = $_POST['address'];
-    $distance = getDistance($addressFrom, $addressTo, "K");
-    echo $distance;
-}
-
 function getDistance($addressFrom, $addressTo, $unit = ''){
     // Google API key
     $apiKey = 'AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo';
@@ -54,5 +46,55 @@ function getDistance($addressFrom, $addressTo, $unit = ''){
         return round($miles, 2).' miles';
     }
 }
+
+$addressFrom = $_POST['restaurant'];
+$addressTo = $_POST['customer'];
+$distance = getDistance($addressFrom, $addressTo, "K");
+
+$dis_fee = 0;
+
+if($distance <= 0.5 && $distance > 0.0){
+    $dis_fee = 350;
+}
+if($distance <= 1.0 && $distance > 0.5){
+    $dis_fee = 400;
+}
+if($distance <= 1.5 && $distance > 1.0){
+    $dis_fee = 450;
+}
+if($distance <= 2.0 && $distance >= 1.5){
+    $dis_fee = 500;
+}
+if($distance <= 2.5 && $distance >= 2.0){
+    $dis_fee = 550;
+}
+if($distance <= 3.0 && $distance >= 2.5){
+    $dis_fee = 600;
+}
+if($distance <= 3.5 && $distance >= 3.0){
+    $dis_fee = 650;
+}
+if($distance <= 4.0 && $distance >= 3.5){
+    $dis_fee = 700;
+}
+if($distance <= 4.5 && $distance >= 4.0){
+    $dis_fee = 750;
+}
+if($distance <= 5.0 && $distance >= 4.5){
+    $dis_fee = 800;
+}
+if($distance <= 5.5 && $distance >= 5.0){
+    $dis_fee = 850;
+}
+if($distance <= 6.0 && $distance >= 5.5){
+    $dis_fee = 900;
+}
+if($distance <= 6.5 && $distance >= 6.0){
+    $dis_fee = 950;
+}
+if($distance <= 7.0 && $distance >= 6.5){
+    $dis_fee = 1000;
+}
+echo $dis_fee;
 
 ?>
