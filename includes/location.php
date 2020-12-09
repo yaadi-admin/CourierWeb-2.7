@@ -1,5 +1,7 @@
 <?php
 include 'includes/connect.php';
+$addressFrom = $_POST['restaurant'];
+$addressTo = $_POST['customer'];
 
 function getDistance($addressFrom, $addressTo, $unit = ''){
     // Google API key
@@ -47,9 +49,8 @@ function getDistance($addressFrom, $addressTo, $unit = ''){
     }
 }
 
-$addressFrom = $_POST['restaurant'];
-$addressTo = $_POST['customer'];
 $distance = getDistance($addressFrom, $addressTo, "K");
+
 
 $dis_fee = 0;
 
