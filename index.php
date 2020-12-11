@@ -159,6 +159,12 @@ if($_SESSION['customer_sid']==session_id())
                 width: 48px;
                 height: 48px;
             }
+            #slideshow img{
+                position: absolute;
+                top: 10em;
+                left: 0;
+                width: 100%;
+            }
         </style>
 
     </head>
@@ -373,17 +379,21 @@ if($_SESSION['customer_sid']==session_id())
 
             <div class="row">
                 <div class="scrolling-wrapper" style="border-bottom: 4px solid ghostwhite;border-top: 4px solid ghostwhite;height: 250px;">
-                    <img src="images/adban.jpg" width="100%" height="100%" style="object-fit: cover">
-                    <img src="images/topban.jpg" width="100%" height="100%" style="object-fit: cover">
-                    <img src="images/footerban.jpg" width="100%" height="100%" style="object-fit: cover">
+                    <div id="slideshow">
+                        <img src="images/adban.jpg" style="object-fit: cover">
+                        <img src="images/topban.jpg" style="object-fit: cover">
+                        <img src="images/footerban.jpg" style="object-fit: cover">
+                    </div>
                 </div>
                 <h6 class="center">
                     <span class="center"><i class="mdi-image-looks-one"></i></span>
                     <span class="center"><i class="mdi-image-looks-two"></i></span>
                     <span class="center"><i class="mdi-image-looks-3"></i></span>
+                    <span class="center"><i class="mdi-image-looks-4"></i></span>
+                    <span class="center"><i class="mdi-image-looks-5"></i></span>
+                    <span class="center"><i class="mdi-image-looks-6"></i></span>
                 </h6>
             </div>
-
 
 <div class="col s12">
     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Favorites</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
@@ -934,6 +944,53 @@ if($_SESSION['customer_sid']==session_id())
 <!--            }, 2000);-->
 <!--        });-->
 <!--    </script>-->
+
+    <script>
+        var duration = 10; // duration in seconds
+        var fadeAmount = 0.3; // fade duration amount relative to the time the image is visible
+
+        $(document).ready(function (){
+            var images = $("#slideshow img");
+            var numImages = images.size();
+            var durationMs = duration * 1000;
+            var imageTime = durationMs / numImages; // time the image is visible
+            var fadeTime = imageTime * fadeAmount; // time for cross fading
+            var visibleTime = imageTime  - (imageTime * fadeAmount * 2);// time the image is visible with opacity == 1
+            var animDelay = visibleTime * (numImages - 1) + fadeTime * (numImages - 2); // animation delay/offset for a single image
+
+            images.each( function( index, element ){
+                if(index != 0){
+                    $(element).css("opacity","0");
+                    setTimeout(function(){
+                        doAnimationLoop(element,fadeTime, visibleTime, fadeTime, animDelay);
+                    },visibleTime*index + fadeTime*(index-1));
+                }else{
+                    setTimeout(function(){
+                        $(element).animate({opacity:0},fadeTime, function(){
+                            setTimeout(function(){
+                                doAnimationLoop(element,fadeTime, visibleTime, fadeTime, animDelay);
+                            },animDelay )
+                        });
+                    },visibleTime);
+                }
+            });
+        });
+
+        // creates a animation loop
+        function doAnimationLoop(element, fadeInTime, visibleTime, fadeOutTime, pauseTime){
+            fadeInOut(element,fadeInTime, visibleTime, fadeOutTime ,function(){
+                setTimeout(function(){
+                    doAnimationLoop(element, fadeInTime, visibleTime, fadeOutTime, pauseTime);
+                },pauseTime);
+            });
+        }
+
+        // shorthand for in- and out-fading
+        function fadeInOut( element, fadeIn, visible, fadeOut, onComplete){
+            return $(element).animate( {opacity:1}, fadeIn ).delay( visible ).animate( {opacity:0}, fadeOut, onComplete);
+        }
+    </script>
+
     <script>
         $(document).ready(function(){
             openTime();
