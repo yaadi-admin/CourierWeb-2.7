@@ -130,7 +130,7 @@ if($_SESSION['delivery_sid']==session_id())
                                 }
                                 ?>
                             </a></li>
-                        <li><a href="delivery-dashboard.php"><i class="mdi-navigation-refresh"></i></a></li>
+                        <li><a href="locate.php"><i class="mdi-maps-directions-bike"></i></a></li>
                     </ul>
                 </div>
             </nav>
