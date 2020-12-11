@@ -204,7 +204,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 
 
                           echo '<li class="collection-item avatar" style="background-color: white;color: black;">
-      <img src="images/yaadi-icon.png" alt="" class="circle">
       <span class="title">' . $row["name"] . '</span>
       <p>Phone: ' . $row["contact"] . ' <br>
          Email: ' . $email . '

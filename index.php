@@ -372,10 +372,10 @@ if($_SESSION['customer_sid']==session_id())
 
 
             <div class="row">
-                <div class="scrolling-wrapper" style="border-bottom: 1px solid lightgrey;border-top: 1px solid lightgrey;height: 180px;">
-                    <img src="images/footerban.jpg" width="100%" height="100%" style="object-fit: cover">
+                <div class="scrolling-wrapper" style="border-bottom: 4px solid ghostwhite;border-top: 4px solid ghostwhite;height: 250px;">
                     <img src="images/adban.jpg" width="100%" height="100%" style="object-fit: cover">
                     <img src="images/topban.jpg" width="100%" height="100%" style="object-fit: cover">
+                    <img src="images/footerban.jpg" width="100%" height="100%" style="object-fit: cover">
                 </div>
                 <h6 class="center">
                     <span class="center"><i class="mdi-image-looks-one"></i></span>
