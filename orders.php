@@ -216,17 +216,17 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_type"]) && $row1["variation_type"] != ""){
+                            if (isset($row1["variation_type"]) && $row1["variation_type"] != ''){
                                 echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_side"]) && $row1["variation_side"] != ""){
+                            if (isset($row1["variation_side"]) && $row1["variation_side"] != ''){
                                 echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_drink"]) && $row1["variation_drink"] != "") {
+                            if (isset($row1["variation_drink"]) && $row1["variation_drink"] != '') {
                                 echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
                             }

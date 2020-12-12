@@ -11,55 +11,6 @@ if($_SESSION['customer_sid']==session_id())
         $usr_address = $row['address'];
     }
     $counter = 0;
-    if(!empty($_SESSION["shopping_cart"]))
-    {
-        foreach($_SESSION["shopping_cart"] as $keys => $values) {
-            $counter += 1;
-        }
-
-    }
-    if(isset($_POST["add_to_cart"]))  {
-        if(isset($_SESSION["shopping_cart"]))  {
-            $item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
-            if(!in_array($_GET["id"], $item_array_id))
-            {
-                $count = count($_SESSION["shopping_cart"]);
-                $item_array = array(
-                    'item_id'               =>     $_GET["id"],
-                    'item_name'               =>     $_POST["hidden_name"],
-                    'item_price'          =>     $_POST["hidden_price"],
-                    'item_quantity'          =>     $_POST["quantity"]
-                );
-                $_SESSION["shopping_cart"][$count] = $item_array;
-            }
-        }
-        else
-        {
-            $item_array = array(
-                'item_id'               =>     $_GET["id"],
-                'item_name'               =>     $_POST["hidden_name"],
-                'item_price'          =>     $_POST["hidden_price"],
-                'item_quantity'          =>     $_POST["quantity"]
-            );
-            $_SESSION["shopping_cart"][0] = $item_array;
-        }
-    }
-    if(isset($_GET["action"]))
-    {
-        if($_GET["action"] == "delete")
-        {
-            foreach($_SESSION["shopping_cart"] as $keys => $values)
-            {
-                if($values["item_id"] == $_GET["id"])
-                {
-                    unset($_SESSION["shopping_cart"][$keys]);
-                    echo '<script>alert("Item Removed")</script>';
-                    echo '<script>window.location="index.php?action=delete&id='.$values["item_id"].'</script>';
-                }
-            }
-        }
-    }
-
 
     ?>
 
@@ -160,7 +111,7 @@ if($_SESSION['customer_sid']==session_id())
                 <div class="nav-wrapper">
                     <ul style="background-color: white;">
                         <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO </b></label>
-                        <li class="left"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 16px;color: black;"><?php echo $usr_address; ?></a></li>
+                        <li class="left"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
                     </ul>
                 </div>
 

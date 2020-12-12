@@ -377,7 +377,7 @@ if($_SESSION['customer_sid']==session_id())
             </div>
 
 
-            <div class="row">
+            <div class="row hide-on-med-and-up">
                 <div class="scrolling-wrapper" style="border-bottom: 4px solid ghostwhite;border-top: 4px solid ghostwhite;height: 250px;">
                     <div id="slideshow">
                         <img src="images/adban.jpg" style="object-fit: cover">
@@ -435,7 +435,7 @@ if($_SESSION['customer_sid']==session_id())
                                         <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                     <label style="font-size: 10px;">⏱️ <b>45 - 60 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                 </div>
                             </div>
@@ -492,7 +492,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                                         </div></button>
                                                     <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                                         <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                                     </div>
                                                 </div>
@@ -547,7 +547,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                                         </div></button>
                                                     <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                                         <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                                     </div>
                                                 </div>
@@ -602,7 +602,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                                         </div></button>
                                                     <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                                         <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                                     </div>
                                                 </div>
@@ -657,7 +657,7 @@ if($_SESSION['customer_sid']==session_id())
                                         <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                     <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                 </div>
                             </div>
@@ -712,7 +712,7 @@ if($_SESSION['customer_sid']==session_id())
                                                  <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                              </div></button>
                                          <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
-                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-radio-button-on right"></i></span><br>
+                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-radio-button-on right hide-on-med-and-up"></i></span><br>
                                              <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                          </div>
                                      </div>
@@ -768,7 +768,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                                         </div></button>
                                                     <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                                         <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                                     </div>
                                                 </div>
@@ -823,7 +823,7 @@ if($_SESSION['customer_sid']==session_id())
                                              <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                          </div></button>
                                          <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
-                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-check-box right"></i></span><br>
+                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-check-box right hide-on-med-and-up"></i></span><br>
                                              <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                          </div>
                                      </div>
@@ -879,7 +879,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                                         </div></button>
                                                     <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right"></i></span><br>
+                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
                                                         <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
                                                     </div>
                                                 </div>
