@@ -28,7 +28,8 @@ else{
   <link href="css/custom/custom.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="css/layouts/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="css/custom/log.css" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection"> 
+  <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
     .input-field div.error{
     position: relative;
@@ -65,7 +66,7 @@ else{
 
   <div id="login-page" class="row">
       <div class="col s12 z-depth-4 card-panel" style="border: 2px solid antiquewhite;border-radius: 8px;">
-          <form class="formValidate  login-form" id="formValidate" method="post" action="<?php echo "routers/router-admin.php"; ?>" novalidate="novalidate">
+          <form class="formValidate  login-form" id="formValidate" method="post" novalidate="novalidate">
               <div class="row"><span style="font-size:18px;">🍉</span>
                   <div class="input-field col s12 center">
                       <img id="logoimg" src="images/yaadi-icon.png" width="200px" height="150px" style="object-position: center;object-fit: scale-down;">
@@ -96,6 +97,7 @@ else{
                               <div style="height:10px;"></div>
                               <div class="divider"></div>
                               <p class="center"><i class="mdi-notification-event-available"></i> Welcome to Yaadi admissions</p>
+                              <p class="center-align"><label id="message"></label></p>
                           </div>
                       </div>
                   </div>
@@ -112,6 +114,9 @@ else{
   <script type="text/javascript" src="js/plugins.min.js"></script>
   <script type="text/javascript" src="js/custom-script.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            LoginUser();
+        })
     $("#formValidate").validate({
         rules: {
             username: {
@@ -148,6 +153,32 @@ else{
           }
         }
      });
+
+
+    function LoginUser() {
+        $(document).on('click', "#loginbtn", function (e) {
+            e.preventDefault();
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+            if (password === '' || username === ''){
+                Materialize.toast('Please enter credentials', 8000);
+
+            }
+            else {
+                $.ajax({
+                    url: '../routers/router-admin.php',
+                    method: 'post',
+                    data:{username:username,password:password},
+                    success: function (data) {
+                        $('#message').html(data);
+
+                    }
+                })
+            }
+        })
+    }
+
     </script>
     
 <script>

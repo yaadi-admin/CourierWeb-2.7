@@ -192,6 +192,8 @@ if($_SESSION['restaurant_sid']==session_id())
                             </li>
                         </ul>
                     </li>
+                    <li class="bold"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-add-shopping-cart"></i>Place Order</a>
+                    </li>
                     <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Account</a>
                     </li>
                     <li class="bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
@@ -848,16 +850,16 @@ if($_SESSION['restaurant_sid']==session_id())
 							<div class="collapsible-body">';
                             echo  '
                     <div class="row">
-                     <form class="formValidate" id="formValidate" method="post" action="routers/hide_show.php" novalidate="novalidate">
-                     <input  type="hidden" name="item" value="'.$row['id'].'">
-                    <p><select class="col s12 browser-default" name="hide_show">
+                     <form class="formValidate" id="formValidate" method="post" novalidate="novalidate">
+                     <input  type="hidden" id="item" name="item" value="'.$row['id'].'">
+                    <p><select class="col s12 browser-default" id="hide_show" name="hide_show">
                     <option value="0"'.(!$row['deleted'] ? 'selected' : '').'>Available</option>
                      <option value="1"'.($row['deleted'] ? 'selected' : '').'>Not Available</option>
                     </select></p>';
 
                             if ($user_id == "331"){
                                 echo '<div class="row">
-                    <p><select class="col s12 browser-default" name = "category">
+                    <p><select class="col s12 browser-default" id="category" name = "category">
                       <option value = "0" '.$cat1.'>Start the day </option >
                       <option value = "1" '.$cat2.'>Lunch & Beyond </option >
                       <option value = "2" '.$cat3.'>Subs</option >
@@ -882,7 +884,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "430") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Salads</option>
                       <option value="1" '.$cat2.'>Platters</option>
                       <option value="2" '.$cat3.'>Burgers</option>
@@ -899,7 +901,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "53") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Big Deal</option>
                       <option value="1" '.$cat2.'>Meal Deal</option>
                       <option value="2" '.$cat3.'>Zingers</option>
@@ -920,7 +922,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "80") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Amazin 4</option>
                       <option value="1" '.$cat2.'>Wings</option>
                       <option value="2" '.$cat3.'>Sides</option>
@@ -932,7 +934,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "57") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Patties</option>
                       <option value="1" '.$cat2.'>Chicken</option>
                       <option value="2" '.$cat3.'>Burgers</option>
@@ -947,14 +949,14 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "294") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Cakes</option>
                       <option value="1" '.$cat2.'>Pastries</option>
                     </select></p>';
                             }
 
                             else if ($user_id == "79") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Specialty Pizza</option>
                       <option value="1" '.$cat2.'>Chicken</option>
                       <option value="2" '.$cat3.'>Sides</option>
@@ -964,7 +966,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "486") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Breakfast</option>
                       <option value="1" '.$cat2.'>Lunch</option>
                       <option value="2" '.$cat3.'>Dinner</option>
@@ -974,7 +976,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "8") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Chicken</option>
                       <option value="1" '.$cat2.'>Fish</option>
                       <option value="2" '.$cat3.'>Sides</option>
@@ -986,7 +988,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "540") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                       <option value="0" '.$cat1.'>Appetizers</option>
                       <option value="1" '.$cat2.'>Soup of day</option>
                       <option value="2" '.$cat3.'>Entrees</option>
@@ -1000,7 +1002,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "259") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                         <option value="0" '.$cat1.'>Lunch Box Meals</option>
                       <option value="1" '.$cat2.'>Fat 2 Fit Salads</option>
                       <option value="2" '.$cat3.'>Lunch Box Specials</option>
@@ -1016,7 +1018,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "591") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                         <option value="0" ' . $cat1 . '>Omelets</option>
                       <option value="1" ' . $cat2 . '>Salads</option>
                       <option value="2" ' . $cat3 . '>Specialty Burgers</option>
@@ -1029,7 +1031,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             }
 
                             else if ($user_id == "54") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                         <option value="0" '.$cat1.'>Featured</option>
                         <option value="1" '.$cat2.'>Chicken</option>
                         <option value="2" '.$cat3.'>Yabba</option>
@@ -1041,13 +1043,13 @@ if($_SESSION['restaurant_sid']==session_id())
                     </select></p>';
                             }
                             else if ($user_id == "1293") {
-                                echo '<p><select class="col s12 browser-default" name="category">
+                                echo '<p><select class="col s12 browser-default" id="category" name="category">
                         <option value="0" '.$cat1.'>All</option>
                     </select></p>';
                             }
 
                             echo'<br>
-<p><button class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" type="submit" value="Change" name="submithide">Change Status
+<p><button class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" id="hideshowbtn" type="submit" value="Change" name="submithide">Change Status
  <i class="mdi-image-assistant-photo right" style="color: maroon;"></i>
  </button></p>
                     </form>
@@ -1243,7 +1245,7 @@ echo '</td></tr></tbody>
 
                 </ul>
                 </div>
-
+<span id="message"></span>
 
         </div>
         </section>
@@ -1297,6 +1299,9 @@ echo '</td></tr></tbody>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            HideShow();
+        })
         $("#formValidate").validate({
             rules: {
                 <?php
@@ -1342,6 +1347,32 @@ echo '</td></tr></tbody>
                         }
                     }
                 });
+
+        function HideShow() {
+            $(document).on('click', "#hideshowbtn", function (e) {
+                e.preventDefault();
+                var hideshow = $('#hide_show').val();
+                var category = $('#category').val();
+                var item = $('#item').val();
+
+                if (hideshow === '' || category === '' || item === ''){
+                    Materialize.toast('Theres an error...', 8000);
+
+                }
+                else {
+                    $.ajax({
+                        url: '../routers/hide_show.php',
+                        method: 'post',
+                        data:{hide_show:hideshow,category:category,item:item},
+                        success: function (data) {
+                            $('#message').html(data);
+
+                        }
+                    })
+                }
+            })
+        }
+
     </script>
     <script type="text/javascript">
         $("#formValidate1").validate({

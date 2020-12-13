@@ -138,7 +138,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         $status = '%';
                     }
 
-                    $sql = mysqli_query($con, "SELECT * FROM orders WHERE status LIKE '$status';");
+                    $sql = mysqli_query($con, "SELECT * FROM orders WHERE restaurantid='$re_id' AND status LIKE '$status';");
                     echo '<div class="row">
                 <div>
                     <ul id="issues-collection" class="collection">';

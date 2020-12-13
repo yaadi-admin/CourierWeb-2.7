@@ -763,7 +763,8 @@ if($_SESSION['customer_sid']==session_id())
                                                     <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
                                                         <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
                                                         <p class="title"><label for="quantity">Quantity:</label>
-                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/>
+                                                            <input type="hidden"/></p>
                                                         <?php
                                                         if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
                                                             echo '';
@@ -772,7 +773,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select class="browser-default" name="variation">';
+                                                    <select class="browser-default" id="variation" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -797,7 +798,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select class="browser-default" name="variation_typee">';
+                                                    <select class="browser-default" id="variation_typee" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -826,7 +827,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select class="browser-default" name="variation_side">';
+                                                        <select class="browser-default" id="variation_side" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -854,7 +855,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select class="browser-default" name="variation_drink">';
+                                                        <select class="browser-default" id="variation_drink" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -873,7 +874,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         }
                                                         ?>
                                                         <?php echo $detail; ?>
-                                                        <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
+                                                        <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0"><i class="mdi-action-shopping-basket"></i></button>
                                                         <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
                                                         <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
                                                     </form>
@@ -3727,6 +3728,41 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
+    <script>
+        $(document).ready(function () {
+            LoginUser();
+        })
+
+        function LoginUser() {
+            $(document).on('click', "#add_to_cart", function (e) {
+                e.preventDefault();
+                var id = $('#').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+                var password = $('#password').val();
+
+                if (password === '' || phone === ''){
+                    Materialize.toast('Enter credentials <button onclick="Register()" class="btn" style="border-radius: 8px;">Create account</button>', 8000);
+
+                }
+                else {
+                    $.ajax({
+                        url: '../routers/add-meal.php',
+                        method: 'get',
+                        data:{contact:phone,password:password},
+                        success: function (data) {
+                            $('#message').html(data);
+
+                        }
+                    })
+                }
+            })
+        }
+    </script>
     <script type="text/javascript">
         (function($) {
             $("#menu-filters li a").click(function() {
