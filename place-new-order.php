@@ -60,7 +60,7 @@ if($_SESSION['restaurant_sid']==session_id())
                 {
                     unset($_SESSION["shopping_cart"][$keys]);
                     echo '<script>alert("Item Removed")</script>';
-//                    echo '<script>window.location="category.php?pgid='.$restid.'"</script>';
+                    echo '<script>window.location="place-new-order.php"</script>';
                 }
             }
         }
@@ -73,7 +73,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Today's Menu</title>
+        <title>Hanker Order</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -185,34 +185,13 @@ if($_SESSION['restaurant_sid']==session_id())
                     <ul class="left">
                         <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Modak', 'cursive';">Yaad<span style="color: yellow;">i</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
-                    <ul class="right">
-                        <li><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-content-add"></i></a></li>
-                        <li><a class="waves-effect waves-light" href="all-r-orders.php?status=Yet%20to%20be%20delivered"><?php
-
-                                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
-                                $count = 0;
-                                $total = 0;
-                                while($row = mysqli_fetch_array($getamount)) {
-                                    $count++;
-                                    $total = 0;
-                                    $total+=$count;
-                                }
-                                if ($total == 0){
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-                                else{
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-
-                                ?></a></li>
-                    </ul>
                 </div>
             </nav>
         </div>
     </header>
     <div id="main">
         <div class="wrapper">
-            <aside id="left-sidebar-nav">
+            <aside id="left-sidebar-nav" style="border-radius: 8px;">
                 <ul id="slide-out" class="side-nav fixed leftnavset">
                     <li class="user-details teal lighten-2">
                         <div class="row">
@@ -232,11 +211,11 @@ if($_SESSION['restaurant_sid']==session_id())
                             </div>
                         </div>
                     </li>
-                    <li class="bold active"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
+                    <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> Orders
+                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> Orders
                                     <?php
 
                                     $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
@@ -273,7 +252,9 @@ if($_SESSION['restaurant_sid']==session_id())
                             </li>
                         </ul>
                     </li>
-                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Account</a>
+                    <li class="bold active"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Order</a>
+                    </li>
+                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-account-circle"></i>Account</a>
                     </li>
                     <li class="bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
                     </li>
@@ -298,6 +279,7 @@ if($_SESSION['restaurant_sid']==session_id())
                         <div class="row">
                             <div>
                                 <ul id="issues-collection" class="collection" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
+                                    <li class="collection-header"><h5>Cart</h5></li>
                                     <?php
                                     if(!empty($_SESSION["add_note"]))
                                     {
@@ -355,7 +337,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                                         <span>$<?php echo $values["item_price"]; ?> JMD</span>
                                                     </div>
                                                     <div class="col s4">
-                                                        <a href="place-order.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a>
+                                                        <a href="place-new-order.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a>
                                                     </div>
                                                 </div>
                                             </li>
@@ -389,7 +371,7 @@ if($_SESSION['restaurant_sid']==session_id())
                 </li>
             </ul>
 
-            <ul class="collection with-header"><li class="collection-header"><h6>Select Meal(s)</h6></li></ul>
+            <ul class="collection with-header"><li class="collection-header"><h5>Add Meal(s) to cart</h5></li></ul>
                 <ul class="collection with-header">
                     <?php
                     $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $user_id AND not deleted ORDER BY id ASC;");

@@ -131,7 +131,7 @@ if($_SESSION['restaurant_sid']==session_id())
     </header>
     <div id="main">
         <div class="wrapper">
-            <aside id="left-sidebar-nav">
+            <aside id="left-sidebar-nav" style="border-radius: 8px;">
                 <ul id="slide-out" class="side-nav fixed leftnavset">
                     <li class="user-details teal lighten-2">
                         <div class="row">
@@ -155,7 +155,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> Orders
+                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> Orders
                                     <?php
 
                                     $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
@@ -192,9 +192,9 @@ if($_SESSION['restaurant_sid']==session_id())
                             </li>
                         </ul>
                     </li>
-                    <li class="bold"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-add-shopping-cart"></i>Place Order</a>
+                    <li class="bold"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Order</a>
                     </li>
-                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Account</a>
+                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-account-circle"></i>Account</a>
                     </li>
                     <li class="bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
                     </li>
@@ -285,7 +285,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "57"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Patties</option>
                       <option value="1">Chicken</option>
                       <option value="2">Burgers</option>
@@ -300,7 +300,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "79"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Specialty Pizza</option>
                       <option value="1">Chicken</option>
                       <option value="2">Sides</option>
@@ -310,7 +310,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "486"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Breakfast</option>
                       <option value="1">Lunch</option>
                       <option value="2">Dinner</option>
@@ -321,7 +321,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "8"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Chicken</option>
                       <option value="1">Fish</option>
                       <option value="2">Sides</option>
@@ -334,7 +334,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "53"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Big Deal</option>
                       <option value="1">Meal Deal</option>
                       <option value="2">Zingers</option>
@@ -355,7 +355,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "540"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Appetizers</option>
                       <option value="1">Soup of day</option>
                       <option value="2">Entrees</option>
@@ -371,14 +371,14 @@ if($_SESSION['restaurant_sid']==session_id())
                                             }
 
                                             else if($user_id == "294"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Cakes</option>
                       <option value="1">Pastries</option>
                     </select>';
 
                                             }
                                             else if($user_id == "259"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Lunch Box Meals</option>
                       <option value="1">Fat 2 Fit Salads</option>
                       <option value="2">Lunch Box Specials</option>
@@ -395,7 +395,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             }
                                             else if($user_id == "591"){
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Omelets</option>
                       <option value="1">Salads</option>
                       <option value="2">Specialty Burgers</option>
@@ -409,13 +409,13 @@ if($_SESSION['restaurant_sid']==session_id())
                                             }
 
                                             else if ($user_id == "1293") {
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                         <option value="0">All</option>
                     </select>';
                                             }
 
                                             else if ($user_id == "54") {
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                         <option value="0">Featured</option>
                         <option value="1">Chicken</option>
                         <option value="2">Yabba</option>
@@ -428,7 +428,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                             }
 
                                             else {
-                                                echo '<select class="col s12" name="category">
+                                                echo '<select class="col s12 browser-default" name="category">
                       <option value="0">Grains</option>
                       <option value="1">Entrees</option>
                       <option value="2">Sides</option>
@@ -454,7 +454,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
             <div class="row">
                 <ul class="collection with-header collapsible z-depth-0">
-                    <li class="collection-header"><h4><?php echo $name; ?><a class="waves-effect waves-light modal-trigger right" href="#." style="font-size: 18px;"><i class="mdi-av-playlist-add"></i></a></h4><p class="caption">Welcome to your menu<br> Tap <i class="mdi-content-add"></i> to add a new item</p></li>
+                    <li class="collection-header"><h4><?php echo $name; ?><a class="waves-effect waves-light modal-trigger right" href="#." style="font-size: 18px;"><i class="mdi-av-playlist-add"></i></a></h4><p class="caption">Welcome to your menu Tap <i class="mdi-content-add"></i> to add a new item</p></li>
                         <?php
                         $result = mysqli_query($con, "SELECT * FROM items where restaurantid = $user_id");
                         while($row = mysqli_fetch_array($result))
@@ -850,9 +850,9 @@ if($_SESSION['restaurant_sid']==session_id())
 							<div class="collapsible-body">';
                             echo  '
                     <div class="row">
-                     <form class="formValidate" id="formValidate" method="post" novalidate="novalidate">
+                     <form class="formValidate" id="formValidate" action="/routers/hide_show.php" method="post" novalidate="novalidate">
                      <input  type="hidden" id="item" name="item" value="'.$row['id'].'">
-                    <p><select class="col s12 browser-default" id="hide_show" name="hide_show">
+                    <p><select class="col s12 browser-default" id="hide_showval" name="hide_show">
                     <option value="0"'.(!$row['deleted'] ? 'selected' : '').'>Available</option>
                      <option value="1"'.($row['deleted'] ? 'selected' : '').'>Not Available</option>
                     </select></p>';
@@ -1300,7 +1300,7 @@ echo '</td></tr></tbody>
     <script type="text/javascript" src="js/custom-script.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            HideShow();
+            HideShowBTN();
         })
         $("#formValidate").validate({
             rules: {
@@ -1326,7 +1326,7 @@ echo '</td></tr></tbody>
                     while($row = mysqli_fetch_array($result))
                     {
                         echo $row["id"].'_name:{
-				required: "Ener item name",
+				required: "Enter item name",
 				minlength: "Minimum length is 5 characters",
 				maxlength: "Maximum length is 20 characters"
 				},';
@@ -1348,10 +1348,10 @@ echo '</td></tr></tbody>
                     }
                 });
 
-        function HideShow() {
-            $(document).on('click', "#hideshowbtn", function (e) {
+        function HideShowBTN() {
+            $(document).on('click', "#hideshowbtnn", function (e) {
                 e.preventDefault();
-                var hideshow = $('#hide_show').val();
+                var hideshow = $('#hide_showval').val();
                 var category = $('#category').val();
                 var item = $('#item').val();
 

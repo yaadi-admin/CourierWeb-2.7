@@ -4,6 +4,7 @@ if($_SESSION['restaurant_sid']==session_id())
 {
     $id = "";
     $pro_pic = "";
+    $user_id = $_SESSION['user_id'];
     $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
     while($row = mysqli_fetch_array($result))
     {
@@ -54,6 +55,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <link href="css/custom/search.bar.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
         <style type="text/css">
             .input-field div.error{
                 position: relative;
@@ -120,10 +122,8 @@ if($_SESSION['restaurant_sid']==session_id())
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul>
-                        <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Restaurant</span></a></h1></li>
-                    </ul>
-                    <ul class="right">
+                    <ul class="left">
+                        <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Modak', 'cursive';">Yaad<span style="color: yellow;">i</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
                 </div>
             </nav>
@@ -131,7 +131,7 @@ if($_SESSION['restaurant_sid']==session_id())
     </header>
     <div id="main">
         <div class="wrapper">
-            <aside id="left-sidebar-nav">
+            <aside id="left-sidebar-nav" style="border-radius: 8px;">
                 <ul id="slide-out" class="side-nav fixed leftnavset">
                     <li class="user-details teal lighten-2">
                         <div class="row">
@@ -155,7 +155,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> Orders
+                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> Orders
                                     <?php
 
                                     $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
@@ -192,8 +192,13 @@ if($_SESSION['restaurant_sid']==session_id())
                             </li>
                         </ul>
                     </li>
-
-                    <li class="active bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
+                    <li class="bold"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Order</a>
+                    </li>
+                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-account-circle"></i>Account</a>
+                    </li>
+                    <li class="bold active"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
+                    </li>
+                    <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-settings"></i>Settings</a>
                     </li>
                 </ul>
                 <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>

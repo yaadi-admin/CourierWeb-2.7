@@ -73,7 +73,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Today's Menu</title>
+        <title>Place Order</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -186,34 +186,13 @@ if($_SESSION['restaurant_sid']==session_id())
                     <ul class="left">
                         <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Modak', 'cursive';">Yaad<span style="color: yellow;">i</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
-                    <ul class="right">
-                        <li><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-content-add"></i></a></li>
-                        <li><a class="waves-effect waves-light" href="all-r-orders.php?status=Yet%20to%20be%20delivered"><?php
-
-                                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
-                                $count = 0;
-                                $total = 0;
-                                while($row = mysqli_fetch_array($getamount)) {
-                                    $count++;
-                                    $total = 0;
-                                    $total+=$count;
-                                }
-                                if ($total == 0){
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-                                else{
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-
-                                ?></a></li>
-                    </ul>
                 </div>
             </nav>
         </div>
     </header>
     <div id="main">
         <div class="wrapper">
-            <aside id="left-sidebar-nav">
+            <aside id="left-sidebar-nav" style="border-radius: 8px;">
                 <ul id="slide-out" class="side-nav fixed leftnavset">
                     <li class="user-details teal lighten-2">
                         <div class="row">
@@ -233,11 +212,11 @@ if($_SESSION['restaurant_sid']==session_id())
                             </div>
                         </div>
                     </li>
-                    <li class="bold active"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
+                    <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i> Orders
+                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> Orders
                                     <?php
 
                                     $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
@@ -274,7 +253,9 @@ if($_SESSION['restaurant_sid']==session_id())
                             </li>
                         </ul>
                     </li>
-                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Account</a>
+                    <li class="bold active"><a href="place-new-order.php" class="waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Order</a>
+                    </li>
+                    <li class="bold"><a href="account-page.php" class="waves-effect waves-cyan"><i class="mdi-action-account-circle"></i>Account</a>
                     </li>
                     <li class="bold"><a href="restaurant-rep.php" class="waves-effect waves-cyan"><i class="mdi-action-view-list"></i>Order Report</a>
                     </li>
@@ -294,29 +275,35 @@ if($_SESSION['restaurant_sid']==session_id())
         <div class="container">
 
             <ul class="collection with-header">
-                <li class="collection-header"><h4>Customer Information</h4></li>
-                <form class="col s12" method="post" action="routers/add-category.php">
+                <li class="collection-header"><h5>Place Hanker Order</h5></li>
+                <form class="col s12" method="post">
                     <li class="collection-item"><div class="input-field col s6">
-                            <input value="<?php echo $row["two"]; ?>" id="<?php echo ''.$row["id"].'_two'; ?>" name="<?php echo ''.$row["id"].'_two'; ?>" type="text">
-                            <label for="category1">Customer name</label>
+                            <i class="mdi-action-account-circle prefix"></i>
+                            <input spellcheck="true" id="name" name="name" type="text">
+                            <label for="name">Customer name</label>
+                        </div></li>
+                    <li class="collection-item"><div class="input-field col s6">
+                            <i class="mdi-communication-phone prefix"></i>
+                            <input spellcheck="true" id="contact" name="contact" type="text">
+                            <label for="contact">Customer contact</label>
                         </div></li>
                     <li class="collection-item"><div class="input-field col s12">
                             <i class="mdi-action-home prefix"></i>
                             <textarea spellcheck="true" id="address" name="address" placeholder="Street, Road or Address" class="materialize-textarea validate" data-error=".errorTxt1"></textarea>
-                            <input type="hidden" name="rest" value="<?php echo $restid; ?>">
                             <label for="address" class="">Delivering to</label>
                             <div class="errorTxt1"></div>
                         </div></li>
-                    <li class="collection-item"><p><select class="col s12 browser-default" name="payment_type">
+                    <li class="collection-item">
+                        <i class="mdi-action-payment prefix"></i>
+                            <p><select class="col s12 browser-default" name="payment_type">
                                 <option value="Cash">Cash</option>
                                 <option value="Online Card">Online Card</option>
                                 <option value="Bank Transfer">Bank Transfer</option>
                                 <option value="Online">Pay-pal</option>
                                 <option value="Wallet">Wallet</option>
-                            </select></p>
+                                </select></p>
                         <label for="payment_type">Customers payment method</label>
                     </li>
-                </form>
             </ul>
 
             <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
@@ -389,9 +376,27 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             <?php
                                             $total = $total + ($values["item_quantity"] * $values["item_price"]);
+                                            $service_fee = $total * .08;
                                         }
                                         ?>
 
+                                        <li class="collection-item">
+                                            <div class="row">
+                                                <div class="col s6">
+                                                    <p class="collections-title">Service fee</p>
+                                                </div>
+                                                <div class="col s2">
+                                                    <p class="collections-title">8%</p>
+                                                </div>
+                                                <div class="col s4">
+                                                    <span><strong>$<?php echo number_format($service_fee); ?> JMD</strong></span>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <?php
+                                    $total = $total + $service_fee;
+                                        ?>
 
                                         <li class="collection-item">
                                             <div class="row">
@@ -402,6 +407,8 @@ if($_SESSION['restaurant_sid']==session_id())
                                                     <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="service_fee" id="service_fee" value="<?php echo $service_fee; ?>">
+                                            <input type="hidden" name="total" id="total" value="<?php echo $total; ?>">
                                         </li>
                                         <?php
                                     }
@@ -417,6 +424,7 @@ if($_SESSION['restaurant_sid']==session_id())
                 <li class="collection-item"><p><button class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" type="submit" value="Change" name="submithide">Submit Order
                             <i class="mdi-image-assistant-photo right" style="color: maroon;"></i>
                         </button></p><br><br></li>
+                </form>
             </ul>
 <!--            <input type="hidden" name="pay_type" value="--><?php //echo $_POST['payment_type'];?><!--">-->
 <!--            <input type="hidden" name="rest" value="--><?php //echo $restid;?><!--">-->

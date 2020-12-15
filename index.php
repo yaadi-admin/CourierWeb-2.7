@@ -383,6 +383,10 @@ if($_SESSION['customer_sid']==session_id())
                         <img src="images/adban.jpg" style="object-fit: cover">
                         <img src="images/topban.jpg" style="object-fit: cover">
                         <img src="images/footerban.jpg" style="object-fit: cover">
+                        <img src="images/ad2.jpg" style="object-fit: cover">
+                        <img src="images/ad3.jpg" style="object-fit: cover">
+                        <img src="images/ad4.jpg" style="object-fit: cover">
+                        <img src="images/ad5.jpg" style="object-fit: cover">
                     </div>
                 </div>
                 <h6 class="center">
