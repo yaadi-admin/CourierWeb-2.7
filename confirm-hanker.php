@@ -4,67 +4,115 @@ if($_SESSION['restaurant_sid']==session_id())
 {
     $user_id = $_SESSION['user_id'];
     $counter = 0;
+    $customer_name = $_POST['name'];
+    $customer_contact = $_POST['contact'];
+    $customer_address = $_POST['address'];
+    $payment_type = $_POST['payment_type'];
+    $myaddress = '';
 
     $sql = mysqli_query($con, "SELECT * FROM orders where restaurantid= $user_id AND not deleted;");
     while($row = mysqli_fetch_array($sql)){
+        $myaddress = $row['address'];
         if ($row['status'] == "Yet to be delivered"){
             $counter += 1;
         }
     }
-    if(isset($_POST["add_to_cart"]))  {
-        if(isset($_SESSION["shopping_cart"]))  {
-            $item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
-            if(!in_array($_GET["id"], $item_array_id))
-            {
-                $count = count($_SESSION["shopping_cart"]);
-                $item_array = array(
-                    'item_id'               =>     $_GET["id"],
-                    'item_name'               =>     $_POST["hidden_name"],
-                    'item_price'          =>     $_POST["hidden_price"],
-                    'item_quantity'          =>     $_POST["quantity"],
-                    'item_variation'        =>    $_POST["variation"],
-                    'item_variation_type'        =>    $_POST["variation_typee"],
-                    'item_variation_side'        =>    $_POST["variation_side"],
-                    'item_variation_drink'        =>    $_POST["variation_drink"]
-                );
-                $_SESSION["shopping_cart"][$count] = $item_array;
-                $Itemnm = $_POST["hidden_name"];
-                echo '<script>Materialize.toast("'.$Itemnm.' was added to your cart", 4000);</script>';
-                echo '<script>alert("'.$Itemnm.' was added to your cart");</script>';
-            }
-            else
-            {
-                echo '<script>alert("Item Already Added To Cart")</script>';
-                echo '<script>window.location="place-new-order.php"</script>';
-            }
+
+    function getDistance($addressFrom, $addressTo, $unit = ''){
+        // Google API key
+        $apiKey = 'AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo';
+
+        // Change address format
+        $formattedAddrFrom    = str_replace(' ', '+', $addressFrom);
+        $formattedAddrTo     = str_replace(' ', '+', $addressTo);
+
+        // Geocoding API request with start address
+        $geocodeFrom = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddrFrom.'&sensor=false&key='.$apiKey);
+        $outputFrom = json_decode($geocodeFrom);
+        if(!empty($outputFrom->error_message)){
+            return $outputFrom->error_message;
         }
-        else
-        {
-            $item_array = array(
-                'item_id'               =>     $_GET["id"],
-                'item_name'               =>     $_POST["hidden_name"],
-                'item_price'          =>     $_POST["hidden_price"],
-                'item_quantity'          =>     $_POST["quantity"],
-                'item_variation'        =>    $_POST["variation"]
-            );
-            $_SESSION["shopping_cart"][0] = $item_array;
+
+        // Geocoding API request with end address
+        $geocodeTo = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddrTo.'&sensor=false&key='.$apiKey);
+        $outputTo = json_decode($geocodeTo);
+        if(!empty($outputTo->error_message)){
+            return $outputTo->error_message;
         }
-    }
-    if(isset($_GET["action"]))
-    {
-        if($_GET["action"] == "delete")
-        {
-            foreach($_SESSION["shopping_cart"] as $keys => $values)
-            {
-                if($values["item_id"] == $_GET["id"])
-                {
-                    unset($_SESSION["shopping_cart"][$keys]);
-                    echo '<script>alert("Item Removed")</script>';
-                    echo '<script>window.location="place-new-order.php"</script>';
-                }
-            }
+
+        // Get latitude and longitude from the geodata
+        $latitudeFrom    = $outputFrom->results[0]->geometry->location->lat;
+        $longitudeFrom    = $outputFrom->results[0]->geometry->location->lng;
+        $latitudeTo        = $outputTo->results[0]->geometry->location->lat;
+        $longitudeTo    = $outputTo->results[0]->geometry->location->lng;
+
+        // Calculate distance between latitude and longitude
+        $theta    = $longitudeFrom - $longitudeTo;
+        $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
+        $dist    = acos($dist);
+        $dist    = rad2deg($dist);
+        $miles    = $dist * 60 * 1.1515;
+
+        // Convert unit and return distance
+        $unit = strtoupper($unit);
+        if($unit == "K"){
+            return round($miles * 1.609344, 2).' km';
+        }elseif($unit == "M"){
+            return round($miles * 1609.344, 2).' meters';
+        }else{
+            return round($miles, 2).' miles';
         }
     }
+
+    $addressFrom = $myaddress;
+    $addressTo   = $customer_address;
+    $distance = getDistance($addressFrom, $addressTo, "K");
+
+    $dis_fee = 0;
+
+    if($distance <= 0.5 && $distance > 0.0){
+        $dis_fee = 350;
+    }
+    if($distance <= 1.0 && $distance > 0.5){
+        $dis_fee = 400;
+    }
+    if($distance <= 1.5 && $distance > 1.0){
+        $dis_fee = 450;
+    }
+    if($distance <= 2.0 && $distance >= 1.5){
+        $dis_fee = 500;
+    }
+    if($distance <= 2.5 && $distance >= 2.0){
+        $dis_fee = 550;
+    }
+    if($distance <= 3.0 && $distance >= 2.5){
+        $dis_fee = 600;
+    }
+    if($distance <= 3.5 && $distance >= 3.0){
+        $dis_fee = 650;
+    }
+    if($distance <= 4.0 && $distance >= 3.5){
+        $dis_fee = 700;
+    }
+    if($distance <= 4.5 && $distance >= 4.0){
+        $dis_fee = 750;
+    }
+    if($distance <= 5.0 && $distance >= 4.5){
+        $dis_fee = 800;
+    }
+    if($distance <= 5.5 && $distance >= 5.0){
+        $dis_fee = 850;
+    }
+    if($distance <= 6.0 && $distance >= 5.5){
+        $dis_fee = 900;
+    }
+    if($distance <= 6.5 && $distance >= 6.0){
+        $dis_fee = 950;
+    }
+    if($distance <= 7.0 && $distance >= 6.5){
+        $dis_fee = 1000;
+    }
+
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -73,7 +121,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Hanker Order</title>
+        <title>Confirm Hanker Order</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -86,6 +134,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com">
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo"></script>
         <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
         <style type="text/css">
             .input-field div.error{
@@ -142,34 +191,6 @@ if($_SESSION['restaurant_sid']==session_id())
             ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             .side-nav.fixed.leftnavset .collapsible-body li.active>a{color:#A82128}ul.side-nav.leftnavset li.active>a{color:#A82128}
         </style>
-        <script>
-            var searchInput = 'address';
-
-            $(document).ready(function () {
-                var autocomplete;
-                autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
-                    types: ['geocode'],
-                });
-
-                google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                    var near_place = autocomplete.getPlace();
-                    document.getElementById('loc_lat').value = near_place.geometry.location.lat();
-                    document.getElementById('loc_long').value = near_place.geometry.location.lng();
-
-                    document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
-                    document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
-                });
-            });
-
-            $(document).on('change', '#'+searchInput, function () {
-                document.getElementById('latitude_input').value = '';
-                document.getElementById('longitude_input').value = '';
-
-                document.getElementById('latitude_view').innerHTML = '';
-                document.getElementById('longitude_view').innerHTML = '';
-            });
-
-        </script>
     </head>
 
     <body>
@@ -222,17 +243,17 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                     $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
                                     $count = 0;
-                                    $total = 0;
+                                    $totalorders = 0;
                                     while($row = mysqli_fetch_array($getamount)) {
                                         $count++;
-                                        $total = 0;
-                                        $total+=$count;
+                                        $totalorders = 0;
+                                        $totalorders+=$count;
                                     }
-                                    if ($total == 0){
-                                        echo '<span class="new badge">'.$total.'</span>';
+                                    if ($totalorders == 0){
+                                        echo '<span class="new badge">'.$totalorders.'</span>';
                                     }
                                     else{
-                                        echo '<span class="new badge">'.$total.'</span>';
+                                        echo '<span class="new badge">'.$totalorders.'</span>';
                                     }
 
 
@@ -275,8 +296,19 @@ if($_SESSION['restaurant_sid']==session_id())
         </div>
         <div class="container">
 
+            <ul class="collection with-header" style="border-top-left-radius: 8px;border-top-right-radius: 8px;">
+                <li class="collection-header"><h5>Confirm Order details</h5></li>
+                    <li class="collection-item avatar">
+                        <i class="mdi-content-content-paste red circle"></i>
+                        <p><strong>Customer:</strong> <?php echo $customer_name; ?></p>
+                        <p><strong>Contact:</strong> <?php echo $customer_contact; ?></p>
+                        <p><strong>Address:</strong> <?php echo $customer_address; ?></p>
+                        <p><strong>Payment Type:</strong> <?php echo $payment_type; ?></p>
+                        <a href="#" class="secondary-content"><i class="mdi-action-grade"></i></a>
+                    </li>
+            </ul>
+
             <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
-                <li class="collection-header"><h6>Cart</h6></li>
                 <li class="collection-item">
                     <div id="work-collections" class="section" >
                         <div class="row">
@@ -339,14 +371,44 @@ if($_SESSION['restaurant_sid']==session_id())
                                                         <span>$<?php echo $values["item_price"]; ?> JMD</span>
                                                     </div>
                                                     <div class="col s4">
-                                                        <a href="place-new-order.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a>
+                                                        <a href="place-order.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a>
                                                     </div>
                                                 </div>
                                             </li>
 
                                             <?php
                                             $total = $total + ($values["item_quantity"] * $values["item_price"]);
+                                            $service_fee = $total * .08;
                                         }
+                                        ?>
+
+                                        <li class="collection-item">
+                                            <div class="row">
+                                                <div class="col s6">
+                                                    <p class="collections-title">Service fee</p>
+                                                </div>
+                                                <div class="col s2">
+                                                    <p class="collections-title">8%</p>
+                                                </div>
+                                                <div class="col s4">
+                                                    <span><strong>$<?php echo number_format($service_fee); ?> JMD</strong></span>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class="collection-item">
+                                            <div class="row">
+                                                <div class="col s8">
+                                                    <p class="collections-title">Delivery fee</p>
+                                                </div>
+                                                <div class="col s4">
+                                                    <span><strong>$<?php echo number_format($dis_fee); ?> JMD</strong></span>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <?php
+                                        $total = $total + $service_fee + $dis_fee;
                                         ?>
 
                                         <li class="collection-item">
@@ -358,11 +420,9 @@ if($_SESSION['restaurant_sid']==session_id())
                                                     <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="service_fee" id="service_fee" value="<?php echo $service_fee; ?>">
+                                            <input type="hidden" name="total" id="total" value="<?php echo $total; ?>">
                                         </li>
-
-                                        <li class="collection-item"><p><a class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" href="request-order.php" value="Change" name="submithide">Place Order
-                                                        <i class="mdi-action-shopping-basket right" style="color: maroon;"></i>
-                                                    </a></p><br><br></li>
                                         <?php
                                     }
                                     ?>
@@ -373,156 +433,28 @@ if($_SESSION['restaurant_sid']==session_id())
                 </li>
             </ul>
 
-                <ul class="collection with-header" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
-                    <li class="collection-header"><h6>Add Meal(s) to cart</h6></li>
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $user_id AND not deleted ORDER BY id ASC;");
-                    if(mysqli_num_rows($result) > 0)
-                    {
-                        while($row = mysqli_fetch_array($result))
-                        {
-                            $detail = "";
-                            if ($row['description'] == ""){
-                                $detail = "No detail available";
-                            }
-
-                            else {
-                                $detail = $row['description'];
-                            }
-                            ?>
-
-                            <li class="collection-header" style="border: 0px solid transparent;border-top-left-radius: 8px;border-top-right-radius: 8px;"><h5><?php echo $row["name"]; ?><span class="right teal-text">$<?php echo number_format($row["price"]); ?></span> </h5></li>
-                            <li class="collection-item avatar" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">
-                                <form method="post" action="place-new-order.php?action=add&id=<?php echo $row["id"]; ?>">
-                                    <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
-                                    <p class="title"><label for="quantity">Quantity:</label>
-                                        <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/>
-                                        <input type="hidden"/></p>
-                                    <?php
-                                    if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
-                                        echo '';
-                                    }
-                                    else{
-                                        echo '
-                                                       <p>
-                                                    <label for="variation">Choose Flavor</label>
-                                                    <select class="browser-default" id="variation" name="variation">';
-                                        if ($row["typeone"] !== ""){
-                                            echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
-                                        }
-                                        if ($row["type2"] !== ""){
-                                            echo '<option value="'.$row["type2"].'">'.$row["type2"].'</option>';
-                                        }
-                                        if ($row["type3"] !== ""){
-                                            echo '<option value="'.$row["type3"].'">'.$row["type3"].'</option>';
-                                        }
-                                        if ($row["type4"] !== ""){
-                                            echo '<option value="'.$row["type4"].'">'.$row["type4"].'</option>';
-                                        }
-
-                                        echo'
-                                                    </select>
-                                                </p>';
-                                    }
-                                    ?>
-                                    <?php
-                                    if ( $row["type5"] === "" && $row["type6"] === "" && $row["type7"] === "" && $row["type8"] === ""){
-                                    }
-                                    else{
-                                        echo '<p>
-                                                    <label for="variation_typee">Choose type</label>
-                                                    <select class="browser-default" id="variation_typee" name="variation_typee">';
-
-                                        if ($row["type5"] !== ""){
-                                            echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
-                                        }
-                                        if ($row["type6"] !== ""){
-                                            echo '<option value="'.$row["type6"].'">'.$row["type6"].'</option>';
-                                        }
-                                        if ($row["type7"] !== ""){
-                                            echo '<option value="'.$row["type7"].'">'.$row["type7"].'</option>';
-                                        }
-                                        if ($row["type8"] !== ""){
-                                            echo '<option value="'.$row["type8"].'">'.$row["type8"].'</option>';
-                                        }
-
-                                        echo '
-                                                    </select>
-
-                                                </p>';
-                                    }
-                                    ?>
-
-                                    <?php
-                                    if ($row["type9"] === "" && $row["type10"] === "" && $row["typeeleven"] === "" && $row["typetwelve"] === "") {
-                                    }
-                                    else{
-                                        echo '
-                                                    <p>
-                                                        <label for="variation_side">Choose Side</label>
-                                                        <select class="browser-default" id="variation_side" name="variation_side">';
-
-                                        if ($row["type9"] !== ""){
-                                            echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
-                                        }
-                                        if ($row["type10"] !== ""){
-                                            echo '<option value="'.$row["type10"].'">'.$row["type10"].'</option>';
-                                        }
-                                        if ($row["typeeleven"] !== ""){
-                                            echo '<option value="'.$row["typeeleven"].'">'.$row["typeeleven"].'</option>';
-                                        }
-                                        if ($row["typetwelve"] !== ""){
-                                            echo '<option value="'.$row["typetwelve"].'">'.$row["typetwelve"].'</option>';
-                                        }
-                                        echo '
-                                                        </select>
-                                                    </p>';
-                                    }
-
-                                    ?>
-
-                                    <?php
-                                    if ($row["typethirteen"] === "" && $row["typefourteen"] === "" && $row["typefifteen"] === "" && $row["typesixteen"] === "") {
-                                    }
-                                    else{
-                                        echo '
-                                                    <p>
-                                                        <label for="variation_drink">Choose Drink</label>
-                                                        <select class="browser-default" id="variation_drink" name="variation_drink">';
-                                        if ($row["typethirteen"] !== ""){
-                                            echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
-                                        }
-                                        if ($row["typefourteen"] !== ""){
-                                            echo '<option value="'.$row["typefourteen"].'">'.$row["typefourteen"].'</option>';
-                                        }
-                                        if ($row["typefifteen"] !== ""){
-                                            echo '<option value="'.$row["typefifteen"].'">'.$row["typefifteen"].'</option>';
-                                        }
-                                        if ($row["typesixteen"] !== ""){
-                                            echo '<option value="'.$row["typesixteen"].'">'.$row["typesixteen"].'</option>';
-                                        }
-                                        echo '
-                                                        </select>
-                                                    </p>';
-                                    }
-                                    ?>
-                                    <?php echo $detail; ?>
-                                    <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0"><i class="mdi-action-shopping-basket"></i></button>
-                                    <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
-                                    <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
-                                </form>
-                            </li>
-
-                            <?php
-                        }
-                    }
-                    ?>
-                </ul>
-
-
-
-
-
+            <ul class="collection with-header" style="border-top-left-radius: 8px;border-top-right-radius: 8px;">
+                <li class="collection-header">
+                    <h6>Submit Order</h6>
+                </li>
+                <form method="post" action="routers/request-delivery.php">
+                <input type="hidden" name="pay_type" value="<?php echo $_POST['payment_type'];?>">
+                <input type="hidden" name="rest" value="<?php echo $user_id; ?>">
+                <input type="hidden" name="del_fee" value="<?php echo $dis_fee; ?>">
+                <input type="hidden" name="pay_type" value="<?php echo $_POST['payment_type']; ?>">
+                <input type="hidden" name="address" value="<?php echo $customer_address; ?>">
+                <input type="hidden" name="contact" value="<?php echo $customer_contact; ?>">
+                <input type="hidden" name="customer_name" value="<?php echo $customer_name; ?>">
+                <?php if (isset($_POST['note'])) { echo'<input type="hidden" name="note" value="'.htmlspecialchars($_POST['note']).'">';}?>
+                <input type="hidden" name="total" value="<?php echo $total; ?>">
+                <input type="hidden" name="servicefee" value="<?php echo $service_fee; ?>">
+                <div class="input-field col s12">
+                    <button id="confirm" class="btn cyan waves-effect waves-light" type="submit" name="action" <?php if($_POST['payment_type'] == 'Wallet') {if ($balance-$total < 0) {echo 'disabled'; }}?> style="width:100%;background-color: white;border: 1px solid #a21318;border-radius: 8px;font-size: 12px;">Place Order
+                    <i class="mdi-action-shopping-cart right"></i>
+                    </button>
+                </div>
+                </form>
+            </ul>
         </div>
         </section>
     </div>

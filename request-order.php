@@ -73,7 +73,7 @@ if($_SESSION['restaurant_sid']==session_id())
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Place Order</title>
+        <title>Customer Details</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -212,7 +212,9 @@ if($_SESSION['restaurant_sid']==session_id())
                             </div>
                         </div>
                     </li>
-                    <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
+                    <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i>Active Orders</a>
+                    </li>
+                    <li class="bold"><a href="restaurant-menu.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
@@ -276,7 +278,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
             <ul class="collection with-header">
                 <li class="collection-header"><h5>Place Hanker Order</h5></li>
-                <form class="col s12" method="post">
+                <form class="col s12" method="post" action="confirm-hanker.php">
                     <li class="collection-item"><div class="input-field col s6">
                             <i class="mdi-action-account-circle prefix"></i>
                             <input spellcheck="true" id="name" name="name" type="text">
@@ -426,21 +428,6 @@ if($_SESSION['restaurant_sid']==session_id())
                         </button></p><br><br></li>
                 </form>
             </ul>
-<!--            <input type="hidden" name="pay_type" value="--><?php //echo $_POST['payment_type'];?><!--">-->
-<!--            <input type="hidden" name="rest" value="--><?php //echo $restid;?><!--">-->
-<!--            <input type="hidden" name="del_fee" value="--><?php //echo $fee;?><!--">-->
-<!--            <input type="hidden" name="pay_type" value="--><?php //echo $_POST['pay_type'];?><!--">-->
-<!--            <input type="hidden" name="address" value="--><?php //echo htmlspecialchars($_POST['address']);?><!--">-->
-<!--            --><?php //if (isset($_POST['note'])) { echo'<input type="hidden" name="note" value="'.htmlspecialchars($_POST['note']).'">';}?>
-<!--            --><?php /*if($_POST['pay_type'] == 'Wallet') echo '<input type="hidden" name="balance" value="<?php echo ($balance-$total);?>">'; */?>
-<!--            <input type="hidden" name="total" value="--><?php //echo $total;?><!--">-->
-<!--            <input type="hidden" name="servicefee" value="--><?php //echo $service_fee;?><!--">-->
-<!--            <div class="input-field col s12">-->
-<!--                <button id="confirm" class="btn cyan waves-effect waves-light" type="submit" name="action" --><?php //if($_POST['pay_type'] == 'Wallet') {if ($balance-$total < 0) {echo 'disabled'; }}?><!-- style="width:100%;background-color: white;border: 1px solid antiquewhite;border-radius: 6px;font-size: 12px;"">Place Order<i class="mdi-action-shopping-cart right"></i></button>-->
-<!--            </div>-->
-
-
-
 
         </div>
         </section>

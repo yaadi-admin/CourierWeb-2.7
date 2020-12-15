@@ -130,7 +130,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </div>
                     </div>
                 </li>
-                <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
+                <li class="bold"><a href="restaurant.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i>Active Orders</a>
+                </li>
+                <li class="bold"><a href="restaurant-menu.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i>Menu</a>
                 </li>
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">

@@ -81,34 +81,34 @@ if($_SESSION['customer_sid']==session_id()) {
                 unset($_SESSION["shopping_cart"]);
 
 //        Customer order confirmation text...
-                $client->messages->create(
-                    $usrph,
-                    array(
-                        'from' => $twilio_number,
-                        'body' => 'Thank you for ordering, Order: #' . $order_id . ', Total: $' . $total . ' => Yaadi.Co'));
+//                $client->messages->create(
+//                    $usrph,
+//                    array(
+//                        'from' => $twilio_number,
+//                        'body' => 'Thank you for ordering, Order: #' . $order_id . ', Total: $' . $total . ' => Yaadi.Co'));
 
 //            Admin order notification...
-                $getadm = mysqli_query($con, "SELECT * FROM users WHERE (role='Administrator' AND verified=1 AND id=1) AND not deleted;");
-                while ($row = mysqli_fetch_array($getadm)) {
-                    $client->messages->create(
-                        $admn,
-                        array(
-                            'from' => $twilio_number,
-                            'body' => '(NEW ODER) => #' . $order_id . ' => Total: $' . $total . ' => Restaurant: ' . $restname . ''));
-                }
+//                $getadm = mysqli_query($con, "SELECT * FROM users WHERE (role='Administrator' AND verified=1 AND id=1) AND not deleted;");
+//                while ($row = mysqli_fetch_array($getadm)) {
+//                    $client->messages->create(
+//                        $admn,
+//                        array(
+//                            'from' => $twilio_number,
+//                            'body' => '(NEW ODER) => #' . $order_id . ' => Total: $' . $total . ' => Restaurant: ' . $restname . ''));
+//                }
 
 
 //            Rider order notification...
-                $getriders = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' AND verified=1) AND not deleted;");
-                while ($row = mysqli_fetch_array($getriders)) {
-
-                    $rider = $row['contact'];
-                    $client->messages->create(
-                        $rider,
-                        array(
-                            'from' => $twilio_number,
-                            'body' => '(NEW ORDER) => #'.$order_id.' => Total: $'.$total.' => Restaurant: '.$restname.''));
-                }
+//                $getriders = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' AND verified=1) AND not deleted;");
+//                while ($row = mysqli_fetch_array($getriders)) {
+//
+//                    $rider = $row['contact'];
+//                    $client->messages->create(
+//                        $rider,
+//                        array(
+//                            'from' => $twilio_number,
+//                            'body' => '(NEW ORDER) => #'.$order_id.' => Total: $'.$total.' => Restaurant: '.$restname.''));
+//                }
 
                 echo '<script>alert("Your order #' . $order_id . ' has been placed!\n");</script>';
                 echo '<script>window.location=" ../orders.php"</script>';

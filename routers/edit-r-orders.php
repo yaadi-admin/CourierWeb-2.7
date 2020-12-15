@@ -27,10 +27,10 @@ if($_SESSION['restaurant_sid']==session_id()) {
             $csurph,
             array(
                 'from' => $twilio_number,
-                'body' => 'Yaadi.Co ORDER #' . $id . ' =>
-Status: => ' . $status . ''));
+                'body' => 'ORDER #'.$id.' Status: => '.$status.''));
 
-        header("location: ../restaurant-orders.php");
+        echo "<script>Materialize.toast('Order updated', 8000);</script>";
+        header("location: ../restaurant.php");
     }
 }
 ?>
