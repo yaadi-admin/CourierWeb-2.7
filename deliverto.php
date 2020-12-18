@@ -11,7 +11,6 @@ if($_SESSION['customer_sid']==session_id())
         $usr_address = $row['address'];
     }
     $counter = 0;
-
     ?>
 
     <!DOCTYPE html>
@@ -40,7 +39,6 @@ if($_SESSION['customer_sid']==session_id())
         <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <script>
             var searchInput = 'addaddress';
