@@ -5,79 +5,23 @@ if($_SESSION['customer_sid']==session_id())
 {
     $usr_address = "";
     $unit = '';
+    $counter = 0;
     $useraddress = mysqli_query($con, "SELECT * FROM users WHERE name= '$name'");
     while($row = mysqli_fetch_array($useraddress))
     {
         $long = '';
         $lat = '';
        $usr_address = $row['address'];
-
         $apiKey = 'AIzaSyB4jFCoT3S8jZACU-7JoH3R3T1UxRdbGxo';
-
         $addressTo = $row['address'];
-
         $formattedAddrTo     = str_replace(' ', '+', $addressTo);
-
-        // Geocoding API request with end address
         $geocodeTo = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddrTo.'&sensor=false&key='.$apiKey);
         $outputTo = json_decode($geocodeTo);
         if(!empty($outputTo->error_message)){
             return $outputTo->error_message;
         }
-
         $lat        = $outputTo->results[0]->geometry->location->lat;
         $long    = $outputTo->results[0]->geometry->location->lng;
-
-
-    }
-    $counter = 0;
-    if(!empty($_SESSION["shopping_cart"]))
-    {
-        foreach($_SESSION["shopping_cart"] as $keys => $values) {
-            $counter += 1;
-        }
-
-    }
-    if(isset($_POST["add_to_cart"]))  {
-        if(isset($_SESSION["shopping_cart"]))  {
-            $item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
-            if(!in_array($_GET["id"], $item_array_id))
-            {
-                $count = count($_SESSION["shopping_cart"]);
-                $item_array = array(
-                    'item_id'               =>     $_GET["id"],
-                    'item_name'               =>     $_POST["hidden_name"],
-                    'item_price'          =>     $_POST["hidden_price"],
-                    'item_quantity'          =>     $_POST["quantity"]
-                );
-                $_SESSION["shopping_cart"][$count] = $item_array;
-            }
-        }
-        else
-        {
-            $item_array = array(
-                'item_id'               =>     $_GET["id"],
-                'item_name'               =>     $_POST["hidden_name"],
-                'item_price'          =>     $_POST["hidden_price"],
-                'item_quantity'          =>     $_POST["quantity"]
-            );
-            $_SESSION["shopping_cart"][0] = $item_array;
-        }
-    }
-    if(isset($_GET["action"]))
-    {
-        if($_GET["action"] == "delete")
-        {
-            foreach($_SESSION["shopping_cart"] as $keys => $values)
-            {
-                if($values["item_id"] == $_GET["id"])
-                {
-                    unset($_SESSION["shopping_cart"][$keys]);
-                    echo '<script>alert("Item Removed")</script>';
-                    echo '<script>window.location="index.php?action=delete&id='.$values["item_id"].'</script>';
-                }
-            }
-        }
     }
     ?>
 
@@ -89,7 +33,6 @@ if($_SESSION['customer_sid']==session_id())
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
         <title>Order Food Online | Have it delivered</title>
-        <!--         TODO: Add meta description for this page -->
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -119,73 +62,32 @@ if($_SESSION['customer_sid']==session_id())
             ul.side-nav.leftnavset .profile-btn{margin:0;text-transform:capitalize;padding:0;text-shadow:1px 1px 1px #444;font-size:15px}
             ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             .side-nav.fixed.leftnavset .collapsible-body li.active>a{color:#A82128}ul.side-nav.leftnavset li.active>a{color: #a82128;}
-            @media screen and (max-width: 600px) {
-                .column {
-                    width: 100%;
-                    display: block;
-                    margin-bottom: 20px;
-                }
-            }
-            label{
-                color: black;
-            }
-
-            .tabs .indicator {
-                background-color: #a21318;
-            }
-            .scrolling-wrapper {
+            label{color: black;}.scrolling-wrapper {
                 overflow-x: scroll;
                 overflow-y: hidden;
-                white-space: nowrap;
-            }
-            .scrolling-wrapper .smallcard {
-                display: inline-block;
-            }
-
-            .scrolling-wrapper-flexbox {
-                display: -webkit-box;
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-            }
-            .scrolling-wrapper-flexbox .smallcard {
+                white-space: nowrap;}.scrolling-wrapper .smallcard {
+                display: inline-block;}.scrolling-wrapper-flexbox .smallcard {
                 -webkit-box-flex: 0;
                 flex: 0 0 auto;
-                margin-right: 3px;
-            }
-
-            .smallcard {
+                margin-right: 3px;}.smallcard {
                 width: 110px;
-                height: 60px;
-            }
-
-            .scrolling-wrapper,  {
+                height: 60px;}.scrolling-wrapper,  {
                 height: 70px;
                 margin-bottom: 20px;
                 width: 100%;
-                -webkit-overflow-scrolling: touch;
-            }
-            .scrolling-wrapper::-webkit-scrollbar, :-webkit-scrollbar {
-                display: none;
-            }
-
-            .chip{
+                -webkit-overflow-scrolling: touch;}.scrolling-wrapper::-webkit-scrollbar, :-webkit-scrollbar {
+                display: none;}.chip{
                 background-color: white;
                 width: 120px;
-                height: inherit;
-            }
-            .chip img{
+                height: inherit;}.chip img{
                 width: 48px;
-                height: 48px;
-            }
-            #slideshow img{
+                height: 48px;}#slideshow img{
                 position: absolute;
                 top: 10em;
                 left: 0;
                 width: 100%;
             }
         </style>
-
     </head>
     <body>
     <div id="loader-wrapper">
@@ -197,19 +99,15 @@ if($_SESSION['customer_sid']==session_id())
         <div class="navbar-fixed">
             <nav class="navbar-color">
                 <div class="nav-wrapper">
-                    <ul style="background-color: white;">
-                        <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO <span id="nearby"></span></b></label>
+                    <ul class="center" style="background-color: white;">
+                        <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>Delivering to <span id="nearby"></span></b></label>
                         <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
                         <li class="right"><a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-shopping-basket" style="color: #a21318;"></i></a></li>
                     </ul>
                 </div>
-
             </nav>
-
         </div>
     </header>
-
-
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
@@ -395,13 +293,16 @@ if($_SESSION['customer_sid']==session_id())
                         </div>
             </div>
 
-
             <div class="row hide-on-med-and-up">
                 <div class="scrolling-wrapper" style="border-bottom: 4px solid ghostwhite;border-top: 4px solid ghostwhite;height: 250px;">
                     <div id="slideshow">
-                        <img src="images/adban.jpg" style="object-fit: cover">
-                        <img src="images/topban.jpg" style="object-fit: cover">
-                        <img src="images/footerban.jpg" style="object-fit: cover">
+                        <img src="images/krispers.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/healthy_eaters.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/must_have.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/gizmos-ad.jpeg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/new_restaurants.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/seafood_cat.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/Naufragada.jpg" style="object-fit: cover" width="100%" height="250px">
                     </div>
                 </div>
                 <h6 class="center">
@@ -442,7 +343,7 @@ if($_SESSION['customer_sid']==session_id())
                             ?>
                             <input type="hidden" id="userlong" value="<?php echo $long; ?>">
                             <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-        <div class="smallcard" style="width: 260px;">
+        <div class="smallcard" style="width: 280px;">
             <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
                 <div class="column">
                     <div class="row">
@@ -456,7 +357,7 @@ if($_SESSION['customer_sid']==session_id())
                                         <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
                                     </div></button>
                                 <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
+                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: #a21318;"></i></span><br>
                                     <label style="font-size: 10px;">⏱️ <b>45 - 60 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
                                 </div>
                             </div>
@@ -485,74 +386,6 @@ if($_SESSION['customer_sid']==session_id())
                     {
                         if ($row['id'] != "297"){
 
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
-
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -575,6 +408,8 @@ if($_SESSION['customer_sid']==session_id())
                                     <div class="column">
                                         <div class="row">
                                             <div class="col s12 m6">
+                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                                 <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                 <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                                     <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -608,73 +443,6 @@ if($_SESSION['customer_sid']==session_id())
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -697,6 +465,8 @@ if($_SESSION['customer_sid']==session_id())
                                     <div class="column">
                                         <div class="row">
                                             <div class="col s12 m6">
+                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                                 <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                 <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                                     <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -730,73 +500,6 @@ if($_SESSION['customer_sid']==session_id())
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -819,6 +522,8 @@ if($_SESSION['customer_sid']==session_id())
                                     <div class="column">
                                         <div class="row">
                                             <div class="col s12 m6">
+                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                                 <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                 <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                                     <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -852,73 +557,6 @@ if($_SESSION['customer_sid']==session_id())
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -941,6 +579,8 @@ if($_SESSION['customer_sid']==session_id())
                 <div class="column">
                     <div class="row">
                         <div class="col s12 m6">
+                            <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                            <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                             <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                             <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                 <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -975,73 +615,6 @@ if($_SESSION['customer_sid']==session_id())
          while($row = mysqli_fetch_array($result))
          {
              if ($row['id'] != "297"){
-
-                 // Get latitude and longitude from the geodata
-                 $latitudeFrom    = $row['ulat'];
-                 $longitudeFrom    = $row['ulong'];
-                 $latitudeTo        = $lat;
-                 $longitudeTo    = $long;
-
-                 // Calculate distance between latitude and longitude
-                 $theta    = $longitudeFrom - $longitudeTo;
-                 $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                 $dist    = acos($dist);
-                 $dist    = rad2deg($dist);
-                 $miles    = $dist * 60 * 1.1515;
-
-                 $unit = "K";
-                 if($unit == "K"){
-                     $distance = round($miles * 1.609344, 2).' km';
-                 }elseif($unit == "M"){
-                     $distance = round($miles * 1609.344, 2).' meters';
-                 }else{
-                     $distance = round($miles, 2).' miles';
-                 }
-
-                 $dis_fee = 0;
-
-                 if($distance <= 0.5 && $distance > 0.0){
-                     $dis_fee = 350;
-                 }
-                 if($distance <= 1.0 && $distance > 0.5){
-                     $dis_fee = 400;
-                 }
-                 if($distance <= 1.5 && $distance > 1.0){
-                     $dis_fee = 450;
-                 }
-                 if($distance <= 2.0 && $distance >= 1.5){
-                     $dis_fee = 500;
-                 }
-                 if($distance <= 2.5 && $distance >= 2.0){
-                     $dis_fee = 550;
-                 }
-                 if($distance <= 3.0 && $distance >= 2.5){
-                     $dis_fee = 600;
-                 }
-                 if($distance <= 3.5 && $distance >= 3.0){
-                     $dis_fee = 650;
-                 }
-                 if($distance <= 4.0 && $distance >= 3.5){
-                     $dis_fee = 700;
-                 }
-                 if($distance <= 4.5 && $distance >= 4.0){
-                     $dis_fee = 750;
-                 }
-                 if($distance <= 5.0 && $distance >= 4.5){
-                     $dis_fee = 800;
-                 }
-                 if($distance <= 5.5 && $distance >= 5.0){
-                     $dis_fee = 850;
-                 }
-                 if($distance <= 6.0 && $distance >= 5.5){
-                     $dis_fee = 900;
-                 }
-                 if($distance <= 6.5 && $distance >= 6.0){
-                     $dis_fee = 950;
-                 }
-                 if($distance <= 7.0 && $distance >= 6.5){
-                     $dis_fee = 1000;
-                 }
                  $address = $row['address'];
                  $image = $row['image_dir3'];
                  $image_dir = '';
@@ -1063,6 +636,8 @@ if($_SESSION['customer_sid']==session_id())
                          <div class="column">
                              <div class="row">
                                  <div class="col s12 m6">
+                                     <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                     <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                      <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                      <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                          <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -1078,7 +653,6 @@ if($_SESSION['customer_sid']==session_id())
                              </div>
                          </div>
                      </form>
-
                  </div>
                  <?php
              }
@@ -1088,7 +662,6 @@ if($_SESSION['customer_sid']==session_id())
 
 </div>
             <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-
             <div class="col s12" id="lunch" hidden>
                 <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Best of Lunch</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
                 <div class="scrolling-wrapper" style="height: 250px;">
@@ -1097,73 +670,6 @@ if($_SESSION['customer_sid']==session_id())
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -1186,6 +692,8 @@ if($_SESSION['customer_sid']==session_id())
                                     <div class="column">
                                         <div class="row">
                                             <div class="col s12 m6">
+                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                                 <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                 <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                                     <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -1201,7 +709,6 @@ if($_SESSION['customer_sid']==session_id())
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                             <?php
                         }
@@ -1220,73 +727,6 @@ if($_SESSION['customer_sid']==session_id())
          while($row = mysqli_fetch_array($result))
          {
              if ($row['id'] != "297"){
-
-                 // Get latitude and longitude from the geodata
-                 $latitudeFrom    = $row['ulat'];
-                 $longitudeFrom    = $row['ulong'];
-                 $latitudeTo        = $lat;
-                 $longitudeTo    = $long;
-
-                 // Calculate distance between latitude and longitude
-                 $theta    = $longitudeFrom - $longitudeTo;
-                 $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                 $dist    = acos($dist);
-                 $dist    = rad2deg($dist);
-                 $miles    = $dist * 60 * 1.1515;
-
-                 $unit = "K";
-                 if($unit == "K"){
-                     $distance = round($miles * 1.609344, 2).' km';
-                 }elseif($unit == "M"){
-                     $distance = round($miles * 1609.344, 2).' meters';
-                 }else{
-                     $distance = round($miles, 2).' miles';
-                 }
-
-                 $dis_fee = 0;
-
-                 if($distance <= 0.5 && $distance > 0.0){
-                     $dis_fee = 350;
-                 }
-                 if($distance <= 1.0 && $distance > 0.5){
-                     $dis_fee = 400;
-                 }
-                 if($distance <= 1.5 && $distance > 1.0){
-                     $dis_fee = 450;
-                 }
-                 if($distance <= 2.0 && $distance >= 1.5){
-                     $dis_fee = 500;
-                 }
-                 if($distance <= 2.5 && $distance >= 2.0){
-                     $dis_fee = 550;
-                 }
-                 if($distance <= 3.0 && $distance >= 2.5){
-                     $dis_fee = 600;
-                 }
-                 if($distance <= 3.5 && $distance >= 3.0){
-                     $dis_fee = 650;
-                 }
-                 if($distance <= 4.0 && $distance >= 3.5){
-                     $dis_fee = 700;
-                 }
-                 if($distance <= 4.5 && $distance >= 4.0){
-                     $dis_fee = 750;
-                 }
-                 if($distance <= 5.0 && $distance >= 4.5){
-                     $dis_fee = 800;
-                 }
-                 if($distance <= 5.5 && $distance >= 5.0){
-                     $dis_fee = 850;
-                 }
-                 if($distance <= 6.0 && $distance >= 5.5){
-                     $dis_fee = 900;
-                 }
-                 if($distance <= 6.5 && $distance >= 6.0){
-                     $dis_fee = 950;
-                 }
-                 if($distance <= 7.0 && $distance >= 6.5){
-                     $dis_fee = 1000;
-                 }
                  $address = $row['address'];
                  $image = $row['image_dir2'];
                  $image_dir = '';
@@ -1308,6 +748,8 @@ if($_SESSION['customer_sid']==session_id())
                          <div class="column">
                              <div class="row">
                                  <div class="col s12 m6">
+                                     <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                     <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                          <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                      <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                          <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -1323,7 +765,6 @@ if($_SESSION['customer_sid']==session_id())
                              </div>
                          </div>
                      </form>
-
                  </div>
                  <?php
              }
@@ -1342,73 +783,6 @@ if($_SESSION['customer_sid']==session_id())
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['id'] != "297"){
-
-                            // Get latitude and longitude from the geodata
-                            $latitudeFrom    = $row['ulat'];
-                            $longitudeFrom    = $row['ulong'];
-                            $latitudeTo        = $lat;
-                            $longitudeTo    = $long;
-
-                            // Calculate distance between latitude and longitude
-                            $theta    = $longitudeFrom - $longitudeTo;
-                            $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-                            $dist    = acos($dist);
-                            $dist    = rad2deg($dist);
-                            $miles    = $dist * 60 * 1.1515;
-
-                            $unit = "K";
-                            if($unit == "K"){
-                                $distance = round($miles * 1.609344, 2).' km';
-                            }elseif($unit == "M"){
-                                $distance = round($miles * 1609.344, 2).' meters';
-                            }else{
-                                $distance = round($miles, 2).' miles';
-                            }
-
-                            $dis_fee = 0;
-
-                            if($distance <= 0.5 && $distance > 0.0){
-                                $dis_fee = 350;
-                            }
-                            if($distance <= 1.0 && $distance > 0.5){
-                                $dis_fee = 400;
-                            }
-                            if($distance <= 1.5 && $distance > 1.0){
-                                $dis_fee = 450;
-                            }
-                            if($distance <= 2.0 && $distance >= 1.5){
-                                $dis_fee = 500;
-                            }
-                            if($distance <= 2.5 && $distance >= 2.0){
-                                $dis_fee = 550;
-                            }
-                            if($distance <= 3.0 && $distance >= 2.5){
-                                $dis_fee = 600;
-                            }
-                            if($distance <= 3.5 && $distance >= 3.0){
-                                $dis_fee = 650;
-                            }
-                            if($distance <= 4.0 && $distance >= 3.5){
-                                $dis_fee = 700;
-                            }
-                            if($distance <= 4.5 && $distance >= 4.0){
-                                $dis_fee = 750;
-                            }
-                            if($distance <= 5.0 && $distance >= 4.5){
-                                $dis_fee = 800;
-                            }
-                            if($distance <= 5.5 && $distance >= 5.0){
-                                $dis_fee = 850;
-                            }
-                            if($distance <= 6.0 && $distance >= 5.5){
-                                $dis_fee = 900;
-                            }
-                            if($distance <= 6.5 && $distance >= 6.0){
-                                $dis_fee = 950;
-                            }
-                            if($distance <= 7.0 && $distance >= 6.5){
-                                $dis_fee = 1000;
-                            }
                             $address = $row['address'];
                             $image = $row['image_dir3'];
                             $image_dir = '';
@@ -1431,6 +805,8 @@ if($_SESSION['customer_sid']==session_id())
                                     <div class="column">
                                         <div class="row">
                                             <div class="col s12 m6">
+                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
                                                 <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                 <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
                                                     <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
@@ -1446,7 +822,6 @@ if($_SESSION['customer_sid']==session_id())
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                             <?php
                         }
@@ -1460,10 +835,9 @@ if($_SESSION['customer_sid']==session_id())
      <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><i class="mdi-navigation-arrow-forward black-text"></i></b></span></h5></a>
  </div>
             <span id="message"></span>
+        </section>
  </div>
 </div>
-</section>
-
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
@@ -1472,7 +846,6 @@ if($_SESSION['customer_sid']==session_id())
             </div>
         </div>
     </footer>
-
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -1488,9 +861,8 @@ if($_SESSION['customer_sid']==session_id())
             script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
     </script>
     <script>
-        var duration = 10; // duration in seconds
-        var fadeAmount = 0.3; // fade duration amount relative to the time the image is visible
-
+        var duration = 30;
+        var fadeAmount = 0.3;
         $(document).ready(function (){
             var images = $("#slideshow img");
             var numImages = images.size();
@@ -1518,7 +890,6 @@ if($_SESSION['customer_sid']==session_id())
             });
         });
 
-        // creates a animation loop
         function doAnimationLoop(element, fadeInTime, visibleTime, fadeOutTime, pauseTime){
             fadeInOut(element,fadeInTime, visibleTime, fadeOutTime ,function(){
                 setTimeout(function(){
@@ -1527,30 +898,9 @@ if($_SESSION['customer_sid']==session_id())
             });
         }
 
-        // shorthand for in- and out-fading
         function fadeInOut( element, fadeIn, visible, fadeOut, onComplete){
             return $(element).animate( {opacity:1}, fadeIn ).delay( visible ).animate( {opacity:0}, fadeOut, onComplete);
         }
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            window.setInterval(function(){
-                var long = document.getElementById('#userlong').val();
-                var lat = document.getElementById('#userlat').val();
-                var lat = document.getElementById('#userlat').val();
-                    $.ajax({
-                        url: '../routers/getcart.php',
-                        method: 'post',
-                        data:{},
-                        success: function (data) {
-                            $('#modal1').html(data);
-
-                        }
-                    })
-            }, 5000);
-
-        })
     </script>
 
     <script>
@@ -1567,7 +917,7 @@ if($_SESSION['customer_sid']==session_id())
 
                     }
                 }))
-        }, 4000);
+        }, 5000);
 
         })
 
