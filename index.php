@@ -86,6 +86,33 @@ if($_SESSION['customer_sid']==session_id())
                 top: 10em;
                 left: 0;
                 width: 100%;
+            }.navbar-fixed nav {
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            }.footer-fixed footer {
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            }body {
+                display: -webkit-box;
+                display: flex;
+                min-height: 100vh;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                flex-direction: column;
+            }main {
+                -webkit-box-flex: 1;
+                flex: 1 0 auto;
+            }.footer-fixed {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }footer ul.justify {
+                text-align: center;
+                display: table;
+                overflow: hidden;
+                margin: 0 auto;
+            }footer ul.justify li {
+                margin-left: auto;
+                margin-right: auto;
+                width: 82px;
             }
         </style>
     </head>
@@ -96,8 +123,8 @@ if($_SESSION['customer_sid']==session_id())
         <div class="loader-section section-right"></div>
     </div>
     <header id="header" class="page-topbar">
-        <div class="navbar-fixed">
-            <nav class="navbar-color">
+        <div class="navbar-fixed z-depth-0">
+            <nav class="navbar-color z-depth-0">
                 <div class="nav-wrapper">
                     <ul class="center" style="background-color: white;">
                         <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>Delivering to <span id="nearby"></span></b></label>
@@ -177,7 +204,6 @@ if($_SESSION['customer_sid']==session_id())
                         </li>
                     </nav>
                 </ul>
-                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan z-depth-0"><i class="mdi-navigation-menu" style="color: white;"></i></a>
             </aside>
             <div id="modal1" class="modal bottom-sheet" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                 <div class="progress"><div class="indeterminate"></div></div>
@@ -185,7 +211,7 @@ if($_SESSION['customer_sid']==session_id())
         </div>
 
         <section class="content"><br>
-            <div class="scrolling-wrapper">
+            <div class="scrolling-wrapper" style="border-bottom: 1px solid black;">
                         <div class="smallcard">
                                 <div class="column">
                                     <div>
@@ -293,27 +319,16 @@ if($_SESSION['customer_sid']==session_id())
                         </div>
             </div>
 
-            <div class="row hide-on-med-and-up">
-                <div class="scrolling-wrapper" style="border-bottom: 4px solid ghostwhite;border-top: 4px solid ghostwhite;height: 250px;">
+            <div class="row hide-on-med-and-up" style="height: 190px;">
+                <div class="scrolling-wrapper" style="border-bottom: 1px solid transparent;border-top: 1px solid transparent;height: 240px;">
                     <div id="slideshow">
-                        <img src="images/krispers.jpg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/healthy_eaters.jpg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/must_have.jpg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/gizmos-ad.jpeg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/new_restaurants.jpg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/seafood_cat.jpg" style="object-fit: cover" width="100%" height="250px">
-                        <img src="images/Naufragada.jpg" style="object-fit: cover" width="100%" height="250px">
+                        <img src="images/promotions/promotwo.jpg" style="object-fit: inherit">
+                        <img src="images/promotions/seafoodwednesday.jpg" style="object-fit: inherit">
+                        <img src="images/promotions/omgcafeicecream.jpg" style="object-fit: inherit">
                     </div>
                 </div>
-                <h6 class="center">
-                    <span class="center"><i class="mdi-image-looks-one"></i></span>
-                    <span class="center"><i class="mdi-image-looks-two"></i></span>
-                    <span class="center"><i class="mdi-image-looks-3"></i></span>
-                    <span class="center"><i class="mdi-image-looks-4"></i></span>
-                    <span class="center"><i class="mdi-image-looks-5"></i></span>
-                    <span class="center"><i class="mdi-image-looks-6"></i></span>
-                </h6>
             </div>
+
 
 <div class="col s12">
     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Favorites</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
@@ -325,7 +340,7 @@ if($_SESSION['customer_sid']==session_id())
                         if ($row['id'] != "297"){
 
                             $address = $row['address'];
-                            $image = $row['image_dir2'];
+                            $image = $row['image_dir'];
                             $image_dir = '';
                             $restaurant_id = $row['id'];
                             $restaurant_name = $row['name'];
@@ -606,7 +621,7 @@ if($_SESSION['customer_sid']==session_id())
                 <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
     </div>
 
- <div class="col s12">
+ <div class="col s12" id="specialoffers" hidden>
      <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Special Offers</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
 
      <div class="scrolling-wrapper" style="height: 250px;">
@@ -659,9 +674,8 @@ if($_SESSION['customer_sid']==session_id())
          }
          ?>
      </div>
-
+     <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
 </div>
-            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
             <div class="col s12" id="lunch" hidden>
                 <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Best of Lunch</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
                 <div class="scrolling-wrapper" style="height: 250px;">
@@ -837,15 +851,28 @@ if($_SESSION['customer_sid']==session_id())
             <span id="message"></span>
         </section>
  </div>
-</div>
-    <footer class="page-footer">
+    <footer id="footershow" class="page-footer">
         <div class="footer-copyright">
             <div class="container">
-                <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="yaadiltd.php" target="_blank">Yaadi.Co</a>, all rights reserved.</span>
-                <span class="right"><a class="grey-text text-lighten-4" href="tercon.php" target="_blank">Terms & Conditions</a></span>
+                <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="#." target="_blank">Yaadi.Co</a> All rights reserved.</span>
+                <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#.">The Ambassadors</a></span>
             </div>
         </div>
     </footer>
+    <div class="footer-fixed hide-on-med-and-up z-depth-1">
+        <footer style="background-color: white;">
+            <nav class="z-depth-0" style="background-color: white;">
+                <div class="nav-wrapper">
+                    <ul class="justify">
+                        <li class="active"><a class="waves-effect" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
+                        <li><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
+                        <li><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
+                        <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </footer>
+    </div>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -856,12 +883,12 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
-    <script type='text/javascript' data-cfasync='false'>
-        window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
-            script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
-    </script>
+<!--    <script type='text/javascript' data-cfasync='false'>-->
+<!--        window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';-->
+<!--            script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();-->
+<!--    </script>-->
     <script>
-        var duration = 30;
+        var duration = 20;
         var fadeAmount = 0.3;
         $(document).ready(function (){
             var images = $("#slideshow img");
@@ -906,7 +933,6 @@ if($_SESSION['customer_sid']==session_id())
     <script>
         $(document).ready(function(){
             openTime();
-        window.setInterval(function(){
             $('#modal1').html(
                 $.ajax({
                     url: '../routers/getcart.php',
@@ -917,7 +943,6 @@ if($_SESSION['customer_sid']==session_id())
 
                     }
                 }))
-        }, 5000);
 
         })
 

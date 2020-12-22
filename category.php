@@ -173,7 +173,54 @@ if($_SESSION['customer_sid']==session_id())
             }
             label{
                 color: black;
-            }
+            }.navbar-fixed nav {
+                 padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+             }.footer-fixed footer {
+                  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+              }body {
+                   display: -webkit-box;
+                   display: flex;
+                   min-height: 100vh;
+                   -webkit-box-orient: vertical;
+                   -webkit-box-direction: normal;
+                   flex-direction: column;
+               }main {
+                    -webkit-box-flex: 1;
+                    flex: 1 0 auto;
+                }.footer-fixed {
+                     position: fixed;
+                     bottom: 0;
+                     width: 100%;
+                 }footer ul.justify {
+                      text-align: center;
+                      display: table;
+                      overflow: hidden;
+                      margin: 0 auto;
+                  }footer ul.justify li {
+                       margin-left: auto;
+                       margin-right: auto;
+                       width: 82px;
+                   }
+            .scrolling-wrapper {
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;}.scrolling-wrapper .smallcard {
+                                         display: inline-block;}.scrolling-wrapper-flexbox .smallcard {
+                                                                    -webkit-box-flex: 0;
+                                                                    flex: 0 0 auto;
+                                                                    margin-right: 3px;}.smallcard {
+                                                                                           width: 110px;
+                                                                                           height: 60px;}.scrolling-wrapper,  {
+                                                                                                             height: 70px;
+                                                                                                             margin-bottom: 20px;
+                                                                                                             width: 100%;
+                                                                                                             -webkit-overflow-scrolling: touch;}.scrolling-wrapper::-webkit-scrollbar, :-webkit-scrollbar {
+                                                                                                                                                    display: none;}.chip{
+                                                                                                                                                                       background-color: white;
+                                                                                                                                                                       width: 120px;
+                                                                                                                                                                       height: inherit;}.chip img{
+                                                                                                                                                                                            width: 48px;
+                                                                                                                                                                                            height: 48px;}
         </style>
     </head>
     <body>
@@ -185,8 +232,8 @@ if($_SESSION['customer_sid']==session_id())
 
     <header id="header" class="page-topbar">
         <div class="navbar-fixed">
-            <nav class="navbar-color">
-                <div class="nav-wrapper">
+            <nav class="navbar-color z-depth-0">
+                <div class="nav-wrapper z-depth-0">
                     <ul style="background-color: white;">
                         <label class="center" style="font-size: 8px;color: #a21318;font-weight: 600;"><b>DELIVERING TO</b></label>
                         <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
@@ -268,7 +315,6 @@ if($_SESSION['customer_sid']==session_id())
                         </li>
                     </nav>
                 </ul>
-                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only z-depth-0" style="color: #a21318"><i class="mdi-navigation-menu" style="color: white;"></i></a>
             </aside>
 
             <section id="content">
@@ -404,311 +450,313 @@ if($_SESSION['customer_sid']==session_id())
                 </div>
             </div>
 
-            <div class="responsive col-md-10 text-center" id="menu-filters">
-                <ul>
-                    <?php
-                    $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
-                    while($row = mysqli_fetch_array($result3))
-                    {
-                        $restid = $selec_rest;
-                        $Rnme = $row['name'];
-                        if ($row['name'] == "O M G") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".Starttheday" style="background-color: white;color: black;font-weight: 800;">🌭 Start the day</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".LunchBeyond" style="background-color: white;color: black;font-weight: 800;">🍔 Lunch & Beyond</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".Subs" style="background-color: white;color: black;font-weight: 800;">🌯 Subs</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".Wraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".ChineseFare" style="background-color: white;color: black;font-weight: 800;">🥡 Chinese Fare</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".JamaicanFare" style="background-color: white;color: black;font-weight: 800;">Jamaican Fare</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".Roti" style="background-color: white;color: black;font-weight: 800;">🌯 Roti</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".Soups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".Appetizers" style="background-color: white;color: black;font-weight: 800;">🍗 Appetizers</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".Salads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".Seafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".Poultry" style="background-color: white;color: black;font-weight: 800;">🍗 Poultry</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".FromtheGrill" style="background-color: white;color: black;font-weight: 800;">🥩 From the Grill</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".Vegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".PastaFusion" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta Fusion</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".EatMeetSipTalk" style="background-color: white;color: black;font-weight: 800;">🍹 Eat, Meet, Sip, Talk</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".Sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "K.F.C") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".bigdeal" style="background-color: white;color: black;font-weight: 800;">🍗 Big Deal</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".mealdeal" style="background-color: white;color: black;font-weight: 800;">🍗 Meal Deal</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".zingers" style="background-color: white;color: black;font-weight: 800;">🍔 Zingers</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".bigsix" style="background-color: white;color: black;font-weight: 800;">🍗 Big Six</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".buckets" style="background-color: white;color: black;font-weight: 800;">🥡 Buckets</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".bigboxes" style="background-color: white;color: black;font-weight: 800;">📦 Big Boxes</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".wings" style="background-color: white;color: black;font-weight: 800;">🍗 Wings</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".krispers" style="background-color: white;color: black;font-weight: 800;">🍖 Krispers</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".value" style="background-color: white;color: black;font-weight: 800;">🍗 Value</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".kfsides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".popcornchicken" style="background-color: white;color: black;font-weight: 800;">🍿 Popcorn Chicken</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".kfsalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".desserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".drinks" style="background-color: white;color: black;font-weight: 800;">🍹 Drinks</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".catering" style="background-color: white;color: black;font-weight: 800;">🍗 Catering</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".secretrecipe" style="background-color: white;color: black;font-weight: 800;">🤫 Secret Recipe</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "Burger King") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".bkburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".otherfavourites" style="background-color: white;color: black;font-weight: 800;">🍗 Other Favourites</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".bksalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads & Veggie</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".bkbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".bksides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".bkdesserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".kingdeal" style="background-color: white;color: black;font-weight: 800;">🍔 King Deals Value Menu</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".bkkingjr" style="background-color: white;color: black;font-weight: 800;">🍔 King Jr™ Meals</a></li>
-  </ul>
-</div>                                                   
-        ';
-                        }
-
-                        else if ($row['name'] == "Gizmos Chillspot") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".gizmosalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".gizmoplatters" style="background-color: white;color: black;font-weight: 800;">🥘 Platters</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".gizmoburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".gizmowrapsquesadilla" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps & Quesadillas</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".gizmopasta" style="background-color: white;color: black;font-weight: 800;">🍝 Pastas</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".gizmovegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".gizmoluncspecial" style="background-color: white;color: black;font-weight: 800;">🍣 Lunch Special</a></li>
-                                                            <li class="right"><a class="filter" data-filter=".gizmodesert" style="background-color: white;color: black;font-weight: 800;">🥧 Deserts</a></li>
-                                                            <li class="left"><a class="filter" data-filter=".gizmomain" style="background-color: white;color: black;font-weight: 800;">🍗 Main Courses</a></li>
-                                                            <li class="right"><a class="filter" data-filter=".gizmomixdrink" style="background-color: white;color: black;font-weight: 800;">🍹 Mix Drink</a></li>
-                                                            <li class="left"><a class="filter" data-filter=".gizmosideorder" style="background-color: white;color: black;font-weight: 800;">🍟 Side Order</a></li>
-                                                            <li class="right"><a class="filter" data-filter=".gizmostarter" style="background-color: white;color: black;font-weight: 800;">🍗 Starters</a></li>
-                                                            <li class="left"><a class="filter" data-filter=".gizmospecial" style="background-color: white;color: black;font-weight: 800;">🎊 Specials</a></li>
-  </ul>
-</div>                                                   
-        ';
-                        }
-                        else if ($row['name'] == "Pizza Hut") {
-                            echo '<div class="fixed-action-btn" style="width: 220px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".pizzahutamazin" style="background-color: white;color: black;font-weight: 800;">🍕 Amazin 4</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".pizzahutwings" style="background-color: white;color: black;font-weight: 800;">🍗 Wings</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".pizzahutsides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".pizzahutbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".pizzahutdeserts" style="background-color: white;color: black;font-weight: 800;">🥧 Deserts</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".pizzahutpasta" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".pizzahutcombos" style="background-color: white;color: black;font-weight: 800;">🎊 Hut Combos</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "Mothers") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".motherspatties" style="background-color: white;color: black;font-weight: 800;">🥖 Patties</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".motherschicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".mothersburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".mothersbreakfastsandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Breakfast Sandwiches</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".motherbreakfastsmeals" style="background-color: white;color: black;font-weight: 800;">🥪 Breakfast Meals</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".motherssandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Sandwiches</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".mothersbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".motherssoups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".mothersicecream" style="background-color: white;color: black;font-weight: 800;">🍦 Ice Cream</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".motherspastry" style="background-color: white;color: black;font-weight: 800;">🥧 Pastry</a></li>
-  </ul>
-</div>                                                
-        ';
-                        }
-
-                        else if ($row['name'] == "Island Grill") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".islandgrillfeatured" style="background-color: white;color: black;font-weight: 800;">🥖 Featured</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".islandgrillchicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".islandgrillyabba" style="background-color: white;color: black;font-weight: 800;">🍗 Yabba</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".islandgrillsandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Sandwiches</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".islandgrillsoups" style="background-color: white;color: black;font-weight: 800;">🍲 Soup</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".islandgrillsides" style="background-color: white;color: black;font-weight: 800;">🍟  Sides</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".islandgrillbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".islandgrillnuggets" style="background-color: white;color: black;font-weight: 800;">🍲 Nuggets</a></li>
-  </ul>
-</div>                                                
-        ';
-                        }
-                        else if ($row['name'] == "Dominos") {
-                            echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".dominosspecialtypizza" style="background-color: white;color: black;font-weight: 800;">🍕 Specialty Pizza</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".dominoschicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".dominosides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".dominosdrinks" style="background-color: white;color: black;font-weight: 800;">🍹 Drinks</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".dominosdesserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
-  </ul>
-</div>                                                   
-        ';
-                        }
-                        else if ($row['name'] == "Tha Ville") {
-                            echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".thavillechicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".thavillefish" style="background-color: white;color: black;font-weight: 800;">🍣 Fish</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".thavillesides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".thavilleservedwith" style="background-color: white;color: black;font-weight: 800;">🍛 Served With</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".thavillemeat" style="background-color: white;color: black;font-weight: 800;">🍖 Meat</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".thavillebeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".thavilledonetoorder" style="background-color: white;color: black;font-weight: 800;">⌛ Done to Order</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".thavillepastries" style="background-color: white;color: black;font-weight: 800;">🥧 Pastries</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "Pablos 2020") {
-                            echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".pablos2020breakfast" style="background-color: white;color: black;font-weight: 800;">🥓 Breakfast</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".pablos2020lunch" style="background-color: white;color: black;font-weight: 800;">🥪 Lunch</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".pablos2020dinner" style="background-color: white;color: black;font-weight: 800;">🍛 Dinner</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".pablos2020dessert" style="background-color: white;color: black;font-weight: 800;">🥧 Dessert</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".pablos2020sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".pablos2020soupoftheday" style="background-color: white;color: black;font-weight: 800;">🍲 Soup of the day</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "GL Steakhouse") {
-                            echo '<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".glsteakhouseappetizers" style="background-color: white;color: black;font-weight: 800;">🥩 Appetizers</a></li>
-                                                         <li class="right"><a class="filter " data-filter=".glsteakhousesoupofday" style="background-color: white;color: black;font-weight: 800;">🍲 Soup of day</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".glsteakhouseentrees" style="background-color: white;color: black;font-weight: 800;">🍖 Entrees</a></li>
-                                                         <li class="right"><a class="filter" data-filter=".glsteakhousesteak" style="background-color: white;color: black;font-weight: 800;">🥓 Steak</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".glsteakhouseseafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".glsteakhousechicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".glsteakhousesideorder" style="background-color: white;color: black;font-weight: 800;">🍟 Side Order</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".glsteakhousesauces" style="background-color: white;color: black;font-weight: 800;">🍛 Sauces</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".glsteakhousedessert" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".glsteakhousebeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-  </ul>
-</div>
-        ';
-                        }
-                        else if ($row['name'] == "Flamin Wok") {
-                            echo '<div class="fixed-action-btn" style="width: 320px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul class="" style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".flaminlunchboxmeals" style="background-color: white;color: black;font-weight: 800;">🥓 Lunch Box Meals</a></li>
-                                                         <li class="left"><a class="filter " data-filter=".flaminfat2fitsalads" style="background-color: white;color: black;font-weight: 800;">🥗 Fat 2 Fit Salads</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".flaminlunchboxspecials" style="background-color: white;color: black;font-weight: 800;">🍖 Lunch Box Specials</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".flaminsoups&appetizers" style="background-color: white;color: black;font-weight: 800;">🍲  Soups & Appetizers</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flaminchickendishes" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken Dishes</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flaminchopsuey" style="background-color: white;color: black;font-weight: 800;">🥦 Chop Suey (Veg.)</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flamintofudishes" style="background-color: white;color: black;font-weight: 800;">🍱 Tofu Dishes</a></li>
-                                                          <li class="right"><a class="filter" data-filter=".flaminporkdishes" style="background-color: white;color: black;font-weight: 800;">🥩 Pork Dishes</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flaminnoodledishes" style="background-color: white;color: black;font-weight: 800;">🍲 Noodle Dishes</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flaminseafooddishes" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood Dishes</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flaminfriedrice" style="background-color: white;color: black;font-weight: 800;">🍚 Fried Rice</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".flamindrinks" style="background-color: white;color: black;font-weight: 800;">🥤 Beverages</a></li>
-  </ul>
-</div>                                                  
-        ';
-                        }
-                        else if ($row['name'] == "Naufragada") {
-                            echo '
-<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".naufragadaomlets" style="background-color: white;color: black;font-weight: 800;">🥟 Omelets</a></li>
-                                                         <li class="left"><a class="filter " data-filter=".naufragadasalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
-                                                         <li class="left"><a class="filter" data-filter=".naufragadaspecialtyburger" style="background-color: white;color: black;font-weight: 800;">🍔 Specialty Burgers</a></li><br>
-                                                         <li class="left"><a class="filter" data-filter=".naufragadapancakeswaffles" style="background-color: white;color: black;font-weight: 800;">🥞 Pancakes & Waffles</a></li>
-                                                          <li CLASS="left"><a class="filter" data-filter=".naufragadaparfaits" style="background-color: white;color: black;font-weight: 800;">🥛 Parfaits / Muesli</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".naufragadawraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li><br>
-                                                          <li class="left"><a class="filter" data-filter=".naufragadataconacho" style="background-color: white;color: black;font-weight: 800;">🌮 Tacos / Nachos</a></li>
-                                                          <li class="left"><a class="filter" data-filter=".naufragadagyros" style="background-color: white;color: black;font-weight: 800;">🍣 Gyros</a></li>
-  </ul>
-</div>                                                   
-        ';
-                        }
-                        else if ($row['name'] == "Ros Cake-house") {
-                            echo '
-<div class="fixed-action-btn" style="width: 300px;">
-  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul style="width: inherit;height: inherit;">
-    <li class="left"><a class="filter active" data-filter=".rosall" style="background-color: white;color: black;font-weight: 800;">🥟 All</a></li>
-  </ul>
-</div>                                                   
-        ';
-                        }
-                        else {
-                            echo '
-
-                                          <div class="fixed-action-btn" style="width: 300px;">
-  <a id="menu" class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
-    <i class="mdi-maps-restaurant-menu teal"></i>
-  </a>
-  <ul style="width: inherit;">
-    <li class="left"><a class="filter active" data-filter=".menu-restaurant" style="background-color: white;color: black;font-weight: 800;">🍛 All</a></li>
-     <li class="right"><a class="filter " data-filter=".casuals" style="background-color: white;color: black;font-weight: 800;">🍛 Main</a></li>
-     <li class="left"><a class="filter" data-filter=".entrees" style="background-color: white;color: black;font-weight: 800;">🍛 Entrees</a></li>
-     <li class="right"><a class="filter" data-filter=".sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li><br>
-     <li class="left"><a class="filter" data-filter=".beverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
-  </ul>
-</div>
-';
-                        }
-                    }
 
 
-                    ?>
-
-                </ul>
-            </div>
+<!--            <div class="responsive col-md-10 text-center" id="menu-filters">-->
+<!--                <ul>-->
+<!--                    --><?php
+//                    $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
+//                    while($row = mysqli_fetch_array($result3))
+//                    {
+//                        $restid = $selec_rest;
+//                        $Rnme = $row['name'];
+//                        if ($row['name'] === 331) {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".Starttheday" style="background-color: white;color: black;font-weight: 800;">🌭 Start the day</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".LunchBeyond" style="background-color: white;color: black;font-weight: 800;">🍔 Lunch & Beyond</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".Subs" style="background-color: white;color: black;font-weight: 800;">🌯 Subs</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".Wraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".ChineseFare" style="background-color: white;color: black;font-weight: 800;">🥡 Chinese Fare</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".JamaicanFare" style="background-color: white;color: black;font-weight: 800;">Jamaican Fare</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".Roti" style="background-color: white;color: black;font-weight: 800;">🌯 Roti</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".Soups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".Appetizers" style="background-color: white;color: black;font-weight: 800;">🍗 Appetizers</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".Salads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".Seafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".Poultry" style="background-color: white;color: black;font-weight: 800;">🍗 Poultry</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".FromtheGrill" style="background-color: white;color: black;font-weight: 800;">🥩 From the Grill</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".Vegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".PastaFusion" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta Fusion</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".EatMeetSipTalk" style="background-color: white;color: black;font-weight: 800;">🍹 Eat, Meet, Sip, Talk</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".Sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "K.F.C") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".bigdeal" style="background-color: white;color: black;font-weight: 800;">🍗 Big Deal</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".mealdeal" style="background-color: white;color: black;font-weight: 800;">🍗 Meal Deal</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".zingers" style="background-color: white;color: black;font-weight: 800;">🍔 Zingers</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".bigsix" style="background-color: white;color: black;font-weight: 800;">🍗 Big Six</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".buckets" style="background-color: white;color: black;font-weight: 800;">🥡 Buckets</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".bigboxes" style="background-color: white;color: black;font-weight: 800;">📦 Big Boxes</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".wings" style="background-color: white;color: black;font-weight: 800;">🍗 Wings</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".krispers" style="background-color: white;color: black;font-weight: 800;">🍖 Krispers</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".value" style="background-color: white;color: black;font-weight: 800;">🍗 Value</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".kfsides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".popcornchicken" style="background-color: white;color: black;font-weight: 800;">🍿 Popcorn Chicken</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".kfsalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".desserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".drinks" style="background-color: white;color: black;font-weight: 800;">🍹 Drinks</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".catering" style="background-color: white;color: black;font-weight: 800;">🍗 Catering</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".secretrecipe" style="background-color: white;color: black;font-weight: 800;">🤫 Secret Recipe</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Burger King") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".bkburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".otherfavourites" style="background-color: white;color: black;font-weight: 800;">🍗 Other Favourites</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".bksalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads & Veggie</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".bkbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".bksides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".bkdesserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".kingdeal" style="background-color: white;color: black;font-weight: 800;">🍔 King Deals Value Menu</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".bkkingjr" style="background-color: white;color: black;font-weight: 800;">🍔 King Jr™ Meals</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//
+//                        else if ($row['name'] == "Gizmos Chillspot") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".gizmosalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".gizmoplatters" style="background-color: white;color: black;font-weight: 800;">🥘 Platters</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".gizmoburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".gizmowrapsquesadilla" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps & Quesadillas</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".gizmopasta" style="background-color: white;color: black;font-weight: 800;">🍝 Pastas</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".gizmovegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".gizmoluncspecial" style="background-color: white;color: black;font-weight: 800;">🍣 Lunch Special</a></li>
+//                                                            <li class="right"><a class="filter" data-filter=".gizmodesert" style="background-color: white;color: black;font-weight: 800;">🥧 Deserts</a></li>
+//                                                            <li class="left"><a class="filter" data-filter=".gizmomain" style="background-color: white;color: black;font-weight: 800;">🍗 Main Courses</a></li>
+//                                                            <li class="right"><a class="filter" data-filter=".gizmomixdrink" style="background-color: white;color: black;font-weight: 800;">🍹 Mix Drink</a></li>
+//                                                            <li class="left"><a class="filter" data-filter=".gizmosideorder" style="background-color: white;color: black;font-weight: 800;">🍟 Side Order</a></li>
+//                                                            <li class="right"><a class="filter" data-filter=".gizmostarter" style="background-color: white;color: black;font-weight: 800;">🍗 Starters</a></li>
+//                                                            <li class="left"><a class="filter" data-filter=".gizmospecial" style="background-color: white;color: black;font-weight: 800;">🎊 Specials</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Pizza Hut") {
+//                            echo '<div class="fixed-action-btn" style="width: 220px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".pizzahutamazin" style="background-color: white;color: black;font-weight: 800;">🍕 Amazin 4</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".pizzahutwings" style="background-color: white;color: black;font-weight: 800;">🍗 Wings</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".pizzahutsides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".pizzahutbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".pizzahutdeserts" style="background-color: white;color: black;font-weight: 800;">🥧 Deserts</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".pizzahutpasta" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".pizzahutcombos" style="background-color: white;color: black;font-weight: 800;">🎊 Hut Combos</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Mothers") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".motherspatties" style="background-color: white;color: black;font-weight: 800;">🥖 Patties</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".motherschicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".mothersburgers" style="background-color: white;color: black;font-weight: 800;">🍔 Burgers</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".mothersbreakfastsandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Breakfast Sandwiches</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".motherbreakfastsmeals" style="background-color: white;color: black;font-weight: 800;">🥪 Breakfast Meals</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".motherssandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Sandwiches</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".mothersbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".motherssoups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".mothersicecream" style="background-color: white;color: black;font-weight: 800;">🍦 Ice Cream</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".motherspastry" style="background-color: white;color: black;font-weight: 800;">🥧 Pastry</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//
+//                        else if ($row['name'] == "Island Grill") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".islandgrillfeatured" style="background-color: white;color: black;font-weight: 800;">🥖 Featured</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".islandgrillchicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".islandgrillyabba" style="background-color: white;color: black;font-weight: 800;">🍗 Yabba</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".islandgrillsandwiches" style="background-color: white;color: black;font-weight: 800;">🥪 Sandwiches</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".islandgrillsoups" style="background-color: white;color: black;font-weight: 800;">🍲 Soup</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".islandgrillsides" style="background-color: white;color: black;font-weight: 800;">🍟  Sides</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".islandgrillbeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".islandgrillnuggets" style="background-color: white;color: black;font-weight: 800;">🍲 Nuggets</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Dominos") {
+//                            echo '<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".dominosspecialtypizza" style="background-color: white;color: black;font-weight: 800;">🍕 Specialty Pizza</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".dominoschicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".dominosides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".dominosdrinks" style="background-color: white;color: black;font-weight: 800;">🍹 Drinks</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".dominosdesserts" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Tha Ville") {
+//                            echo '<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".thavillechicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".thavillefish" style="background-color: white;color: black;font-weight: 800;">🍣 Fish</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".thavillesides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".thavilleservedwith" style="background-color: white;color: black;font-weight: 800;">🍛 Served With</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".thavillemeat" style="background-color: white;color: black;font-weight: 800;">🍖 Meat</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".thavillebeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".thavilledonetoorder" style="background-color: white;color: black;font-weight: 800;">⌛ Done to Order</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".thavillepastries" style="background-color: white;color: black;font-weight: 800;">🥧 Pastries</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Pablos 2020") {
+//                            echo '<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".pablos2020breakfast" style="background-color: white;color: black;font-weight: 800;">🥓 Breakfast</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".pablos2020lunch" style="background-color: white;color: black;font-weight: 800;">🥪 Lunch</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".pablos2020dinner" style="background-color: white;color: black;font-weight: 800;">🍛 Dinner</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".pablos2020dessert" style="background-color: white;color: black;font-weight: 800;">🥧 Dessert</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".pablos2020sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".pablos2020soupoftheday" style="background-color: white;color: black;font-weight: 800;">🍲 Soup of the day</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "GL Steakhouse") {
+//                            echo '<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".glsteakhouseappetizers" style="background-color: white;color: black;font-weight: 800;">🥩 Appetizers</a></li>
+//                                                         <li class="right"><a class="filter " data-filter=".glsteakhousesoupofday" style="background-color: white;color: black;font-weight: 800;">🍲 Soup of day</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".glsteakhouseentrees" style="background-color: white;color: black;font-weight: 800;">🍖 Entrees</a></li>
+//                                                         <li class="right"><a class="filter" data-filter=".glsteakhousesteak" style="background-color: white;color: black;font-weight: 800;">🥓 Steak</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".glsteakhouseseafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".glsteakhousechicken" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".glsteakhousesideorder" style="background-color: white;color: black;font-weight: 800;">🍟 Side Order</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".glsteakhousesauces" style="background-color: white;color: black;font-weight: 800;">🍛 Sauces</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".glsteakhousedessert" style="background-color: white;color: black;font-weight: 800;">🥧 Desserts</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".glsteakhousebeverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Flamin Wok") {
+//                            echo '<div class="fixed-action-btn" style="width: 320px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul class="" style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".flaminlunchboxmeals" style="background-color: white;color: black;font-weight: 800;">🥓 Lunch Box Meals</a></li>
+//                                                         <li class="left"><a class="filter " data-filter=".flaminfat2fitsalads" style="background-color: white;color: black;font-weight: 800;">🥗 Fat 2 Fit Salads</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".flaminlunchboxspecials" style="background-color: white;color: black;font-weight: 800;">🍖 Lunch Box Specials</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".flaminsoups&appetizers" style="background-color: white;color: black;font-weight: 800;">🍲  Soups & Appetizers</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flaminchickendishes" style="background-color: white;color: black;font-weight: 800;">🍗 Chicken Dishes</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flaminchopsuey" style="background-color: white;color: black;font-weight: 800;">🥦 Chop Suey (Veg.)</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flamintofudishes" style="background-color: white;color: black;font-weight: 800;">🍱 Tofu Dishes</a></li>
+//                                                          <li class="right"><a class="filter" data-filter=".flaminporkdishes" style="background-color: white;color: black;font-weight: 800;">🥩 Pork Dishes</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flaminnoodledishes" style="background-color: white;color: black;font-weight: 800;">🍲 Noodle Dishes</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flaminseafooddishes" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood Dishes</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flaminfriedrice" style="background-color: white;color: black;font-weight: 800;">🍚 Fried Rice</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".flamindrinks" style="background-color: white;color: black;font-weight: 800;">🥤 Beverages</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Naufragada") {
+//                            echo '
+//<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".naufragadaomlets" style="background-color: white;color: black;font-weight: 800;">🥟 Omelets</a></li>
+//                                                         <li class="left"><a class="filter " data-filter=".naufragadasalads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>
+//                                                         <li class="left"><a class="filter" data-filter=".naufragadaspecialtyburger" style="background-color: white;color: black;font-weight: 800;">🍔 Specialty Burgers</a></li><br>
+//                                                         <li class="left"><a class="filter" data-filter=".naufragadapancakeswaffles" style="background-color: white;color: black;font-weight: 800;">🥞 Pancakes & Waffles</a></li>
+//                                                          <li CLASS="left"><a class="filter" data-filter=".naufragadaparfaits" style="background-color: white;color: black;font-weight: 800;">🥛 Parfaits / Muesli</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".naufragadawraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li><br>
+//                                                          <li class="left"><a class="filter" data-filter=".naufragadataconacho" style="background-color: white;color: black;font-weight: 800;">🌮 Tacos / Nachos</a></li>
+//                                                          <li class="left"><a class="filter" data-filter=".naufragadagyros" style="background-color: white;color: black;font-weight: 800;">🍣 Gyros</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else if ($row['name'] == "Ros Cake-house") {
+//                            echo '
+//<div class="fixed-action-btn" style="width: 300px;">
+//  <a class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul style="width: inherit;height: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".rosall" style="background-color: white;color: black;font-weight: 800;">🥟 All</a></li>
+//  </ul>
+//</div>
+//        ';
+//                        }
+//                        else {
+//                            echo '
+//
+//                                          <div class="fixed-action-btn" style="width: 300px;">
+//  <a id="menu" class="btn-floating waves-effect waves-light btn-large red right z-depth-0">
+//    <i class="mdi-maps-restaurant-menu teal"></i>
+//  </a>
+//  <ul style="width: inherit;">
+//    <li class="left"><a class="filter active" data-filter=".menu-restaurant" style="background-color: white;color: black;font-weight: 800;">🍛 All</a></li>
+//     <li class="right"><a class="filter " data-filter=".casuals" style="background-color: white;color: black;font-weight: 800;">🍛 Main</a></li>
+//     <li class="left"><a class="filter" data-filter=".entrees" style="background-color: white;color: black;font-weight: 800;">🍛 Entrees</a></li>
+//     <li class="right"><a class="filter" data-filter=".sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li><br>
+//     <li class="left"><a class="filter" data-filter=".beverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a></li>
+//  </ul>
+//</div>
+//';
+//                        }
+//                    }
+//
+//
+//                    ?>
+<!---->
+<!--                </ul>-->
+<!--            </div>-->
 
             <section id="menu-list" class="responsive">
                 <div class="container" style="border: 0px solid transparent;">
@@ -727,9 +775,9 @@ if($_SESSION['customer_sid']==session_id())
 
                                             <?php
 
-                                            if ($row['id'] == 53){
+                                            if ($row['id'] == 291){
                                                 echo '<h5><label>Promotion</label><br>KFC Secret Recipe</h5>
-                                                <h6>The great taste of KFC Original Recipe for a limited time</h6>';
+//                                                <h6>The great taste of KFC Original Recipe for a limited time</h6>';
                                             }
                                             else{
                                                 echo '<h6>No current deals</h6>';
@@ -741,6 +789,37 @@ if($_SESSION['customer_sid']==session_id())
 
 
                                         </p></li>
+                                    <li class="collection-item menu-list col s12" hidden disabled>
+                                        <div class="scrolling-wrapper" style="border-bottom: 1px solid transparent;">
+                                            <div class="smallcard">
+                                                <div class="column">
+                                                    <div>
+                                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                                            <a class="filter active" data-filter=".menu-restaurant" style="background-color: white;color: black;font-weight: 800;">🍛 All</a>
+                                                        </div>
+
+                                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                                            <a class="filter " data-filter=".casuals" style="background-color: white;color: black;font-weight: 800;">🍛 Main</a>
+                                                        </div>
+
+                                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                                            <a class="filter" data-filter=".entrees" style="background-color: white;color: black;font-weight: 800;">🍛 Entrees</a>
+                                                        </div>
+
+                                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                                            <a class="filter" data-filter=".sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a>
+                                                        </div>
+
+                                                        <div class="chip" style="color: black;width: 140px;background-color: ghostwhite;">
+                                                            <a class="filter" data-filter=".beverages" style="background-color: white;color: black;font-weight: 800;">🍹 Beverages</a>
+                                                        </div>
+
+                                                    </div></div>
+                                            </div>
+                                        </div>
+
+                                    </li>
+
                                     <?php
                                     $result = mysqli_query($con, "SELECT * FROM items where restaurantid= $selec_rest AND category='0' AND not deleted ORDER BY id ASC;");
                                     if(mysqli_num_rows($result) > 0)
@@ -763,8 +842,7 @@ if($_SESSION['customer_sid']==session_id())
                                                     <form method="post" action="category.php?action=add&id=<?php echo $row["id"]; ?>&pgid=<?php echo $restid; ?>">
                                                         <img src="<?php if ($row['img_addr'] != 0 || $row['img_addr'] != "") {echo $row['img_addr'];} else {echo "images/itemdefault.png";} ?>" style="object-fit: cover;" class="circle">
                                                         <p class="title"><label for="quantity">Quantity:</label>
-                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/>
-                                                            <input type="hidden"/></p>
+                                                            <input style="color: darkred;width: 80%;" type="tel" max="10" min="1" name="quantity" value="1"/></p>
                                                         <?php
                                                         if ($row["typeone"] === "" && $row["type2"] === "" && $row["type3"] === "" && $row["type4"] === "") {
                                                             echo '';
@@ -773,7 +851,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                        <p>
                                                     <label for="variation">Choose Flavor</label>
-                                                    <select class="browser-default" id="variation" name="variation">';
+                                                    <select class="browser-default" name="variation">';
                                                             if ($row["typeone"] !== ""){
                                                                 echo '<option value="'.$row["typeone"].'">'.$row["typeone"].'</option>';
                                                             }
@@ -798,7 +876,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         else{
                                                             echo '<p>
                                                     <label for="variation_typee">Choose type</label>
-                                                    <select class="browser-default" id="variation_typee" name="variation_typee">';
+                                                    <select class="browser-default" name="variation_typee">';
 
                                                             if ($row["type5"] !== ""){
                                                                 echo '<option value="'.$row["type5"].'">'.$row["type5"].'</option>';
@@ -827,7 +905,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_side">Choose Side</label>
-                                                        <select class="browser-default" id="variation_side" name="variation_side">';
+                                                        <select class="browser-default" name="variation_side">';
 
                                                             if ($row["type9"] !== ""){
                                                                 echo '<option value="'.$row["type9"].'">'.$row["type9"].'</option>';
@@ -855,7 +933,7 @@ if($_SESSION['customer_sid']==session_id())
                                                             echo '
                                                     <p>
                                                         <label for="variation_drink">Choose Drink</label>
-                                                        <select class="browser-default" id="variation_drink" name="variation_drink">';
+                                                        <select class="browser-default" name="variation_drink">';
                                                             if ($row["typethirteen"] !== ""){
                                                                 echo '<option value="'.$row["typethirteen"].'">'.$row["typethirteen"].'</option>';
                                                             }
@@ -874,7 +952,7 @@ if($_SESSION['customer_sid']==session_id())
                                                         }
                                                         ?>
                                                         <?php echo $detail; ?>
-                                                        <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0"><i class="mdi-action-shopping-basket"></i></button>
+                                                        <button id="add_to_cart" type="submit" name="add_to_cart" style="margin-top:0px;border-radius: 8px;font-size:20px;width: 50px;border: 0px solid transparent;" class="btn-floating secondary-content z-depth-0" value=""><i class="mdi-action-shopping-basket"></i></button>
                                                         <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
                                                         <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
                                                     </form>
@@ -3718,6 +3796,54 @@ if($_SESSION['customer_sid']==session_id())
             </div>
         </div>
     </footer>
+    <div class="footer-fixed hide-on-med-and-up z-depth-1">
+        <div class="row">
+            <div class="col s12">
+    <?php
+    $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
+    while($row = mysqli_fetch_array($result3))
+    {
+        $restid = $selec_rest;
+        $Rnme = $row['name'];
+        if ($row['name'] === 331) {
+            echo '';
+        }
+    }
+    ?>
+<!--                <ul class="tabs">-->
+<!--                    <li class="tab col s10"><a class="filter active" data-filter=".Starttheday" style="background-color: white;color: black;font-weight: 800;">🌭 Start the day</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter " data-filter=".LunchBeyond" style="background-color: white;color: black;font-weight: 800;">🍔 Lunch & Beyond</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Subs" style="background-color: white;color: black;font-weight: 800;">🌯 Subs</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Wraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".ChineseFare" style="background-color: white;color: black;font-weight: 800;">🥡 Chinese Fare</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".JamaicanFare" style="background-color: white;color: black;font-weight: 800;">Jamaican Fare</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Roti" style="background-color: white;color: black;font-weight: 800;">🌯 Roti</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Soups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Appetizers" style="background-color: white;color: black;font-weight: 800;">🍗 Appetizers</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Salads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Seafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Poultry" style="background-color: white;color: black;font-weight: 800;">🍗 Poultry</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".FromtheGrill" style="background-color: white;color: black;font-weight: 800;">🥩 From the Grill</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Vegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".PastaFusion" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta Fusion</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".EatMeetSipTalk" style="background-color: white;color: black;font-weight: 800;">🍹 Eat, Meet, Sip, Talk</a></li>-->
+<!--                    <li class="tab col s3"><a class="filter" data-filter=".Sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>-->
+<!--                </ul>-->
+            </div>
+        </div>
+        <footer style="background-color: white;">
+            <nav class="z-depth-0" style="background-color: white;">
+                <div class="nav-wrapper">
+                    <ul class="justify">
+                        <li class="active"><a class="waves-effect" name="home" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
+                        <li><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
+                        <li><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
+                        <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </footer>
+    </div>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -3728,41 +3854,6 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
-    <script>
-        $(document).ready(function () {
-            LoginUser();
-        })
-
-        function LoginUser() {
-            $(document).on('click', "#add_to_cart", function (e) {
-                e.preventDefault();
-                var id = $('#').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-                var password = $('#password').val();
-
-                if (password === '' || phone === ''){
-                    Materialize.toast('Enter credentials <button onclick="Register()" class="btn" style="border-radius: 8px;">Create account</button>', 8000);
-
-                }
-                else {
-                    $.ajax({
-                        url: '../routers/add-meal.php',
-                        method: 'get',
-                        data:{contact:phone,password:password},
-                        success: function (data) {
-                            $('#message').html(data);
-
-                        }
-                    })
-                }
-            })
-        }
-    </script>
     <script type="text/javascript">
         (function($) {
             $("#menu-filters li a").click(function() {

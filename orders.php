@@ -48,7 +48,34 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 .side-nav.fixed.leftnavset .collapsible-body li.active>a{color:#A82128}ul.side-nav.leftnavset li.active>a{color:#A82128}
     label{
         color: black;
-    }
+    }.navbar-fixed nav {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }.footer-fixed footer {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }body {
+         display: -webkit-box;
+         display: flex;
+         min-height: 100vh;
+         -webkit-box-orient: vertical;
+         -webkit-box-direction: normal;
+         flex-direction: column;
+     }main {
+          -webkit-box-flex: 1;
+          flex: 1 0 auto;
+      }.footer-fixed {
+           position: fixed;
+           bottom: 0;
+           width: 100%;
+       }footer ul.justify {
+            text-align: center;
+            display: table;
+            overflow: hidden;
+            margin: 0 auto;
+        }footer ul.justify li {
+             margin-left: auto;
+             margin-right: auto;
+             width: 82px;
+         }
   </style>
 </head>
 
@@ -59,8 +86,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
       <div class="loader-section section-right"></div>
   </div>
   <header id="header" class="page-topbar">
-        <div class="navbar-fixed">
-            <nav class="navbar-color">
+        <div class="navbar-fixed z-depth-0">
+            <nav class="navbar-color z-depth-0">
                 <div class="nav-wrapper">
                     <ul style="background-color: white;">
                         <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO <span id="nearby"></span></b></label>
@@ -96,10 +123,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     <li class="bold"><a href="index.php"><i class="mdi-action-shop-two"></i> Order Food</a>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold active"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>My Orders</a>
+                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>My Orders</a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li class="bold active"><a href="orders.php">My Orders</a>
+                                        <li><a href="orders.php">My Orders</a>
                                         </li>
                                         <?php
                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders WHERE customer_id = $user_id;");
@@ -115,10 +142,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     </li>
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
-                            <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-question-answer"></i>Tickets</a>
+                            <li class="bold active"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-question-answer"></i>Tickets</a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="tickets.php">My Tickets</a>
+                                        <li class="bold active"><a href="tickets.php">My Tickets</a>
                                         </li>
                                         <?php
                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM tickets WHERE poster_id = $user_id AND not deleted;");
@@ -140,17 +167,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     </li>
                 </nav>
             </ul>
-            <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan z-depth-0"><i class="mdi-navigation-menu" style="color: white;"></i></a>
         </aside>
       <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
           <p class="caption">My past & current orders</p>
 <div id="work-collections" class="seaction">
@@ -304,13 +322,27 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
       </div>
     </div>
   <footer class="page-footer">
-    <div class="footer-copyright">
-      <div class="container">
-        <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="yaadiltd.php" target="_blank">Yaadi.Co</a> All rights reserved.</span>
-        <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
-        </div>
-    </div>
+      <div class="footer-copyright">
+          <div class="container">
+              <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="yaadiltd.php" target="_blank">Yaadi.Co</a>, all rights reserved.</span>
+              <span class="right"><a class="grey-text text-lighten-4" href="tercon.php" target="_blank">Terms & Conditions</a></span>
+          </div>
+      </div>
   </footer>
+  <div class="footer-fixed hide-on-med-and-up z-depth-1">
+      <footer style="background-color: white;">
+          <nav class="z-depth-0" style="background-color: white;">
+              <div class="nav-wrapper">
+                  <ul class="justify">
+                      <li><a class="waves-effect" name="home" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
+                      <li class="active"><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
+                      <li><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
+                      <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
+                  </ul>
+              </div>
+          </nav>
+      </footer>
+  </div>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>    
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>

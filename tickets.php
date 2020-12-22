@@ -85,6 +85,34 @@ ul.side-nav.leftnavset li.user-details #profile-dropdown a{padding:8px 15px}
 ul.side-nav.leftnavset .profile-btn{margin:0;text-transform:capitalize;padding:0;text-shadow:1px 1px 1px #444;font-size:15px}
 ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 .side-nav.fixed.leftnavset .collapsible-body li.active>a{color:#A82128}ul.side-nav.leftnavset li.active>a{color:#A82128}
+  .navbar-fixed nav {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }.footer-fixed footer {
+       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+   }body {
+        display: -webkit-box;
+        display: flex;
+        min-height: 100vh;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+    }main {
+         -webkit-box-flex: 1;
+         flex: 1 0 auto;
+     }.footer-fixed {
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+      }footer ul.justify {
+           text-align: center;
+           display: table;
+           overflow: hidden;
+           margin: 0 auto;
+       }footer ul.justify li {
+            margin-left: auto;
+            margin-right: auto;
+            width: 82px;
+        }
     </style> 
 </head>
 
@@ -96,8 +124,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   </div>
    
   <header id="header" class="page-topbar">
-         <div class="navbar-fixed">
-            <nav class="navbar-color">
+         <div class="navbar-fixed z-depth-0">
+            <nav class="navbar-color z-depth-0">
                 <div class="nav-wrapper">
                     <ul style="background-color: white;">
                         <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>DELIVERING TO <span id="nearby"></span></b></label>
@@ -179,21 +207,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                      </li>
                  </nav>
              </ul>
-             <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan z-depth-0"><i class="mdi-navigation-menu" style="color: white;"></i></a>
          </aside>
-       
+
       <section id="content">
 
-         <div id="breadcrumbs-wrapper">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12" style="background: url(https://image.freepik.com/free-vector/food-pattern-design_1221-27.jpg) repeat fixed;border-radius: 16px;border-top-left-radius: 0px;border-top-right-radius: 0px;">
-                <h5 class="breadcrumbs-title" style="font-weight: 800;mso-bidi-font-style: oblique;color: #fff;width: 120px;background-color: #FFB03B;border-radius: 8px;text-align: center;">Tickets</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-  
         <div class="container">
           <p class="caption">If you're experiencing any issues, contact us by opening a ticket.</p>
           <div class="divider"></div>
@@ -203,7 +220,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
               </div>
 <div>
                 <div class="card-panel">
-                  <div class="row">
                     <form class="formValidate" id="formValidate" method="post" action="routers/add-ticket.php" novalidate="novalidate" class="col s12">
                       <div class="row">
                         <div class="input-field col s12">
@@ -233,23 +249,22 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                       </div>					  
                       <div class="row">
                         <div class="row">
-                          <div class="input-field col s11">
+                          <div class="input-field col s12">
 						  <input type="hidden" value="<?php echo $user_id;?>" name="id">
-                            <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:16px;">Submit
+                            <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:16px;">Send
                               <i class="mdi-content-send right"></i>
                             </button>
                           </div>
                         </div>
                       </div>
                     </form>
-                  </div>
                 </div>
               </div>
             <div class="divider"></div>
           </div>
     </div>
           <div class="container">
-          <p class="caption">List of your tickets</p>
+          <p class="caption">Past tickets</p>
           <div class="divider"></div>
 									<div id="work-collections">
 									<ul id="projects-collection" class="collection">
@@ -271,8 +286,15 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                             <span class="task-cat cyan">'.$row['status'].'</span></div>											
                                             <div class="col s2">
                                             <span class="task-cat grey darken-3">'.$row['type'].'</span></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s6">
+                                                <p class="collections-title"></p>                                              
+                                            </div>
                                             <div class="col s2">
-                                            <span class="badge">'.$row['date'].'</span></div>
+                                            <span class="badge">'.$row['date'].'</span></div>											
+                                            <div class="col s2">
+                                            <span class="task-cat darken-3"></span></div>
                                         </div>
                                     </a>';
 									}
@@ -286,14 +308,20 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
     </div>
     </div>
 
-   <footer class="page-footer">
-    <div class="footer-copyright">
-      <div class="container">
-        <span>Copyright © 2019 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi® Ltd</a> All rights reserved.</span>
-        <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
-        </div>
-    </div>
-  </footer>
+   <div class="footer-fixed hide-on-med-and-up z-depth-1">
+       <footer style="background-color: white;">
+           <nav class="z-depth-0" style="background-color: white;">
+               <div class="nav-wrapper">
+                   <ul class="justify">
+                       <li><a class="waves-effect" name="home" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
+                       <li><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
+                       <li class="active"><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
+                       <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
+                   </ul>
+               </div>
+           </nav>
+       </footer>
+   </div>
      
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>    
      <script type="text/javascript" src="js/plugins/angular.min.js"></script>
