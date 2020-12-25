@@ -170,8 +170,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         </aside>
       <section id="content">
         <div class="container">
-          <p class="caption">My past & current orders</p>
-<div id="work-collections" class="seaction">
+<div id="work-collections" class="section">
              
 					<?php
 					if(isset($_GET['status'])){
@@ -184,7 +183,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             ?>
 					 <div class="row">
                 <div>
-                    <ul id="issues-collection" class="collection">
+                    <ul id="issues-collection" class="collection" style="background-color: white;border-top-right-radius: 8px;border-top-left-radius: 8px;">
+                        <li class="collection-header"><h4 style="padding-left: 20px;">My Orders</h4></li>
                          <?php
 					while($row = mysqli_fetch_array($sql))
 					{

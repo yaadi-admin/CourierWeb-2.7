@@ -165,7 +165,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <div id="logack" class="modal bottom-sheet">
 
             <div class="modal-content">
-                <h5>Activate ordering?</h5>
+                <h5>Enable ordering?</h5>
                 <h6>Enter password</h6>
                 <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
                 <form action="routers/deac-orders.php" method="post">
@@ -224,8 +224,22 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 						$status = $row['status'];
 						$deleted = $row['deleted'];
 						echo '<li class="collection-item avatar" id="'.$row['id'].'">
-                              <i class="mdi-content-content-paste red circle"></i>
-                              <span class="collection-header">Order No. '.$row['id'].'</span>
+                              <i class="mdi-content-content-paste red circle"></i>';
+
+						if ($status === 'Cancelled by Customer'){
+						    echo '<span class="collection-header">Order No. '.$row['id'].'
+                            <span class="right"><form method="post" action="routers/reopen-order.php">
+                            <input type="hidden" value="0" name="reopen">
+                            <input type="hidden" value="'.$row['id'].'" name="itemid">
+                            <button class="btn-flat waves-effect waves-light" type="submit" name="submit" style="color: #a21318;">Reopen</button>    
+                            </form></span>
+                            </span>';
+                        }
+						else{
+                            echo '<span class="collection-header">Order No. '.$row['id'].'</span>';
+                        }
+
+						echo'
                               <p><strong>Date:</strong> '.$row['date'].'</p>
                               <p><strong>Filled By:</strong> '.$fillername.'</p>
                               <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>							  
@@ -277,22 +291,22 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                             </div>
                             <div class="col s5">
                             <p class="collections-title">'.$item_name.'</p>';
-                            if (isset($row1["variation"])) {
+                            if (isset($row1["variation"]) && $row1["variation"] !== '') {
                                 echo ' 
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_type"])){
+                            if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
                                 echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_side"])){
+                            if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
                                 echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
                             }
 
-                            if (isset($row1["variation_drink"])) {
+                            if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
                                 echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
                             }

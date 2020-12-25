@@ -136,34 +136,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     <ul class="left">
                       <li><h1 class="logo-wrapper" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;"><a href="index.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
-                    <ul class="right">
-
-                        <?php
-
-        $openclosed = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=1;");
-        while($row = mysqli_fetch_array($openclosed)) {
-
-            if ($row['admission'] == 1) {
-
-                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open" style="color: white;"><label class="white-text right" style="font-size: 6px;">Login</label></i></a></li>';
-            }
-            elseif ($row['admission'] == 0){
-                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock" style="color: white;"><label class="white-text left" style="font-size: 6px;">Login</label></i></a></li>';
-            }
-
-        }
-
-   $orderstats = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=2;");
-        while($row = mysqli_fetch_array($orderstats)) {
-            if ($row['admission'] == 0) {
-                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock" style="color: white;"><label class="white-text right" style="font-size: 6px;">Orders</label></i></a></li>';
-                            }
-            elseif ($row['admission'] == 1){
-                echo '<li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open" style="color: white;"><label class="white-text right" style="font-size: 6px;">Orders</label></i></a></li>';
-            }
-                        }
-                        ?>
-                    </ul>
                 </div>
             </nav>
         </div>
@@ -255,10 +227,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
 
-        <div id="logac" class="modal bottom-sheet">
+        <div id="closelog" class="modal bottom-sheet">
 
             <div class="modal-content">
-                <h5>Close customer login?</h5>
+                <h5>Disable login?</h5>
                 <h6>Enter password</h6>
                 <input name="validatore" id="validatore" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
                 <form action="routers/openclose.php" method="post">
@@ -268,14 +240,41 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             </div>
         </div>
 
-        <div id="logack" class="modal bottom-sheet">
+        <div id="openlog" class="modal bottom-sheet">
 
             <div class="modal-content">
-                <h5>Open customer login?</h5>
+                <h5>Enable login?</h5>
                 <h6>Enter password</h6>
                 <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
                 <form action="routers/closeopen.php" method="post">
                     <input type="hidden" name="admission" value="<?php $admission = 0; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
+
+        <div id="closeorder" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Close ordering?</h5>
+                <h6>Enter password</h6>
+                <input name="validatore" id="validatore" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/act-orders.php" method="post">
+                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 1; echo $admission; ?>">
+                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div id="enableorder" class="modal bottom-sheet">
+
+            <div class="modal-content">
+                <h5>Enable ordering?</h5>
+                <h6>Enter password</h6>
+                <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
+                <form action="routers/deac-orders.php" method="post">
+                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 0; echo $admission; ?>">
                     <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
                 </form>
             </div>
@@ -300,9 +299,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                   $orderstat = mysqli_query($con, "SELECT DISTINCT admission FROM incumbency WHERE id=2;");
                   while($row = mysqli_fetch_array($orderstat)) {
                       if ($row['admission'] == 0) {
-                          echo '<li class="collection-item">Ordering <a href="all-orders.php"><span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></a></li>';
+                          echo '<li class="collection-item"><i class="mdi-action-shop-two"></i> Ordering <a class="modal-trigger" href="#closeorder"><span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></a></li>';
                       } else if ($row['admission'] != 0) {
-                          echo '<li class="collection-item">Ordering <a href="all-orders.php"><span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></a></li>';
+                          echo '<li class="collection-item"><i class="mdi-action-shop-two"></i> Ordering <a class="modal-trigger" href="#enableorder"><span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></a></li>';
                       }
                   }
 
@@ -310,21 +309,21 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                   while($row = mysqli_fetch_array($openclose)) {
 
                       if ($row['admission'] == 0) {
-                          echo '<li class="collection-item">Customer Login <span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></li>';
+                          echo '<li class="collection-item"><i class="mdi-hardware-security"></i> Login <a class="modal-trigger" href="#closelog"><span class="badge green new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-check-circle" style="color: white;"></i> ENABLED</span></span></a></li>';
                       } else if ($row['admission'] != 0) {
-                          echo '<li class="collection-item">Customer Login <span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></li>';
+                          echo '<li class="collection-item"><i class="mdi-hardware-security"></i> Login <a class="modal-trigger" href="#openlog"><span class="badge red new" style="font-size: 1px;"><span style="font-size: 12px;"><i class="mdi-action-exit-to-app" style="color: white;"></i> DISABLED</span></span></a></li>';
                       }
                   }
 
                   ?>
-                  <li class="collection-item"><a href="am_rd.php"><h4>Couriers</h4></a></li>
-                  <li class="collection-item"><a href="am_cust.php"><h4>Customers</h4></a></li>
-                  <li class="collection-item"><a href="am_rest.php"><h4>Restaurants</h4></a></li>
-                  <li class="collection-item"><a href="am_pa.php"><h4>Account Recovery</h4></a></li>
-                  <li class="collection-item"><a href="tickets.php"><h4>Tickets</h4></a></li>
-                  <li class="collection-item"><a href="am_rep.php"><h4>Reports</h4></a></li>
-                  <li class="collection-item"><a href="am_wal.php"><h4>Wallets</h4></a></li>
-                  <li class="collection-item"><a href="am_adv.php"><h4>Promotions</h4></a></li>
+                  <li class="collection-item"><a href="am_rd.php"><h4 class="black-text"><i class="mdi-maps-directions-bike"></i> Couriers</h4></a></li>
+                  <li class="collection-item"><a href="am_cust.php"><h4 class="black-text"><i class="mdi-action-shop"></i> Customers</h4></a></li>
+                  <li class="collection-item"><a href="am_rest.php"><h4 class="black-text"><i class="mdi-action-shop-two"></i> Restaurants</h4></a></li>
+                  <li class="collection-item"><a href="am_pa.php"><h4 class="black-text"><i class="mdi-hardware-security"></i> Account Recovery</h4></a></li>
+                  <li class="collection-item"><a href="tickets.php"><h4 class="black-text"><i class="mdi-communication-message"></i> Tickets</h4></a></li>
+                  <li class="collection-item"><a href="am_rep.php"><h4 class="black-text"><i class="mdi-action-report-problem"></i> Reports</h4></a></li>
+                  <li class="collection-item"><a href="am_wal.php"><h4 class="black-text"><i class="mdi-action-wallet-membership"></i> Wallets</h4></a></li>
+                  <li class="collection-item"><a href="am_adv.php"><h4 class="black-text"><i class="mdi-action-settings-remote"></i> Promotions</h4></a></li>
               </ul>
           </section>
         </div>

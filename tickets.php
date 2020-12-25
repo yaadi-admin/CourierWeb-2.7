@@ -219,19 +219,19 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                 <h4 class="header">Open a ticket</h4>
               </div>
 <div>
-                <div class="card-panel">
+                <div class="card-panel z-depth-0">
                     <form class="formValidate" id="formValidate" method="post" action="routers/add-ticket.php" novalidate="novalidate" class="col s12">
                       <div class="row">
                         <div class="input-field col s12">
-                          <input name="subject" id="subject" type="text" data-error=".errorTxt1">
+                          <input name="subject" id="subject" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;">
                           <label for="subject" class="">Subject</label>
 						  <div class="errorTxt1"></div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="input-field col s12">
-                          <textarea name="description" id="description" class="materialize-textarea validate" data-error=".errorTxt2"></textarea>
-                          <label for="description" class="">Description</label>
+                          <textarea name="description" id="description" class="materialize-textarea validate" data-error=".errorTxt2" style="border-bottom-right-radius: 8px;"></textarea>
+                          <label for="description" class="">Details</label>
 						  <div class="errorTxt2"></div>
                         </div>
                       </div>					  
@@ -242,7 +242,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 								<option value="Support">Support</option>
 								<option value="Payment">Payment</option>
 								<option value="Complaint">Complaint</option>
-								<option value="Others">Others</option>				
+								<option value="Others">Other</option>
 							</select>
 							<label>Type</label>
                         </div>
@@ -251,7 +251,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         <div class="row">
                           <div class="input-field col s12">
 						  <input type="hidden" value="<?php echo $user_id;?>" name="id">
-                            <button class="btn cyan waves-effect waves-light right" type="submit" name="action" style="border-radius:16px;">Send
+                            <button class="btn cyan waves-effect waves-light" type="submit" name="action" style="border-radius:16px;width: 100%;">Send
                               <i class="mdi-content-send right"></i>
                             </button>
                           </div>
@@ -322,7 +322,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
            </nav>
        </footer>
    </div>
-     
+       <script type='text/javascript' data-cfasync='false'>
+           window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
+               script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
+       </script>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>    
      <script type="text/javascript" src="js/plugins/angular.min.js"></script>
      <script type="text/javascript" src="js/materialize.min.js"></script>

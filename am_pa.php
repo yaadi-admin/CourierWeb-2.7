@@ -233,47 +233,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             ?>
 
                 </ul>
-
-
-                  <table id="data-table-admin" class="responsive centered highlight striped" cellspacing="1">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:50%;">Reset & Notify</th>
-                        <th data-field="name" style="width:50%;">Phone & Role</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-				<?php
-				$result = mysqli_query($con, "SELECT * FROM users");
-				while($row = mysqli_fetch_array($result))
-				{
-                    $rowid = $row['id'];
-                    $name =  $row["name"];
-                    $username = $row["username"];
-                    $email = $row["email"];
-                    $contact = $row["contact"];
-                    $address = $row["address"];
-                    $paw = $row['password'];
-                    
-                    echo '<tr><td>
-                              <div><form class="formValidate" id="formValidate1" method="post" action="routers/dfp.php" novalidate="novalidate">
-                              <input name="dfp" value="'.$contact.'" hidden>
-                              <input name="dfpd" value="'.$rowid.'" hidden>
-                              <button type="submit" name="action" style="border-radius:16px;"><span class="text-black" style="font-weight: 300;">Notify</span>
-                                <i class="mdi-content-send right"></i>
-                              </button></form></div>
-                              </td>';
-
-					echo '<td>
-<div><span class="text-black" style="font-weight: 300;">'.$contact.'</span></div>
-<div><span class="text-black" style="font-weight: 300;">'.$row['role'].'</span></div>
-</td></tr>';
-                    
-				}
-				?>
-                    </tbody>
-</table>
             </div>
 			</form>
 
