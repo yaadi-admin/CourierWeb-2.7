@@ -314,7 +314,7 @@ if($_SESSION['customer_sid']==session_id())
                         if ($row['id'] != "297"){
 
                             $address = $row['address'];
-                            $image = $row['image_dir'];
+                            $image = $row['image_dir2'];
                             $image_dir = '';
                             $restaurant_id = $row['id'];
                             $restaurant_name = $row['name'];
@@ -843,6 +843,10 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
+    <script type='text/javascript' data-cfasync='false'>
+        window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
+            script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
+    </script>
     <script>
         var duration = 20;
         var fadeAmount = 0.3;

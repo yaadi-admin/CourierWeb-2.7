@@ -7,6 +7,16 @@ if($_SESSION['admin_sid']==session_id()) {
             $sql = "UPDATE users SET role = '$value' WHERE id = $key;";
             $con->query($sql);
         }
+        if (preg_match("/[0-9]+_restaurant/", $key)) {
+            $key = strtok($key, '_');
+            $sql = "UPDATE users SET name = '$value' WHERE id = $key;";
+            $con->query($sql);
+        }
+        if (preg_match("/[0-9]+_email/", $key)) {
+            $key = strtok($key, '_');
+            $sql = "UPDATE users SET email = '$value' WHERE id = $key;";
+            $con->query($sql);
+        }
         if (preg_match("/[0-9]+_verified/", $key)) {
             $key = strtok($key, '_');
             $sql = "UPDATE users SET verified = '$value' WHERE id = $key;";

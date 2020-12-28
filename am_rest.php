@@ -236,7 +236,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 
                       <?php
 
-                      $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant';");
+                      $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' ORDER BY name ASC;");
                       while($row = mysqli_fetch_array($result))
                       {
                           $name =  $row["name"];
@@ -346,7 +346,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 ';
 
                           echo '
-                    
+<p class="col s12"><label for="restaurant">Restaurant</label><input id="restaurant" name="'.$row['id'].'_restaurant" value="'.$name.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>        
+<p class="col s12"><label for="email">Email</label><input id="email" name="'.$row['id'].'_email" value="'.$email.'" type="email" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>        
 <p class="col s4"><label for="contact">Contact</label><input id="contact" name="'.$row['id'].'_contact" value="'.$contact.'" type="tel" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
 <p class="col s8"><label for="address">Address</label><input id="address" name="'.$row['id'].'_address" value="'.$address.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;""><div class="errorTxt01"></div></p>
 <p class="col s8"><label for="ocassion">Restaurant Type</label><input id="ocassion" name="'.$row['id'].'_ocassion" value="'.$type.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></div></p>                   
