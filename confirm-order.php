@@ -36,39 +36,39 @@ if($_SESSION['customer_sid']==session_id())
     else if($_POST['distance'] <= 2.0 && $_POST['distance'] >= 1.5){
         $fee = 500;
     }
-    else if($_POST['distance'] <= 2.5 && $_POST['distance'] >= 2.0){
-        $fee = 550;
+    else if($_POST['distance'] >= 2.5 && $_POST['distance'] <= 7.0){
+        $fee = 500;
     }
-    else if($_POST['distance'] <= 3.0 && $_POST['distance'] >= 2.5){
-        $fee = 600;
-    }
-    else if($_POST['distance'] <= 3.5 && $_POST['distance'] >= 3.0){
-        $fee = 650;
-    }
-    else if($_POST['distance'] <= 4.0 && $_POST['distance'] >= 3.5){
-        $fee = 700;
-    }
-    else if($_POST['distance'] <= 4.5 && $_POST['distance'] >= 4.0){
-        $fee = 750;
-    }
-    else if($_POST['distance'] <= 5.0 && $_POST['distance'] >= 4.5){
-        $fee = 800;
-    }
-    else if($_POST['distance'] <= 5.5 && $_POST['distance'] >= 5.0){
-        $fee = 850;
-    }
-    else if($_POST['distance'] <= 6.0 && $_POST['distance'] >= 5.5){
-        $fee = 900;
-    }
-    else if($_POST['distance'] <= 6.5 && $_POST['distance'] >= 6.0){
-        $fee = 950;
-    }
-    else if($_POST['distance'] <= 7.0 && $_POST['distance'] >= 6.5){
-        $fee = 1000;
-    }
-    else if($_POST['distance'] <= 7.5 && $_POST['distance'] >= 7.0){
-        $fee = 1050;
-    }
+//    else if($_POST['distance'] <= 3.0 && $_POST['distance'] >= 2.5){
+//        $fee = 600;
+//    }
+//    else if($_POST['distance'] <= 3.5 && $_POST['distance'] >= 3.0){
+//        $fee = 650;
+//    }
+//    else if($_POST['distance'] <= 4.0 && $_POST['distance'] >= 3.5){
+//        $fee = 700;
+//    }
+//    else if($_POST['distance'] <= 4.5 && $_POST['distance'] >= 4.0){
+//        $fee = 750;
+//    }
+//    else if($_POST['distance'] <= 5.0 && $_POST['distance'] >= 4.5){
+//        $fee = 800;
+//    }
+//    else if($_POST['distance'] <= 5.5 && $_POST['distance'] >= 5.0){
+//        $fee = 850;
+//    }
+//    else if($_POST['distance'] <= 6.0 && $_POST['distance'] >= 5.5){
+//        $fee = 900;
+//    }
+//    else if($_POST['distance'] <= 6.5 && $_POST['distance'] >= 6.0){
+//        $fee = 950;
+//    }
+//    else if($_POST['distance'] <= 7.0 && $_POST['distance'] >= 6.5){
+//        $fee = 1000;
+//    }
+//    else if($_POST['distance'] <= 7.5 && $_POST['distance'] >= 7.0){
+//        $fee = 1050;
+//    }
     else if($_POST['distance'] <= 8.0 && $_POST['distance'] >= 7.5){
         $fee = 1100;
     }
@@ -141,27 +141,27 @@ if($_SESSION['customer_sid']==session_id())
     else if($_POST['distance'] <= 20.5 && $_POST['distance'] >= 20.0){
         $fee = 2250;
     }
-    else if($_POST['distance'] <= 21.0 && $_POST['distance'] >= 20.5){
-        $fee = 2300;
-    }
-    else if($_POST['distance'] <= 21.5 && $_POST['distance'] >= 21.0){
-        $fee = 2350;
-    }
-    else if($_POST['distance'] <= 22.0 && $_POST['distance'] >= 21.5){
-        $fee = 2400;
-    }
-    else if($_POST['distance'] <= 23.5 && $_POST['distance'] >= 22.0){
-        $fee = 2450;
-    }
-    else if($_POST['distance'] <= 23.0 && $_POST['distance'] >= 22.5){
-        $fee = 2500;
-    }
-    else if($_POST['distance'] <= 23.5 && $_POST['distance'] >= 23.0){
-        $fee = 2550;
-    }
-    else if($_POST['distance'] <= 24.0 && $_POST['distance'] >= 23.5){
-        $fee = 2600;
-    }
+//    else if($_POST['distance'] <= 21.0 && $_POST['distance'] >= 20.5){
+//        $fee = 2300;
+//    }
+//    else if($_POST['distance'] <= 21.5 && $_POST['distance'] >= 21.0){
+//        $fee = 2350;
+//    }
+//    else if($_POST['distance'] <= 22.0 && $_POST['distance'] >= 21.5){
+//        $fee = 2400;
+//    }
+//    else if($_POST['distance'] <= 23.5 && $_POST['distance'] >= 22.0){
+//        $fee = 2450;
+//    }
+//    else if($_POST['distance'] <= 23.0 && $_POST['distance'] >= 22.5){
+//        $fee = 2500;
+//    }
+//    else if($_POST['distance'] <= 23.5 && $_POST['distance'] >= 23.0){
+//        $fee = 2550;
+//    }
+//    else if($_POST['distance'] <= 24.0 && $_POST['distance'] >= 23.5){
+//        $fee = 2600;
+//    }
     else
         $continue=1;
 
@@ -246,34 +246,6 @@ if($_SESSION['customer_sid']==session_id())
                 label{
                     color: black;
                 }
-                .navbar-fixed nav {
-                    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-                }.footer-fixed footer {
-                     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-                 }body {
-                      display: -webkit-box;
-                      display: flex;
-                      min-height: 100vh;
-                      -webkit-box-orient: vertical;
-                      -webkit-box-direction: normal;
-                      flex-direction: column;
-                  }main {
-                       -webkit-box-flex: 1;
-                       flex: 1 0 auto;
-                   }.footer-fixed {
-                        position: fixed;
-                        bottom: 0;
-                        width: 100%;
-                    }footer ul.justify {
-                         text-align: center;
-                         display: table;
-                         overflow: hidden;
-                         margin: 0 auto;
-                     }footer ul.justify li {
-                          margin-left: auto;
-                          margin-right: auto;
-                          width: 82px;
-                      }
             </style>
         </head>
         <body>
@@ -365,6 +337,7 @@ if($_SESSION['customer_sid']==session_id())
                             </li>
                         </nav>
                     </ul>
+                    <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only z-depth-0" style="color: #a21318"><i class="mdi-navigation-menu" style="color: white;"></i></a>
                 </aside>
                 <div id="breadcrumbs-wrapper">
                     <div class="container">
@@ -527,7 +500,6 @@ if($_SESSION['customer_sid']==session_id())
                         </li>
                     </ul>
                 </section>
-
                 <section>
                     <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                         <li class="collection-item">
@@ -548,13 +520,8 @@ if($_SESSION['customer_sid']==session_id())
                         </li>
                     </ul>
                 </section>
-
-
             </div>
-
         </div>
-
-        <!--        footer -->
         <footer class="page-footer">
             <div class="footer-copyright">
                 <div class="container">
@@ -563,20 +530,6 @@ if($_SESSION['customer_sid']==session_id())
                 </div>
             </div>
         </footer>
-        <div class="footer-fixed hide-on-med-and-up z-depth-1">
-            <footer style="background-color: white;">
-                <nav class="z-depth-0" style="background-color: white;">
-                    <div class="nav-wrapper">
-                        <ul class="justify">
-                            <li class="active"><a class="waves-effect" name="home" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
-                            <li><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
-                            <li><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
-                            <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </footer>
-        </div>
         <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="js/plugins/angular.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>

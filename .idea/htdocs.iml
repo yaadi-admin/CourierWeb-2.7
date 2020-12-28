@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/Twilio" isTestSource="false" packagePrefix="Twilio\" />
+      <excludeFolder url="file://$MODULE_DIR$/panorama" />
+      <excludeFolder url="file://$MODULE_DIR$/trendy_pips" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

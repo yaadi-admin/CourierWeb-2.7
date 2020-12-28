@@ -231,34 +231,7 @@ if($_SESSION['customer_sid']==session_id())
             }
             label{
                 color: black;
-            }.navbar-fixed nav {
-                 padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-             }.footer-fixed footer {
-                  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-              }body {
-                   display: -webkit-box;
-                   display: flex;
-                   min-height: 100vh;
-                   -webkit-box-orient: vertical;
-                   -webkit-box-direction: normal;
-                   flex-direction: column;
-               }main {
-                    -webkit-box-flex: 1;
-                    flex: 1 0 auto;
-                }.footer-fixed {
-                     position: fixed;
-                     bottom: 0;
-                     width: 100%;
-                 }footer ul.justify {
-                      text-align: center;
-                      display: table;
-                      overflow: hidden;
-                      margin: 0 auto;
-                  }footer ul.justify li {
-                       margin-left: auto;
-                       margin-right: auto;
-                       width: 82px;
-                   }
+            }
             .scrolling-wrapper {
                 overflow-x: scroll;
                 overflow-y: hidden;
@@ -373,6 +346,7 @@ if($_SESSION['customer_sid']==session_id())
                         </li>
                     </nav>
                 </ul>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only z-depth-0" style="color: #a21318"><i class="mdi-navigation-menu" style="color: white;"></i></a>
             </aside>
 
             <section id="content">
@@ -685,54 +659,6 @@ if($_SESSION['customer_sid']==session_id())
             </div>
         </div>
     </footer>
-    <div class="footer-fixed hide-on-med-and-up z-depth-1">
-        <div class="row">
-            <div class="col s12">
-                <?php
-                $result3 = mysqli_query($con, "SELECT * FROM users where id= $restid AND not deleted;");
-                while($row = mysqli_fetch_array($result3))
-                {
-                    $restid = $selec_rest;
-                    $Rnme = $row['name'];
-                    if ($row['name'] === 331) {
-                        echo '';
-                    }
-                }
-                ?>
-                <!--                <ul class="tabs">-->
-                <!--                    <li class="tab col s10"><a class="filter active" data-filter=".Starttheday" style="background-color: white;color: black;font-weight: 800;">🌭 Start the day</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter " data-filter=".LunchBeyond" style="background-color: white;color: black;font-weight: 800;">🍔 Lunch & Beyond</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Subs" style="background-color: white;color: black;font-weight: 800;">🌯 Subs</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Wraps" style="background-color: white;color: black;font-weight: 800;">🌯 Wraps</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".ChineseFare" style="background-color: white;color: black;font-weight: 800;">🥡 Chinese Fare</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".JamaicanFare" style="background-color: white;color: black;font-weight: 800;">Jamaican Fare</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Roti" style="background-color: white;color: black;font-weight: 800;">🌯 Roti</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Soups" style="background-color: white;color: black;font-weight: 800;">🍲 Soups</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Appetizers" style="background-color: white;color: black;font-weight: 800;">🍗 Appetizers</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Salads" style="background-color: white;color: black;font-weight: 800;">🥗 Salads</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Seafood" style="background-color: white;color: black;font-weight: 800;">🍣 Seafood</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Poultry" style="background-color: white;color: black;font-weight: 800;">🍗 Poultry</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".FromtheGrill" style="background-color: white;color: black;font-weight: 800;">🥩 From the Grill</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Vegetarian" style="background-color: white;color: black;font-weight: 800;">🥦 Vegetarian</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".PastaFusion" style="background-color: white;color: black;font-weight: 800;">🍝 Pasta Fusion</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".EatMeetSipTalk" style="background-color: white;color: black;font-weight: 800;">🍹 Eat, Meet, Sip, Talk</a></li>-->
-                <!--                    <li class="tab col s3"><a class="filter" data-filter=".Sides" style="background-color: white;color: black;font-weight: 800;">🍟 Sides</a></li>-->
-                <!--                </ul>-->
-            </div>
-        </div>
-        <footer style="background-color: white;">
-            <nav class="z-depth-0" style="background-color: white;">
-                <div class="nav-wrapper">
-                    <ul class="justify">
-                        <li class="active"><a class="waves-effect" name="home" href="index.php"><i class="mdi-action-shop-two" style="color: #a21318;"></i></a></label> </li>
-                        <li><a class="waves-effect" href="orders.php"><i class="mdi-editor-insert-invitation" style="color: #a21318;"></i></a></li>
-                        <li><a class="waves-effect" href="tickets.php"><i class="mdi-action-question-answer" style="color: #a21318;"></i></a></li>
-                        <li><a class="waves-effect" href="details.php"><i class="mdi-action-settings" style="color: #a21318;"></i></a></li>
-                    </ul>
-                </div>
-            </nav>
-        </footer>
-    </div>
     <script type="text/javascript" src="js/plugins/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/plugins/angular.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>

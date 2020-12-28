@@ -184,7 +184,7 @@ if($_SESSION['restaurant_sid']==session_id()) {
             }
         }
 
-        header("location: ../restaurant.php#$editid");
+        header("location: ../restaurant-menu.php#$editid");
     }
 }
 ?>
