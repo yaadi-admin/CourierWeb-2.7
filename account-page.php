@@ -22,7 +22,7 @@ include 'includes/connect.php';
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>My Account</title>
+  <title>Business Account</title>
   <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
   <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
   <meta name="msapplication-TileColor" content="#00bcd4">
@@ -199,17 +199,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           <div class="divider"></div>
             <div class="row" style="border-radius: 8px;">
                 <div>
-                <div class="card-panel" style="border-radius: 8px;">
+                <div class="card-panel z-depth-0" style="border-radius: 8px;">
                   <div class="row">
-                    <form class="formValidate" id="formValidate" method="post" action="routers/restaurant-details-router.php" novalidate="novalidate"class="col s12">
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <i class="mdi-action-account-circle prefix"></i>
-                          <input name="username" id="username" type="text" value="<?php echo $username;?>" data-error=".errorTxt1" disabled>
-                          <label for="username" class="">Entity Username</label>
-						  <div class="errorTxt1"></div>
-                        </div>
-                      </div>					
+                    <form class="formValidate" id="formValidate" method="post" novalidate="novalidate"class="col s12">
                       <div class="row">
                         <div class="input-field col s6">
                           <i class="mdi-action-account-box prefix"></i>
@@ -225,24 +217,16 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </div>
                       </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class="input-field col s6">
                                 <i class="mdi-communication-phone prefix"></i>
                                 <input name="phone" id="phone" type="number" value="<?php echo $contact;?>" data-error=".errorTxt5">
                                 <label for="phone" class="">Business Number</label>
                                 <div class="errorTxt5"></div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="input-field col s6">
                                 <i class="mdi-communication-phone prefix"></i>
-                                <input name="phone2" id="phone" type="number" value="<?php echo $phone_nt;?>" data-error=".errorTxt5">
+                                <input name="phonent" id="phonent" type="number" value="<?php echo $phone_nt;?>" data-error=".errorTxt5">
                                 <label for="phone" class="">First Notification Contact</label>
-                                <div class="errorTxt5"></div>
-                            </div>
-                            <div class="input-field col s6">
-                                <i class="mdi-communication-phone prefix"></i>
-                                <input name="phone3" id="phone" type="number" value="<?php echo $phone_nt2;?>" data-error=".errorTxt5">
-                                <label for="phone" class="">Second Notification Contact</label>
                                 <div class="errorTxt5"></div>
                             </div>
                         </div>
@@ -263,7 +247,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                           </div>
                         <div class="row">
                           <div class="input-field col s12">
-                            <button class="btn cyan waves-effect waves-light" type="submit" name="action" style="border-radius:8px;width: 100%;">Update
+                            <button class="btn cyan waves-effect waves-light" id="updatedetails" type="submit" name="action" style="border-radius:8px;width: 100%;">Update
                               <i class="mdi-content-send right"></i>
                             </button>
                           </div>
@@ -273,9 +257,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                   </div>
                 </div>
               </div>
-            <div class="divider"></div>
           </div>
         </div>
+            <span id="message"></span>
       </section>
     </div>
   </div>
@@ -369,6 +353,38 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         }
      });
     </script>
+  <script>
+
+      $(document).ready(function () {
+          UpdateUser();
+      })
+
+      function UpdateUser() {
+          $(document).on('click', "#updatedetails", function (e) {
+              e.preventDefault();
+              var name = $('#name').val();
+              var phone = $('#phone').val();
+              var phonent = $('#phonent').val();
+              var email = $('#email').val();
+              var address = $('#address').val();
+              var passcode = $('#password').val();
+
+              if (name == "" || passcode == "" || email == "" || address == "" || phone == "" || phonent == ""){
+                  Materialize.toast('All fields are not filled', 8000);
+              }
+              else {
+                  $.ajax({
+                      url: '../routers/restaurant-details-router.php',
+                      method: 'post',
+                      data:{Pnn:phone,Pnnt:phonent,Pc:passcode,Nm:name,Em:email,Ad:address},
+                      success: function (data) {
+                          $('#message').html(data);
+                      }
+                  })
+              }
+          })
+      }
+  </script>
       <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}

@@ -435,7 +435,7 @@ if($_SESSION['customer_sid']==session_id())
             </div>
         </div>
                 </li>
-                <li class = "collection-item">
+                <li class="collection-item">
     <div class="row">
             <div class="col s8">
                 <p class="collections-title">Delivery</p>
@@ -465,16 +465,19 @@ if($_SESSION['customer_sid']==session_id())
                     <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
                         <li class="collection-item">
                             <?php
-                            if(!empty($_POST['note']))
-                                echo '<p><strong>Note: </strong>'.htmlspecialchars($_POST['note']).'</p>';
+                            if(!empty($_POST['note'])){
+                                echo '<p><strong>Note: </strong>'.htmlspecialchars($_POST['note']).'</p>';}
+                            else{
+                                echo '<label>No side note added</label>';
+                            }
                             ?>
                         </li>
                     </ul>
                 </section>
 
                 <section>
-                    <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
-                        <li class="collection-item">
+                    <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;background-color: transparent;border: 0px solid transparent;">
+                        <li class="collection-item" style="background-color: transparent;">
                             <form action="routers/order-router.php" method="post">
                                 <?php
                                 foreach ($_POST as $key => $value)
@@ -497,26 +500,6 @@ if($_SESSION['customer_sid']==session_id())
                                     <button id="confirm" class="btn cyan waves-effect waves-light" type="submit" name="action" <?php if($_POST['pay_type'] == 'Wallet') {if ($balance-$total < 0) {echo 'disabled'; }}?> style="width:100%;background-color: white;border: 1px solid antiquewhite;border-radius: 6px;font-size: 12px;"">Place Order<i class="mdi-action-shopping-cart right"></i></button>
                                 </div>
                             </form>
-                        </li>
-                    </ul>
-                </section>
-                <section>
-                    <ul class="collection with-header z-depth-0" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
-                        <li class="collection-item">
-                            <?php
-                            echo '<div id="basic-collections" class="section">
-		<div class="row">
-			<div class="collection">
-				<a href="#" class="collection-item">
-					<div class="row"><div class="col s7">Wallet Balance</div><div class="col s3">$'.number_format($balance).'</div></div>
-				</a>
-				<a href="#" class="collection-item active">
-					<div class="row"><div class="col s7">Balance after purchase</div><div class="col s3">$'.number_format($balance-$total).'</div></div>
-				</a>
-			</div>
-		</div>
-	</div>';
-                            ?>
                         </li>
                     </ul>
                 </section>

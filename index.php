@@ -87,6 +87,9 @@ if($_SESSION['customer_sid']==session_id())
                 left: 0;
                 width: 100%;
             }
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -97,13 +100,22 @@ if($_SESSION['customer_sid']==session_id())
     </div>
     <header id="header" class="page-topbar">
         <div class="navbar-fixed z-depth-0">
-            <nav class="navbar-color z-depth-0">
+            <nav class="navbar-color z-depth-0 nav-extended">
                 <div class="nav-wrapper">
                     <ul class="center" style="background-color: white;">
                         <label class="center" style="font-size: 10px;color: #a21318;font-weight: 600;"><b>Delivering to <span id="nearby"></span></b></label>
                         <li class="center"><a href="deliverto.php" class="brand-logo darken-1" style="font-size: 12px;color: black;"><?php echo $usr_address; ?></a></li>
                         <li class="right"><a id="viewcart" class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-shopping-basket" style="color: #a21318;"></i></a></li>
                     </ul>
+                </div>
+                <div class="nav-content">
+                    <div class="responsive col-md-10 text-center" id="menu-filters">
+                    <ul class="tabs tabs-transparent">
+                        <li class="tab z-depth-0"><a class="filter active" data-filter=".delivery" style="background-color: white;color: black;font-weight: 800;">DELIVERY</a></li>
+                        <li class="tab z-depth-0"><a class="filter" data-filter=".pickup" style="background-color: white;color: black;font-weight: 800;">PICKUP</a></li>
+                        <li class="tab z-depth-0"><a class="filter" data-filter=".stelizabeth" style="background-color: white;color: black;font-weight: 800;">ST.ELIZABETH</a></li>
+                    </ul>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -183,7 +195,8 @@ if($_SESSION['customer_sid']==session_id())
                 <div class="progress"><div class="indeterminate"></div></div>
             </div>
         </div>
-
+<br>
+<br>
         <section class="content"><br>
             <div class="scrolling-wrapper" style="border-bottom: 1px solid black;">
                         <div class="smallcard">
@@ -293,534 +306,630 @@ if($_SESSION['customer_sid']==session_id())
                         </div>
             </div>
 
-            <div class="row hide-on-med-and-up" style="height: 190px;">
-                <div class="scrolling-wrapper" style="border-bottom: 1px solid transparent;border-top: 1px solid transparent;height: 240px;">
-                    <div id="slideshow">
-                        <img src="images/promotions/promotwo.jpg" style="object-fit: inherit">
-                        <img src="images/promotions/seafoodwednesday.jpg" style="object-fit: inherit">
-                        <img src="images/promotions/omgcafeicecream.jpg" style="object-fit: inherit">
-                    </div>
-                </div>
-            </div>
+            <section id="menu-list" class="responsive">
 
+                <div id="menu-wrapper">
 
-<div class="col s12">
-    <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Favorites</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-    <div class="scrolling-wrapper" style="height: 250px;">
-        <?php
-                    $result = mysqli_query($con, "SELECT * FROM users where (role='Restaurant') AND not deleted AND ocassion='Fast Food' OR (id='331' OR id='430' OR id='80' OR id='294' OR id='8')  ORDER BY id='53' DESC, id='331' DESC, id='430' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
+                    <div class="menu-restaurant delivery" style="border: .5px solid #ddd;border-radius: 2px;width: 100%;">
 
-                            $address = $row['address'];
-                            $image = $row['image_dir2'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
+                        <div class="container col s12">
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Favorites</b> <span class="right" style="padding-right: 10px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users where (role='Restaurant') AND not deleted AND ocassion='Fast Food' OR (id='331' OR id='430' OR id='80' OR id='294' OR id='8')  ORDER BY id='53' DESC, id='331' DESC, id='430' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
 
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
+                                        $address = $row['address'];
+                                        $image = $row['image_dir2'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
 
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
 
-                            ?>
-                            <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                            <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-        <div class="smallcard" style="width: 280px;">
-            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                <div class="column">
-                    <div class="row">
-                        <div class="col s12 m6">
-                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
-                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
-                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                    <div class="card-image">
-                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                    </div></button>
-                                <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: #a21318;"></i></span><br>
-                                    <label style="font-size: 10px;">⏱️ <b>45 - 60 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                </div>
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <input type="hidden" id="userlong" value="<?php echo $long; ?>">
+                                        <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
+                                        <div class="smallcard" style="width: 280px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>55 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </div>
+
                         </div>
-                    </div>
-                </div>
-            </form>
 
-        </div>
-                            <?php
-                        }
-                    }
-        ?>
-    </div>
+                        <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
 
-    </div>
+                        <div class="col s12" id="breakfast" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Breakfast</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Restaurant') AND id='331' OR ocassion='Dessert' AND not deleted");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
 
-            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
 
-            <div class="col s12" id="breakfast" hidden>
-                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Breakfast</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-                <div class="scrolling-wrapper" style="height: 250px;">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Restaurant') AND id='331' OR ocassion='Dessert' AND not deleted");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
 
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
 
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard" style="width: 300px;">
-                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="row">
-                                            <div class="col s12 m6">
-                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                                        </div></button>
-                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                                        <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"></span> Delivery</label>
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>25 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
+
                                         </div>
-                                    </div>
-                                </form>
-
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-            </div>
-
-            <div class="col s12" id="steakseafoodwednesday" hidden>
-                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Steak & Seafood</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-                <div class="scrolling-wrapper" style="height: 250px;">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Seafood' OR ocassion='Steak') AND not deleted ORDER BY id DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard" style="width: 300px;">
-                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="row">
-                                            <div class="col s12 m6">
-                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                                        </div></button>
-                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                                        <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-            </div>
-
-            <div class="col s12" id="pizzatuesday" hidden>
-                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Pizza Tuesday</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-                <div class="scrolling-wrapper" style="height: 250px;">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Pizza' AND not deleted ORDER BY id DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard" style="width: 300px;">
-                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="row">
-                                            <div class="col s12 m6">
-                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                                        </div></button>
-                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                                        <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-            </div>
-
-            <div class="col s12" id="latenightcravings" hidden>
-    <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Late Night Cravings</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-    <div class="scrolling-wrapper" style="height: 250px;">
-        <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Restaurant & Bar' AND not deleted ORDER BY id DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-        <div class="smallcard" style="width: 300px;">
-            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                <div class="column">
-                    <div class="row">
-                        <div class="col s12 m6">
-                            <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                            <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                    <div class="card-image">
-                                        <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                    </div></button>
-                                <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                    <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                    <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                </div>
-                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
                         </div>
-                    </div>
-                </div>
-            </form>
 
-        </div>
-                            <?php
-                        }
-                    }
-        ?>
-    </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-    </div>
+                        <div class="col s12" id="steakseafoodwednesday" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Steak & Seafood</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Seafood' OR ocassion='Steak') AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
 
- <div class="col s12" id="specialoffers" hidden>
-     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Special Offers</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
 
-     <div class="scrolling-wrapper" style="height: 250px;">
-         <?php
-         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Dessert') AND not deleted ORDER BY id DESC;");
-         while($row = mysqli_fetch_array($result))
-         {
-             if ($row['id'] != "297"){
-                 $address = $row['address'];
-                 $image = $row['image_dir3'];
-                 $image_dir = '';
-                 $restaurant_id = $row['id'];
-                 $restaurant_name = $row['name'];
-                 $mon = $row['mon'];
-                 $monc = $row['monc'];
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
 
-                 if ($image != ''){
-                     $image_dir = $image;
-                 }
-                 else if ($image == ''){
-                     $image_dir = 'images/yaadi-food.jpg';
-                 }
-
-                 ?>
-                 <div class="smallcard" style="width: 260px;">
-                     <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                         <div class="column">
-                             <div class="row">
-                                 <div class="col s12 m6">
-                                     <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                     <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                     <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                     <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                         <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                             <div class="card-image">
-                                                 <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                             </div></button>
-                                         <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
-                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-radio-button-on right hide-on-med-and-up"></i></span><br>
-                                             <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </form>
-                 </div>
-                 <?php
-             }
-         }
-         ?>
-     </div>
-     <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-</div>
-            <div class="col s12" id="lunch" hidden>
-                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Best of Lunch</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-                <div class="scrolling-wrapper" style="height: 250px;">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Fast Food' OR ocassion='Restaurant' AND not deleted ORDER BY id DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard" style="width: 300px;">
-                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="row">
-                                            <div class="col s12 m6">
-                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                                        </div></button>
-                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                                        <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>45 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
+
                                         </div>
-                                    </div>
-                                </form>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </div>
-                            <?php
-                        }
-                    }
-                    ?>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                        <div class="col s12" id="pizzatuesday" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Pizza Tuesday</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Pizza' AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                        <div class="col s12" id="latenightcravings" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Late Night Cravings</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND ocassion='Restaurant & Bar' AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                        <div class="col s12" id="specialoffers" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Special Offers</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Dessert') AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 260px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+                        <div class="col s12" id="lunch" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Best of Lunch</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Fast Food' OR ocassion='Restaurant') AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                        <div class="col s12">
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Fastest Near You</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND ocassion='Pizza' AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir2'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                        </div>
+                        <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+
+                        <div class="col s12" id="dinner" hidden>
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Dinner</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Seafood' OR ocassion='Jamaican Chinese' OR ocassion='Chinese') AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                     </div>
+
+
+<!--                    next menu list-->
+                    <div class="menu-restaurant stelizabeth" style="border: .5px solid #ddd;border-radius: 2px;width: 100%;">
+                        <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+
+                        <div class="col s12" id="stelizbeth">
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">St.Elizbeth</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                            <div class="scrolling-wrapper" style="height: 280px;">
+                                <?php
+                                $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND parish='st.elizabeth' AND not deleted ORDER BY id DESC;");
+                                while($row = mysqli_fetch_array($result))
+                                {
+                                    if ($row['id'] != "297"){
+                                        $address = $row['address'];
+                                        $image = $row['image_dir3'];
+                                        $image_dir = '';
+                                        $restaurant_id = $row['id'];
+                                        $restaurant_name = $row['name'];
+                                        $ocassion = $row['ocassion'];
+
+                                        $mon = $row['mon'];
+                                        $monc = $row['monc'];
+
+                                        if ($image != ''){
+                                            $image_dir = $image;
+                                        }
+                                        else if ($image == ''){
+                                            $image_dir = 'images/yaadi-food.jpg';
+                                        }
+
+                                        ?>
+                                        <div class="smallcard" style="width: 300px;">
+                                            <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
+                                                <div class="column">
+                                                    <div class="row">
+                                                        <div class="col s12 m6">
+                                                            <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
+                                                            <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
+                                                            <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
+                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
+                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                                    <div class="card-image">
+                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                                    </div>
+                                                                </button>
+                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
+                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
+                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
+                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>30 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
+                        </div>
+
+                     </div>
+
+
                 </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-            </div>
+            </section>
+
+
 
  <div class="col s12">
-     <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Fastest Near You</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-
-     <div class="scrolling-wrapper" style="height: 250px;">
-         <?php
-         $result = mysqli_query($con, "SELECT * FROM users where role='Restaurant' AND ocassion='Pizza' AND not deleted ORDER BY id DESC;");
-         while($row = mysqli_fetch_array($result))
-         {
-             if ($row['id'] != "297"){
-                 $address = $row['address'];
-                 $image = $row['image_dir2'];
-                 $image_dir = '';
-                 $restaurant_id = $row['id'];
-                 $restaurant_name = $row['name'];
-                 $mon = $row['mon'];
-                 $monc = $row['monc'];
-
-                 if ($image != ''){
-                     $image_dir = $image;
-                 }
-                 else if ($image == ''){
-                     $image_dir = 'images/yaadi-food.jpg';
-                 }
-
-                 ?>
-                 <div class="smallcard" style="width: 300px;">
-                     <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                         <div class="column">
-                             <div class="row">
-                                 <div class="col s12 m6">
-                                     <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                     <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                         <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                     <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                         <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                         <div class="card-image">
-                                             <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                         </div></button>
-                                         <div class="card-content" style="height: 65px;background-color: ghostwhite;border-radius: 8px;">
-                                             <span style="font-size: 18px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-check-box right hide-on-med-and-up"></i></span><br>
-                                             <label style="font-size: 10px;">⏱️ <b>30 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </form>
-                 </div>
-                 <?php
-             }
-         }
-         ?>
-     </div>
-
-</div>
-            <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-
-            <div class="col s12" id="dinner" hidden>
-                <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b>Dinner</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><a href="#."><i class="mdi-navigation-arrow-forward black-text"></i></a></b></span></h5>
-                <div class="scrolling-wrapper" style="height: 250px;">
-                    <?php
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND (ocassion='Restaurant' OR ocassion='Seafood' OR ocassion='Jamaican Chinese' OR ocassion='Chinese') AND not deleted ORDER BY id DESC;");
-                    while($row = mysqli_fetch_array($result))
-                    {
-                        if ($row['id'] != "297"){
-                            $address = $row['address'];
-                            $image = $row['image_dir3'];
-                            $image_dir = '';
-                            $restaurant_id = $row['id'];
-                            $restaurant_name = $row['name'];
-
-                            $mon = $row['mon'];
-                            $monc = $row['monc'];
-
-                            if ($image != ''){
-                                $image_dir = $image;
-                            }
-                            else if ($image == ''){
-                                $image_dir = 'images/yaadi-food.jpg';
-                            }
-
-                            ?>
-                            <div class="smallcard" style="width: 300px;">
-                                <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
-                                    <div class="column">
-                                        <div class="row">
-                                            <div class="col s12 m6">
-                                                <input type="hidden" id="userlong" value="<?php echo $long; ?>">
-                                                <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                                <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
-                                                <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                    <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $image_dir; ?>" height="140px" width="100%" style="object-fit: cover;border-radius: 8px">
-                                                        </div></button>
-                                                    <div class="card-content" style="height: 70px;background-color: ghostwhite;border-radius: 8px;">
-                                                        <span style="font-size: 20px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-toggle-star right hide-on-med-and-up"></i></span><br>
-                                                        <label style="font-size: 10px;">⏱️ <b>40 Minutes</b> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> Delivery</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
-            </div>
-
- <div class="col s12">
-     <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;background-color: lightgray;border-radius: 16px;"><b><i class="mdi-navigation-arrow-forward black-text"></i></b></span></h5></a>
+     <a href="restaurants.php"><h5 style="padding-left: 20px;font-weight: 600;"><b>View all restaurants</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></b></span></h5></a>
  </div>
             <span id="message"></span>
         </section>
@@ -847,6 +956,19 @@ if($_SESSION['customer_sid']==session_id())
         window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
             script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
     </script>
+    <script type="text/javascript">
+        (function($) {
+            $("#menu-filters li a").click(function() {
+                $("#menu-filters li a").removeClass('active');
+                $(this).addClass('active');
+                var selectedFilter = $(this).data("filter");
+                $(".menu-restaurant").fadeOut();
+                setTimeout(function() {
+                    $(selectedFilter).slideDown();
+                }, 100);
+            });
+
+        })(jQuery);</script>
     <script>
         var duration = 20;
         var fadeAmount = 0.3;

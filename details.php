@@ -287,6 +287,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 
                 </form>
             </ul>
+            <span id="message"></span>
       </section>
             </div>
           </div>
@@ -387,10 +388,10 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   <script>
 
       $(document).ready(function () {
-            LoginUser();
+            UpdateUser();
         })
 
-        function LoginUser() {
+        function UpdateUser() {
       $(document).on('click', "#updatedetails", function (e) {
           e.preventDefault();
                 var name = $('#name').val();
@@ -400,7 +401,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                 var passcode = $('#password').val();
 
                 if (name == "" || passcode == "" || email == "" || address == "" || phone == ""){
-                    $('#modaltop').html('<h5>All fields are not filled</h5>');
+                    Materialize.toast('All fields are not filled', 8000);
                 }
                 else {
                 $.ajax({
@@ -408,7 +409,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     method: 'post',
                     data:{Pnn:phone,Pc:passcode,Nm:name,Em:email,Ad:address},
                     success: function (data) {
-                        document.location.href='../details.php';
+                        $('#message').html(data);
                     }
                 })
                 }
