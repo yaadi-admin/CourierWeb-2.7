@@ -185,7 +185,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                         <?php
                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
                                         while($row = mysqli_fetch_array($sql)){
-                                            echo '<li><a href="all-r-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                            echo '<li><a href="restaurant-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
                                         }
                                         ?>

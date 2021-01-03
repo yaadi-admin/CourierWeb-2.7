@@ -8,8 +8,8 @@ if($_SESSION['admin_sid']==session_id()) {
         $sql = "UPDATE incumbency SET admission = '$val' WHERE id = 2;";
         $con->query($sql);
     }
-    echo '<script>alert("Ordering disabled");</script>';
-    echo "<script>document.location.href='../all-orders.php';</script>";
+    echo '<script>alert("Ordering closed");</script>';
+    echo "<script>document.location.href='../admin.php';</script>";
 }
 
 ?>

@@ -72,7 +72,7 @@ if($_SESSION['customer_sid']==session_id()) {
                 mail($to, $subject, $message, implode("\r\n", $headers));
 //                $updwal = "UPDATE wallet_details SET balance = '$balance' WHERE id = $wallet_id;";
 //                $con->query($updwal);
-                echo "<script>Materialize.toast('Wallet Top Up request Sent', 8000)</script>";
+                echo "<script>Materialize.toast('Wallet top up request Sent', 8000)</script>";
             }
         }
     }

@@ -106,24 +106,6 @@ if($_SESSION['restaurant_sid']==session_id())
                     </ul>
                     <ul class="right">
                         <li><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-content-add"></i></a></li>
-                        <li><a class="waves-effect waves-light" href="all-r-orders.php?status=Yet%20to%20be%20delivered"><?php
-
-                                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND restaurantid LIKE $user_id;");
-                                $count = 0;
-                                $total = 0;
-                                while($row = mysqli_fetch_array($getamount)) {
-                                    $count++;
-                                    $total = 0;
-                                    $total+=$count;
-                                }
-                                if ($total == 0){
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-                                else{
-                                    echo '<span class="new badge" style="background-color: transparent;font-size: 12px;"><span style="color: yellow;">'.$total.'</span></span>';
-                                }
-
-                                ?></a></li>
                     </ul>
                 </div>
             </nav>
@@ -185,7 +167,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                         <?php
                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
                                         while($row = mysqli_fetch_array($sql)){
-                                            echo '<li><a href="all-r-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                            echo '<li><a href="restaurant-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
                                         }
                                         ?>
@@ -454,11 +436,14 @@ if($_SESSION['restaurant_sid']==session_id())
                 </div>
             </div>
 
+            <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                <li class="collection-header"><h5 style="padding-left: 10px;"><span class="caption">Tap <i class="mdi-content-add" style="color: #a21318;"></i> to add a new item</span></h5></li>
+            </ul>
+
             <div class="row">
                 <ul class="collection with-header collapsible z-depth-0">
-                    <li class="collection-header"><h4><?php echo $name; ?><a class="waves-effect waves-light modal-trigger right" href="#." style="font-size: 18px;"><i class="mdi-av-playlist-add"></i></a></h4><p class="caption">Welcome to your menu Tap <i class="mdi-content-add"></i> to add a new item</p></li>
                     <?php
-                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid = $user_id");
+                    $result = mysqli_query($con, "SELECT * FROM items where restaurantid = $user_id ORDER by name ASC;");
                     while($row = mysqli_fetch_array($result))
                     {
                         if ($row['deleted'] == "0"){

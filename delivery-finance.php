@@ -146,7 +146,7 @@ if($_SESSION['delivery_sid']==session_id())
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
-                <ul id="slide-out" class="side-nav fixed leftnavset">
+                <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
                     <li class="user-details cyan darken-2">
                         <div class="row">
                             <div class="col col s4 m4 l4">

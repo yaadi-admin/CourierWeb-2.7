@@ -3,6 +3,7 @@ include 'includes/connect.php';
 	if($_SESSION['admin_sid']==session_id())
 	{
         $id = "";
+        $cus = "";
         $result = mysqli_query($con, "SELECT * FROM users WHERE name='$name';");
         while($row = mysqli_fetch_array($result))
         {
@@ -18,7 +19,6 @@ include 'includes/connect.php';
 		?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -34,6 +34,7 @@ include 'includes/connect.php';
   <link href="css/custom/custom.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection"> 
     <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
     ul.side-nav.leftnavset{top:64px;overflow:hidden;  }
 .side-nav.fixed.leftnavset .collapsible-body li.active{background-color:rgba(0,0,0,0.04)}
@@ -66,10 +67,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     <ul class="left">                      
                       <li><h1 class="logo-wrapper" style="font-family: 'Open Sans';font-family: 'Akronim';font-size:42px;"><a href="admin.php" class="brand-logo darken-1" style="font-family: 'Open Sans', ;font-family: 'Akronim';font-size:42px;">Yaadi<span style="font-size: 12px;color: mediumspringgreen;"> Admissions</span></a></h1></li>
                     </ul>
-                    <ul class="right">
-                        <li><a class="waves-effect waves-light modal-trigger" href="#logack"><i class="mdi-action-lock-open"></i></a></li>
-                        <li><a class="waves-effect waves-light modal-trigger" href="#logac"><i class="mdi-action-lock"></i></a></li>
-                    </ul>
                 </div>
             </nav>
         </div>
@@ -77,7 +74,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   <div id="main">
     <div class="wrapper">
       <aside id="left-sidebar-nav">
-        <ul id="slide-out" class="side-nav fixed leftnavset">
+        <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
             <li class="user-details teal lighten-2">
             <div class="row">
                 <div class="col col s4 m4 l4">
@@ -149,41 +146,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
 
-        <div id="logac" class="modal bottom-sheet">
-
-            <div class="modal-content">
-                <h5>Close ordering?</h5>
-                <h6>Enter password</h6>
-                <input name="validatore" id="validatore" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
-                <form action="routers/act-orders.php" method="post">
-                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 1; echo $admission; ?>">
-                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
-                </form>
-            </div>
-        </div>
-
-        <div id="logack" class="modal bottom-sheet">
-
-            <div class="modal-content">
-                <h5>Enable ordering?</h5>
-                <h6>Enter password</h6>
-                <input name="validator" id="validator" type="text" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
-                <form action="routers/deac-orders.php" method="post">
-                    <input type="hidden" placeholder="Enter your password..." name="admission" value="<?php $admission = 0; echo $admission; ?>">
-                    <button class="btn waves-effect waves-light teal" type="submit" href=""><i class="mdi-hardware-security"></i></button>
-                </form>
-            </div>
-        </div>
-
       <section id="content">
-          <div id="breadcrumbs-wrapper">
-          <div class="container">
             <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">All Orders</h5>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="container">
           <p class="caption"><?php
@@ -198,7 +162,6 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
               }
           ?></p>
             <div id="work-collections" class="section">
-             
 					<?php
 					if(isset($_GET['status'])){
 						$status = $_GET['status'];
@@ -227,7 +190,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                               <i class="mdi-content-content-paste red circle"></i>';
 
 						if ($status === 'Cancelled by Customer'){
-						    echo '<span class="collection-header">Order No. '.$row['id'].'
+						    echo '<span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
                             <span class="right"><form method="post" action="routers/reopen-order.php">
                             <input type="hidden" value="0" name="reopen">
                             <input type="hidden" value="'.$row['id'].'" name="itemid">
@@ -236,7 +199,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                             </span>';
                         }
 						else{
-                            echo '<span class="collection-header">Order No. '.$row['id'].'</span>';
+                            echo '<span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>';
                         }
 
 						echo'
@@ -245,8 +208,8 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                               <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>							  
 							  <p><strong>Status:</strong> '.($deleted ? $status : '
 							  <form method="post" action="routers/edit-orders.php">
-							  <input type="hidden" value="'.$cus.'" name="cos">
-							    <input type="hidden" value="'.$row['id'].'" name="id">
+							  <input type="hidden" id="cos" value="'.$cus.'" name="cos">
+							    <input type="hidden" id="itemid" value="'.$row['id'].'" name="id">
 								<select name="status">
 								<option value="Yet to be delivered" '.($status=='Yet to be delivered' ? 'selected' : '').'>Yet to be delivered</option>
 								<option value="Cancelled by Admin" '.($status=='Cancelled by Admin' ? 'selected' : '').'>Cancelled by Admin</option>
@@ -356,16 +319,16 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                             </div>';										
 								if(!$deleted){
 
-								echo '<br><br><button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid maroon;width: 100%;">Update Order #'.$order_id.'
+								echo '<br><br><button class="waves-effect waves-green btn z-depth-1" type="submit" name="action" style="border-radius:10px;width: 100%;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button>
 										</form>
 										
-										<div class="row col s12"><form class="formValidate" id="formValidate1" method="post" action="routers/disc_03.php" novalidate="novalidate">
-                              <textarea class="materialize-textarea" type="text" name="custom-promo" placeholder="Enter custom message..." style="color: black; border-bottom: 1.5px solid antiquewhite;border-radius: 0px;height: 40px;"></textarea>
-                              <input type="hidden" name="phoneto" value="'.$phone.'">
-                              <input type="hidden" name="orderid" value="'.$order_id.'">
-                    <button class="waves-effect waves-green btn-flat left" type="submit" name="action" style="border-radius: 10px;border: 1px solid maroon;width: 100%;">Send Message
+										<div class="row col s12"><form class="formValidate" id="formValidate1" method="post" novalidate="novalidate">
+                              <textarea class="materialize-textarea" type="text" id="custommsg" name="custommsg" placeholder="Enter custom message..." style="color: black; border-bottom: 1.5px solid antiquewhite;border-radius: 0px;height: 40px;"></textarea>
+                              <input type="hidden" id="phoneto" name="phoneto" value="'.$phone.'">
+                              <input type="hidden" id="orderid" name="orderid" value="'.$order_id.'">
+                    <button class="waves-effect waves-green btn z-depth-1" type="submit" id="sendmessage" name="action" style="border-radius: 8px;width: 100%;background-color: mediumaquamarine;color: white;">Send Message
                     <i class="mdi-communication-message right"></i>
                               </button></form></div>';
 								}
@@ -378,6 +341,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 					
               </div>
             </div>
+          <span id="message"></span>
           </section>
         </div>
         </div>
@@ -396,6 +360,34 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>       
     <script type="text/javascript" src="js/plugins.min.js"></script>
+  <script>
+      $(document).ready(function () {
+          messge();
+      })
+      function messge() {
+          $(document).on('click', "#sendmessage", function (e) {
+              e.preventDefault();
+              var cus = $('#phoneto').val();
+              var order = $('#orderid').val();
+              var msg = $('#custommsg').val();
+
+              if (msg === '' || order === '' || cus === ''){
+                  Materialize.toast('You need to enter a message', 8000);
+              }
+              else {
+                  $.ajax({
+                      url: '../routers/disc_03.php',
+                      method: 'post',
+                      data:{phoneto:cus,orderid:order,custommsg:msg},
+                      success: function (data) {
+                          $('#message').html(data);
+
+                      }
+                  })
+              }
+          })
+      }
+  </script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}

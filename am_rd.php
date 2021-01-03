@@ -210,14 +210,17 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                     $username = $row["username"];
                     $email = $row["email"];
                     $contact = $row["contact"];
+                    $image = $row["image_dir"];
+                    if ($image === ''){
+                        $image = "images/itemdefault.png";
+                    }
                     $address = $row["address"];
                     $paw = $row['password'];
-                    $hours = $row['opentime'];
                     $type = $row['ocassion'];
 
 
                     echo '<li class="collection-item avatar" style="background-color: white;color: black;">
-      <img src="images/yaadi-icon.png" alt="" class="circle">
+      <img src="'.$image.'" alt="" class="circle">
       <span class="title">' . $row["name"] . '</span>
       <p>Phone: ' . $row["contact"] . ' <br>
          Email: ' . $email . '
@@ -226,23 +229,15 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
       <div class="collapsible-body">
       <form class="formValidate" id="formValidate1" method="post" action="routers/ard-router.php" novalidate="novalidate">
       <table class="responsive centered highlight striped">
-                    <thead class="teal lighten-2">
-                      <tr>
-                        <th data-field="name" style="width:100%;">Details</th>
-                      </tr>
-                    </thead>
 
                     <tbody>
       
       <tr><td>
 
-<span class="text-black" style="font-weight: 300;">' . $row['name'] . '</span>
-<div><label for="email">Email</label><input id="email" name="' . $row['id'] . '_email" value="' . $email . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-
-      
-      
-<div><label for="contact">Contact</label><input id="contact" name="' . $row['id'] . '_contact" value="' . $contact . '" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
-<div><label for="address">Address</label><input id="address" name="' . $row['id'] . '_address" value="' . $address . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+<div><label for="name">Name</label><input id="contact" name="' . $row['name'] . '_name" value="' . $row['name'] . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt01"></div></div>
+<div><label for="email">Email</label><input id="email" name="' . $row['id'] . '_email" value="' . $email . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt02"></div></div>
+<div><label for="contact">Contact</label><input id="contact" name="' . $row['id'] . '_contact" value="' . $contact . '" type="tel" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt03"></div></div>
+<div><label for="address">Address</label><input id="address" name="' . $row['id'] . '_address" value="' . $address . '" type="text" data-error=".errorTxt01" style="border-radius: 8px;border-bottom: 2px solid mediumaquamarine;"><div class="errorTxt04"></div></div>
 ';
 
                         $key = $row['id'];
@@ -354,7 +349,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
    <footer class="page-footer">
     <div class="footer-copyright">
       <div class="container">
-        <span>Copyright © 2019 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi® Ltd</a> All rights reserved.</span>
+        <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi Ltd</a> All rights reserved.</span>
         <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
         </div>
     </div>

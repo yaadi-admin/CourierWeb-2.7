@@ -57,6 +57,7 @@ include 'includes/connect.php';
   <link href="css/custom/custom.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="https://fonts.googleapis.com/css?family=Akronim|Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
      <style type="text/css">
   .input-field div.error{
     position: relative;
@@ -323,10 +324,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 						<li>
 							<div class="collapsible-header"><i class="mdi-image-add-to-photos"></i>Hours</div>
 							<div class="collapsible-body">';
-                          echo '<form action="routers/arest-router.php" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                          echo '<form method="post" enctype="multipart/form-data" novalidate="novalidate">
                           <p class="col s6"><label for="mondayopen">Open: AM</label><input id="mondayopen" name="'.$row['id'].'_mondayopen" value="'.$mon.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"></p>
 <p class="col s6"><label for="mondayclose">Close: PM</label><input id="mondayclose" name="'.$row['id'].'_mondayclose" value="'.$monc.'" type="text" data-error=".errorTxt01" style="border-bottom-right-radius: 8px;"><div class="errorTxt01"></div></p>
-                          <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
+                          <input type="hidden" id="key" value="'.$row['id'].'">
+                          <p><button class="btn-flat waves-effect waves-light black-text z-depth-1" id="updatehours" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: maroon;width: 100%;" type="submit" name="submit">Update
                               <i class="mdi-action-thumbs-up-down right" style="color: maroon;"></i>
                               </button></p>
                               </form>
@@ -460,6 +462,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   <script>
       $(document).ready(function () {
           SImage();
+          hours();
       })
 
       function SImage() {
@@ -477,14 +480,36 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                       method: 'post',
                       data:{fileToUpload:file,rest:restaurant},
                       success: function (data) {
-                          Materialize.toast(data, 2000);
-
+                          $('#message').html(data);
                       }
                   })
               }
           })
       }
 
+      function hours() {
+          $(document).on('click', "#updatehours", function (e) {
+              e.preventDefault();
+              var open = $('#mondayopen').val();
+              var close = $('#mondayclose').val();
+              var key = $('#key').val();
+
+              if (open === '' || close === ''){
+                  Materialize.toast('You need to enter a value', 8000);
+              }
+              else {
+                  $.ajax({
+                      url: '../routers/disc_02.php',
+                      method: 'post',
+                      data:{open:open,close:close,id:key},
+                      success: function (data) {
+                          $('#message').html(data);
+
+                      }
+                  })
+              }
+          })
+      }
 
   </script>
     <script type="text/javascript" src="js/custom-script.js">

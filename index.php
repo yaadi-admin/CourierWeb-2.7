@@ -952,10 +952,6 @@ if($_SESSION['customer_sid']==session_id())
     <script type="text/javascript" src="js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/plugins.min.js"></script>
     <script type="text/javascript" src="js/custom-script.js"></script>
-    <script type='text/javascript' data-cfasync='false'>
-        window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript';
-            script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '2c63b2b2-cf28-43d2-9604-89dd5cb4ac9d', f: true }); done = true; } }; })();
-    </script>
     <script type="text/javascript">
         (function($) {
             $("#menu-filters li a").click(function() {
@@ -1067,28 +1063,6 @@ if($_SESSION['customer_sid']==session_id())
             }
             else{
 
-                if (moment > 800 && moment < 1900){
-                    <?php
-                    $openclosertime = "";
-                    $openclose = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND not deleted ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
-                    while($row2 = mysqli_fetch_array($openclose))
-                    {
-                        $openclosee = mysqli_query($con, "SELECT * FROM incumbency WHERE id= 2");
-                        while ($row = mysqli_fetch_array($openclosee)) {
-                            $openclosertime = $row['admission'];
-                        }
-                    }
-
-                    if ($openclosertime == 0) {
-                        echo "Materialize.toast('Ordering is currently active 😋', 8000);";
-                    }
-                    if ($openclosertime == 1) {
-                        echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
-                    }
-                    ?>
-
-                }
-
                 if (moment > 630 && moment < 1130){
                     $('#breakfast').show();
                 }
@@ -1105,7 +1079,29 @@ if($_SESSION['customer_sid']==session_id())
                     $('#latenightcravings').show();
                 }
 
-                else if (moment > 1800 && moment < 2400){
+                if (moment > 800 && moment < 1900){
+                    <?php
+                    $openclosertime = "";
+                    $openclose = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND not deleted ORDER BY id='53' DESC, id='331' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
+                    while($row2 = mysqli_fetch_array($openclose))
+                    {
+                        $openclosee = mysqli_query($con, "SELECT * FROM incumbency WHERE id= 2");
+                        while ($row = mysqli_fetch_array($openclosee)) {
+                            $openclosertime = $row['admission'];
+                        }
+                    }
+
+                    if ($openclosertime == 1) {
+                        echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
+                    }
+                    else{
+                        echo "Materialize.toast('Ordering is currently active 😋', 8000);";
+                    }
+                    ?>
+
+                }
+
+                else if (moment > 1900 && moment < 2400){
                     <?php
                     echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
                     ?>

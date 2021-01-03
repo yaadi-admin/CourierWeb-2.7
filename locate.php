@@ -203,7 +203,7 @@ if($_SESSION['delivery_sid']==session_id())
                     id="changemode-walking"
                     hidden
             />
-            <a name="back" id="back" href="delivery-dashboard.php" style="font-size: 20px;text-decoration: none;color: white;width: 100%;height: 100%;">X</a>
+            <a name="back" id="back" href="delivery-dashboard.php" style="font-size: 50px;text-decoration: none;color: white;width: 100%;height: 100%;">X</a>
             <input type="radio" name="type" id="changemode-transit" hidden />
             <label for="changemode-transit" hidden>Transit</label>
 

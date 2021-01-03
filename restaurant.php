@@ -57,14 +57,17 @@ if($_SESSION['restaurant_sid']==session_id())
                     <ul class="left">
                         <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="restaurant.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Modak', 'cursive';">Yaad<span style="color: yellow;">i</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
+                    <ul class="right">
+                        <li><a href="restaurant.php"><i class="mdi-navigation-refresh"></i></a></li>
+                    </ul>
                 </div>
             </nav>
         </div>
     </header>
     <div id="main">
         <div class="wrapper">
-            <aside id="left-sidebar-nav" style="border-radius: 8px;">
-                <ul id="slide-out" class="side-nav fixed leftnavset">
+            <aside id="left-sidebar-nav">
+                <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
                     <li class="user-details teal lighten-2">
                         <div class="row">
                             <div class="col col s4 m4 l4">
@@ -117,7 +120,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                         <?php
                                         $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
                                         while($row = mysqli_fetch_array($sql)){
-                                            echo '<li><a href="all-r-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                            echo '<li><a href="restaurant-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
                                         }
                                         ?>
@@ -138,14 +141,23 @@ if($_SESSION['restaurant_sid']==session_id())
                 <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
             </aside>
             <section id="content">
-
-                <div id="breadcrumbs-wrapper">
                         <div class="row">
                         </div>
-                </div>
+                <?php
+                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Paused' OR status LIKE 'Ready For Pick-Up') AND restaurantid LIKE $user_id AND not deleted;");
+                $count = 0;
+                $totalnew = 0;
+                while($row = mysqli_fetch_array($getamount)) {
+                    $count++;
+                    $totalnew = 0;
+                    $totalnew+=$count;
+                }
+                ?>
                 <div class="container">
                     <div id="work-collections" class="section">
-
+                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Active Orders (<?php echo $totalnew; ?>)</h5></li>
+                        </ul>
                         <?php
                         if(isset($_GET['status'])){
                             $status = $_GET['status'];
@@ -158,9 +170,7 @@ if($_SESSION['restaurant_sid']==session_id())
                         $sql = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Paused' OR status LIKE 'Ready For Pick-Up') AND restaurantid LIKE $user_id AND not deleted;");
                         echo '<div class="row">
                 <div>
-                    <ul id="issues-collection with-header" class="collection"  style="background-color: white;border-radius: 8px;">
-                    <li class="collection-header"><h4 class="center-align">Active orders ('.$total.')</h4></li><br>
-                    ';
+                    <ul id="issues-collection with-header" class="collection"  style="background-color: white;border-radius: 8px;">';
                         while($row = mysqli_fetch_array($sql))
                         {
 
@@ -178,7 +188,7 @@ if($_SESSION['restaurant_sid']==session_id())
                             $deleted = $row['deleted'];
                             echo '<li class="collection-item avatar" style="margin: 0 0 30px 0;">
                               <i class="mdi-content-content-paste red circle"></i>
-                              <span class="collection-header">Order No. '.$row['id'].'</span>
+                              <span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
                               <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>
                               <p><strong>Courier:</strong> '.$fillername.'</p>
@@ -267,7 +277,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                             </div>';
                             if(!$deleted){
 
-                                echo '<br><br><p><button class="waves-effect waves-green btn-flat" id="updateorderbtn" style="border-radius:10px;border: 1px solid #a21318;width: 100%;">Update Order #'.$order_id.'
+                                echo '<br><br><p><button class="waves-effect waves-green btn-flat" id="updateorderbtn" style="border-radius:10px;border: 1px solid #a21318;width: 100%;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button></p>
 										</form>';

@@ -64,7 +64,7 @@ label{
   <div id="main">
     <div class="wrapper">
         <aside id="left-sidebar-nav" style="border-radius: 8px;">
-            <ul id="slide-out" class="side-nav fixed leftnavset">
+            <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
                 <li class="user-details teal lighten-2">
                     <div class="row">
                         <div class="col col s4 m4 l4">
@@ -117,7 +117,7 @@ label{
                                     <?php
                                     $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
                                     while($row = mysqli_fetch_array($sql)){
-                                        echo '<li><a href="all-r-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                        echo '<li><a href="restaurant-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
                                     }
                                     ?>
@@ -138,24 +138,16 @@ label{
             <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
       <section id="content">
-
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
             <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">All Orders</h5>
               </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
-          <p class="caption">Orders from customers with details</p>
 <div id="work-collections" class="section">
-             
+    <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+        <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Orders</h5></li>
+    </ul>
 					<?php
 					if(isset($_GET['status'])){
 						$status = $_GET['status'];
-                        $re_id = $_GET['restaurantid'];
 					}
 					else{
 						$status = '%';
@@ -182,7 +174,7 @@ label{
 						$deleted = $row['deleted'];
 						echo '<li class="collection-item avatar">
                               <i class="mdi-content-content-paste red circle"></i>
-                              <span class="collection-header">Order No. '.$row['id'].'</span>
+                              <span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
                               <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>
                               <p><strong>Courier:</strong> '.$fillername.'</p>
@@ -272,7 +264,7 @@ label{
                                             </div>';										
 								if(!$deleted){
                                     
-								echo '<br><br><button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid antiquewhite;">Update Order #'.$order_id.'
+								echo '<br><br><button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button>
 										</form>';

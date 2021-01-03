@@ -104,8 +104,8 @@ if($_SESSION['delivery_sid']==session_id())
     </div>
     <header id="header" class="page-topbar">
         <div class="navbar-fixed">
-            <nav class="navbar-color">
-                <div class="nav-wrapper">
+            <nav class="navbar-color z-depth-0">
+                <div class="nav-wrapper z-depth-0">
                     <ul class="left">
                         <li><h1 class="logo-wrapper" style="font-size:42px;"><a href="delivery-dashboard.php" class="brand-logo darken-1" style="font-size:40px;font-family: 'Open Sans', ;font-family: 'Akronim';">Yaadi<span style="font-size: 16px;color: mediumspringgreen;"> Delivery</span></a><span class="logo-text">Logo</span></h1></li>
                     </ul>
@@ -139,7 +139,7 @@ if($_SESSION['delivery_sid']==session_id())
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
-                <ul id="slide-out" class="side-nav fixed leftnavset">
+                <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
                     <li class="user-details cyan darken-2">
                         <div class="row">
                             <div class="col col s4 m4 l4">
@@ -180,7 +180,25 @@ if($_SESSION['delivery_sid']==session_id())
                             ?>
                         </a>
                     </li>
-                    <li class="bold"><a href="delivery-history.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>History</a>
+                    <li class="bold"><a href="delivery-history.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>History
+<!--                            --><?php
+//
+//                            $getamt = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Completed') AND assignedto LIKE '$user_id'; ");
+//                            $counter = 0;
+//                            $completed = 0;
+//                            while($row = mysqli_fetch_array($getamt)) {
+//                                $counter++;
+//                                $completed = 0;
+//                                $completed+=$count;
+//                            }
+//                            if ($completed == 0){
+//                                echo '<span class="new badge" style="font-size: 0px"><span style="font-size: 12px">'.$completed.'</span></span>';
+//                            }
+//                            else{
+//                                echo '<span class="new badge" style="font-size: 0px"><span style="font-size: 12px">'.$completed.'</span></span>';
+//                            }
+//                            ?>
+                        </a>
                     </li>
                     <li class="bold"><a href="delivery-finance.php" class="waves-effect waves-cyan"><i class="mdi-editor-attach-money"></i>Finance</a>
                     </li>
@@ -188,37 +206,24 @@ if($_SESSION['delivery_sid']==session_id())
                 <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
             </aside>
             <section id="content">
-                <div id="breadcrumbs-wrapper">
-                    <div class="container">
                         <div class="row">
-                            <div class="col s12 m12 l12">
-                                <h5 class="breadcrumbs-title"><span style="background-color: mediumaquamarine;color: black;border-radius: 16px;">(<?php
-
-                                        $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Preparing' OR status LIKE 'Preparing') AND assignedto LIKE '$user_id'");
-                                        $count = 0;
-                                        $total = 0;
-                                        while($row = mysqli_fetch_array($getamount)) {
-                                            $count++;
-                                            $total = 0;
-                                            $total+=$count;
-                                        }
-                                        if ($total == 0){
-                                            echo $total;
-                                        }
-                                        else{
-                                            echo $total;
-                                        }
-
-
-                                        ?>)</span> <span style="font-size: 15px;">Active order(s) </span> <span class="right" style="font-size: 10px;"><?php echo date('l jS \of F Y'); ?></span></h5>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
+                <?php
+                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '$user_id';");
+                $count = 0;
+                $totalnew = 0;
+                while($row = mysqli_fetch_array($getamount)) {
+                    $count++;
+                    $totalnew = 0;
+                    $totalnew+=$count;
+                }
+                ?>
                 <div class="container">
                     <p class="caption">
                     <div id="work-collections" class="section">
+                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Active Orders (<?php echo $totalnew; ?>)</h5></li>
+                        </ul>
 
                         <?php
                         if(isset($_GET['status'])){
@@ -232,7 +237,7 @@ if($_SESSION['delivery_sid']==session_id())
                         $sql = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Ready For Pick-Up' OR status LIKE 'Out For Delivery' OR status LIKE 'Arrived') AND assignedto LIKE '$user_id'");
                         echo '<div class="row">
                 <div>
-                    <ul id="issues-collection" class="collection">';
+                    <ul id="issues-collection" class="collection white" style="border-radius: 8px;">';
 
                         $count = 0;
 
@@ -245,7 +250,7 @@ if($_SESSION['delivery_sid']==session_id())
 
                                 $status = $row['status'];
                                 $deleted = $row['deleted'];
-                                echo '<li class="collection-item avatar">
+                                echo '<li class="collection-item avatar" style="margin: 50px 0px;">
                               <i class="mdi-content-content-paste red circle"></i>
                               <span class="collection-header">Order No. <span style="font-size: 20px;color: #A82128;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
@@ -296,22 +301,22 @@ if($_SESSION['delivery_sid']==session_id())
                             </div>
                             <div class="col s5">
                             <p class="collections-title">'.$item_name.'</p>';
-                                    if (isset($row1["variation"])) {
+                                    if (isset($row1["variation"]) && $row1["variation"] !== '') {
                                         echo ' 
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_type"])){
+                                    if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
                                         echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_side"])){
+                                    if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
                                         echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_drink"])) {
+                                    if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
                                         echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
                                     }
@@ -362,7 +367,7 @@ if($_SESSION['delivery_sid']==session_id())
                                 if(!$deleted){
 
                                     echo '<br><br>
-                                    <button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid maroon;">Update Order #'.$order_id.'
+                                    <button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid maroon;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button>
 										</form>';

@@ -126,7 +126,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   <div id="main">
     <div class="wrapper">
     <aside id="left-sidebar-nav">
-        <ul id="slide-out" class="side-nav fixed leftnavset">
+        <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
             <li class="user-details cyan darken-2">
             <div class="row">
                 <div class="col col s4 m4 l4">
@@ -155,32 +155,20 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
         <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
         </aside>
         <section id="content">
-        <div id="breadcrumbs-wrapper">
-          <div class="container">
             <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">My Account</h5>
               </div>
-            </div>
-          </div>
-        </div>
         <div class="container">
-          <p class="caption">TRN, Full Name, Contact, Email, Address & Password</p>
-          <div class="divider"></div>
-            <div class="row">
-              <div class="col s12 m4 l3">
-              </div>
-                <div>
-
-
-                    <div class="card-panel col s11" style="padding-left: 10px;border-radius: 10px;">
+            <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h4>Courier Account</h4></li>
+            </ul>
+                    <div class="card-panel col s12 z-depth-0" style="padding-left: 10px;border-radius: 10px;">
                         <div class="row" style="padding-left: 10px;">
                             <form class="formValidate" id="formValidate" method="post" action="routers/restaurant-details-router.php" novalidate="novalidate"class="col s10">
                                 <div class="row">
-                                    <div class="input-field col s11">
+                                    <div class="input-field col s11" hidden>
                                         <i class="mdi-action-supervisor-account prefix"></i>
                                         <input name="username" id="username" type="number" value="<?php echo $username;?>" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;" disabled>
-                                        <label for="username" class="">TRN ( Tax Registration Number ) *</label>
+                                        <label for="username" class="">TRN ( Tax Registration Number )</label>
                                         <div class="errorTxt1"></div>
                                     </div>
                                 </div>
@@ -188,7 +176,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                     <div class="input-field col s11">
                                         <i class="mdi-action-perm-contact-cal prefix"></i>
                                         <input name="name" id="name" type="text" value="<?php echo $name;?>" data-error=".errorTxt2" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
-                                        <label for="name" class="">Full Name *</label>
+                                        <label for="name" class="">Name</label>
                                         <div class="errorTxt2"></div>
                                     </div>
                                 </div>
@@ -196,7 +184,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                     <div class="input-field col s11">
                                         <i class="mdi-action-perm-phone-msg prefix"></i>
                                         <input name="phone" id="phone" type="number" value="<?php echo $contact;?>" data-error=".errorTxt5" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
-                                        <label for="phone" class="">Phone Number *</label>
+                                        <label for="phone" class="">Contact</label>
                                         <div class="errorTxt5"></div>
                                     </div>
                                 </div>
@@ -212,34 +200,31 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                                     <div class="input-field col s11">
                                         <i class="mdi-action-home prefix"></i>
                                         <textarea spellcheck="true" name="address" id="address" class="materialize-textarea validate" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;"><?php echo $address;?></textarea>
-                                        <label for="address" class="">Address *</label>
+                                        <label for="address" class="">Address</label>
                                         <div class="errorTxt6"></div>
                                     </div>
                                     <div class="row" style="padding-left: 10px;">
                                         <div class="input-field col s11">
                                             <i class="mdi-action-lock-outline prefix"></i>
                                             <input name="password" id="password" type="password" data-error=".errorTxt4" style="border-bottom-right-radius: 8px;border-bottom: 2px solid antiquewhite;">
-                                            <label for="password" class="">Confirm Password </label>
+                                            <label for="password" class="">Password</label>
                                             <div class="errorTxt4"></div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="input-field col s10">
-                                            <a class="waves-effect waves-light btn modal-trigger right text-black" href="#modal1" style="color: black;border-radius:8px;background-color: white;border-bottom: 3px solid antiquewhite;">Update</a>
-
-
-                                            <div id="modal1" class="modal bottom-sheet">
-                                                <div class="modal-content">
-                                                    <h4>Save Changes?</h4>
-                                                    <p>Are you sure you want to commit to these changes?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button class="btn-flat cyan waves-effect waves-light right text-white" type="submit" name="action" style="color: white;border-radius:8px;background-color: white;border-bottom: 3px solid antiquewhite;">Confirm
-                                                        <i class="mdi-content-send right"></i>
-                                                    </button>
-                                                </div>
+                                        <div class="input-field col s11">
+                                            <a class="waves-effect waves-light btn modal-trigger center text-black" href="#modal1" style="color: white;border-radius:8px;background-color: #a21318;width: 100%;">Update</a>
+                                        </div>
+                                        <div id="modal1" class="modal bottom-sheet">
+                                            <div class="modal-content">
+                                                <h4>Save Changes?</h4>
+                                                <p>Are you sure you want to commit to these changes?</p>
                                             </div>
-
+                                            <div class="modal-footer">
+                                                <button class="btn-flat cyan waves-effect waves-light right text-white" type="submit" name="action" style="color: white;border-radius:8px;background-color: white;border-bottom: 3px solid antiquewhite;">Confirm
+                                                    <i class="mdi-content-send right"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <br /><br />
@@ -259,9 +244,9 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
   </div>
   <footer class="page-footer">
     <div class="footer-copyright">
-      <div class="container">
-        <span>Copyright © 2019 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi® Ltd</a> All rights reserved.</span>
-        <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
+        <div class="container">
+            <span>Copyright © 2020 <a class="grey-text text-lighten-4" href="#" target="_blank">Yaadi.Co</a> All rights reserved.</span>
+            <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="#">The Ambassadors</a></span>
         </div>
     </div>
   </footer>

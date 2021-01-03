@@ -138,7 +138,7 @@ if($_SESSION['delivery_sid']==session_id())
     <div id="main">
         <div class="wrapper">
             <aside id="left-sidebar-nav">
-                <ul id="slide-out" class="side-nav fixed leftnavset">
+                <ul id="slide-out" class="side-nav fixed leftnavset" style="border-top-right-radius: 8px;">
                     <li class="user-details cyan darken-2">
                         <div class="row">
                             <div class="col col s4 m4 l4">
@@ -187,38 +187,27 @@ if($_SESSION['delivery_sid']==session_id())
                 <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
             </aside>
             <section id="content">
-                <div id="breadcrumbs-wrapper">
-                    <div class="container">
                         <div class="row">
-                            <div class="col s12 m12 l12">
-                                <h5 class="breadcrumbs-title"><span style="background-color: mediumaquamarine;color: black;border-radius: 16px;">(<?php
-
-                                        $getamount = mysqli_query($con, "SELECT * FROM orders WHERE assignedto LIKE '$user_id'");
-                                        $count = 0;
-                                        $total = 0;
-                                        while($row = mysqli_fetch_array($getamount)) {
-                                            $count++;
-                                            $total = 0;
-                                            $total+=$count;
-                                        }
-                                        if ($total == 0){
-                                            echo $total;
-                                        }
-                                        else{
-                                            echo $total;
-                                        }
-
-
-                                        ?>)</span> <span style="font-size: 15px;">Total Order History </span> <span class="right" style="font-size: 10px;"><?php echo date('l jS \of F Y'); ?></span></h5>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                <?php
 
+                $getamount = mysqli_query($con, "SELECT * FROM orders WHERE assignedto LIKE '$user_id'");
+                $count = 0;
+                $history = 0;
+                while($row = mysqli_fetch_array($getamount)) {
+                    $count++;
+                    $history = 0;
+                    $history+=$count;
+                }
+
+
+                ?>
                 <div class="container">
                     <p class="caption">
                     <div id="work-collections" class="section">
-
+                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Order History (<?php echo $history; ?>)</h5></li>
+                        </ul>
                         <?php
                         if(isset($_GET['status'])){
                             $status = $_GET['status'];
@@ -231,7 +220,8 @@ if($_SESSION['delivery_sid']==session_id())
                         $sql = mysqli_query($con, "SELECT * FROM orders WHERE assignedto LIKE '$user_id'");
                         echo '<div class="row">
                 <div>
-                    <ul id="issues-collection" class="collection">';
+                    <ul id="issues-collection" class="collection white">
+                    ';
 
                         $count = 0;
 
@@ -281,22 +271,22 @@ if($_SESSION['delivery_sid']==session_id())
                             </div>
                             <div class="col s5">
                             <p class="collections-title">'.$item_name.'</p>';
-                                    if (isset($row1["variation"])) {
+                                    if (isset($row1["variation"]) && $row1["variation"] !== '') {
                                         echo ' 
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_type"])){
+                                    if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
                                         echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_side"])){
+                                    if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
                                         echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
                                     }
 
-                                    if (isset($row1["variation_drink"])) {
+                                    if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
                                         echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
                                     }

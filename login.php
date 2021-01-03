@@ -121,28 +121,6 @@ else{
                 color: #b5796d;
             }
 
-            .snowflake {
-                color: #fff;
-                font-size: 1em;
-                font-family: Arial;
-                text-shadow: 0 0 1px #000;
-            }
-
-            @-webkit-keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@-webkit-keyframes snowflakes-shake{0%{-webkit-transform:translateX(0px);transform:translateX(0px)}50%{-webkit-transform:translateX(80px);transform:translateX(80px)}100%{-webkit-transform:translateX(0px);transform:translateX(0px)}}@keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@keyframes snowflakes-shake{0%{transform:translateX(0px)}50%{transform:translateX(80px)}100%{transform:translateX(0px)}}.snowflake{position:fixed;top:-10%;z-index:9999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default;-webkit-animation-name:snowflakes-fall,snowflakes-shake;-webkit-animation-duration:10s,3s;-webkit-animation-timing-function:linear,ease-in-out;-webkit-animation-iteration-count:infinite,infinite;-webkit-animation-play-state:running,running;animation-name:snowflakes-fall,snowflakes-shake;animation-duration:10s,3s;animation-timing-function:linear,ease-in-out;animation-iteration-count:infinite,infinite;animation-play-state:running,running}.snowflake:nth-of-type(0){left:1%;-webkit-animation-delay:0s,0s;animation-delay:0s,0s}.snowflake:nth-of-type(1){left:10%;-webkit-animation-delay:1s,1s;animation-delay:1s,1s}.snowflake:nth-of-type(2){left:20%;-webkit-animation-delay:6s,.5s;animation-delay:6s,.5s}.snowflake:nth-of-type(3){left:30%;-webkit-animation-delay:4s,2s;animation-delay:4s,2s}.snowflake:nth-of-type(4){left:40%;-webkit-animation-delay:2s,2s;animation-delay:2s,2s}.snowflake:nth-of-type(5){left:50%;-webkit-animation-delay:8s,3s;animation-delay:8s,3s}.snowflake:nth-of-type(6){left:60%;-webkit-animation-delay:6s,2s;animation-delay:6s,2s}.snowflake:nth-of-type(7){left:70%;-webkit-animation-delay:2.5s,1s;animation-delay:2.5s,1s}.snowflake:nth-of-type(8){left:80%;-webkit-animation-delay:1s,0s;animation-delay:1s,0s}.snowflake:nth-of-type(9){left:90%;-webkit-animation-delay:3s,1.5s;animation-delay:3s,1.5s}
-            /* Demo Purpose Only*/
-            .demo {
-                font-family: 'Raleway', sans-serif;
-                color:#fff;
-                display: block;
-                margin: 0 auto;
-                padding: 15px 0;
-                text-align: center;
-            }
-            .demo a{
-                font-family: 'Raleway', sans-serif;
-                color: #000;
-            }
-
         </style>
     </head>
     <body style="background: url(https://image.freepik.com/free-vector/food-pattern-design_1221-27.jpg) repeat fixed;">
@@ -151,38 +129,6 @@ else{
         <div class="loader-section section-left"></div>
         <div class="loader-section section-right"></div>
     </div>
-    <div class="snowflakes" aria-hidden="true">
-        <div class="snowflake">
-            ❅
-        </div>
-        <div class="snowflake">
-            ❅
-        </div>
-        <div class="snowflake">
-            ❆
-        </div>
-        <div class="snowflake">
-            ❄
-        </div>
-        <div class="snowflake">
-            ❅
-        </div>
-        <div class="snowflake">
-            ❆
-        </div>
-        <div class="snowflake">
-            ❄
-        </div>
-        <div class="snowflake">
-            ❅
-        </div>
-        <div class="snowflake">
-            ❆
-        </div>
-        <div class="snowflake">
-            ❄
-        </div>
-    </div>
     <div id="login-page" class="row z-depth-0"">
 
     <div class="col s12 z-depth-3 card-panel" style="border: 2px solid #a0381b;border-radius: 8px;">
@@ -190,9 +136,9 @@ else{
             <div class="row"><i style="font-size:18px;">🇯🇲</i> <span class="" style="font-size: 4px;color:#b5796d;"></span>
                 <div class="input-field col s12 center">
               <span class="badge" data-badge-caption="custom caption" style="color: antiquewhite;border: .5px solid white;
-  font-weight: bold;box-shadow: -2px -2px 10px #FFF, 2.5px 2.5px 10px white;transition: all 0.2s ease-in-out;cursor: pointer;font-weight: 600;border-radius: 8px;line-height: 0;width: 80px;height: 40px;display: inline-flex;color: #b5796d;justify-content: center;align-items: center;margin: 0 8px;font-size: 15.2px;font-family: Open Sans, ;font-family: Akronim;border-bottom: 5px solid #b5796d;border-bottom-right-radius: 40px;border-top-right-radius: 120px;border-bottom-left-radius: 40px;border-top-left-radius: 120px;border-top-left: 2px solid #b5796d;border-top: 2px solid #b5796d;"><span>#</span>foodie</span>
+  font-weight: bold;box-shadow: -2px -2px 10px #FFF, 2.5px 2.5px 10px white;transition: all 0.2s ease-in-out;cursor: pointer;font-weight: 600;border-radius: 8px;line-height: 0;width: 80px;height: 40px;display: inline-flex;color: #b5796d;justify-content: center;align-items: center;margin: 0 8px;font-size: 15.2px;font-family: Open Sans, ;font-family: Akronim;border-bottom: 5px solid #b5796d;border-bottom-right-radius: 40px;border-top-right-radius: 120px;border-bottom-left-radius: 40px;border-top-left-radius: 120px;border-top-left: 2px solid #b5796d;border-top: 2px solid #b5796d;"><span>#</span>yaadi</span>
                     <img id="logoimg" src="images/yaadi-icon.png" width="auto" height="100px" style="object-position: center;object-fit: scale-down;zoom: 180%;">
-                    <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;"></p><span class="badge" data-badge-caption="custom caption"><h6 id="version" style="font-size:12px;font-family: Open Sans, ;font-family: Akronim;color: #a0381b;">Version .23</h6></span>
+                    <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;"></p><span class="badge" data-badge-caption="custom caption"><h6 id="version" style="font-size:12px;font-family: Open Sans, ;font-family: Akronim;color: #a0381b;">Version .24</h6></span>
                 </div>
             </div>
             <div class="row margin">
