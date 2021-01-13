@@ -44,8 +44,7 @@ if($_SESSION['restaurant_sid']==session_id())
                 'item_id'               =>     $_GET["id"],
                 'item_name'               =>     $_POST["hidden_name"],
                 'item_price'          =>     $_POST["hidden_price"],
-                'item_quantity'          =>     $_POST["quantity"],
-                'item_variation'        =>    $_POST["variation"]
+                'item_quantity'          =>     $_POST["quantity"]
             );
             $_SESSION["shopping_cart"][0] = $item_array;
         }
@@ -327,7 +326,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                                                 <label>Side: </label><label>'.$values["item_variation_side"].'</label><br>';
                                                             }
 
-                                                            if (isset($values["item_variation_drink"])) {
+                                                            if (isset($values["item_variation_drink"]) ) {
                                                                 echo '  
                                                                 <label>Drink: </label><label>'.$values["item_variation_drink"].'</label><br>';
                                                             }

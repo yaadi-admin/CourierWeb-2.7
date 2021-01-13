@@ -28,16 +28,16 @@ if($_SESSION['customer_sid']==session_id())
         $fee = 350;
     }
     if($_POST['distance'] <= 1.0 && $_POST['distance'] > 0.5){
-        $fee = 400;
-    }
-    else if($_POST['distance'] <= 1.5 && $_POST['distance'] > 1.0){
         $fee = 450;
     }
-    else if($_POST['distance'] <= 2.0 && $_POST['distance'] >= 1.5){
+    else if($_POST['distance'] <= 1.5 && $_POST['distance'] > 1.0){
         $fee = 500;
     }
+    else if($_POST['distance'] <= 2.0 && $_POST['distance'] >= 1.5){
+        $fee = 550;
+    }
     else if($_POST['distance'] >= 2.5 && $_POST['distance'] <= 7.0){
-        $fee = 500;
+        $fee = 600;
     }
 //    else if($_POST['distance'] <= 3.0 && $_POST['distance'] >= 2.5){
 //        $fee = 600;
@@ -451,7 +451,6 @@ if($_SESSION['customer_sid']==session_id())
                 <p class="collections-title"> Total</p>
             </div>
             <div class="col s4">
-            
                 <span><strong>$'.number_format($total).' JMD</strong></span>
             </div>
         </div>

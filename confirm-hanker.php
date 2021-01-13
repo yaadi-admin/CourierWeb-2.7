@@ -3,19 +3,15 @@ include 'includes/connect.php';
 if($_SESSION['restaurant_sid']==session_id())
 {
     $user_id = $_SESSION['user_id'];
-    $counter = 0;
     $customer_name = $_POST['name'];
     $customer_contact = $_POST['contact'];
     $customer_address = $_POST['address'];
     $payment_type = $_POST['payment_type'];
-    $myaddress = '';
+    $myaddress = "";
 
-    $sql = mysqli_query($con, "SELECT * FROM orders where restaurantid= $user_id AND not deleted;");
+    $sql = mysqli_query($con, "SELECT * FROM users WHERE name= '$name' AND not deleted;");
     while($row = mysqli_fetch_array($sql)){
         $myaddress = $row['address'];
-        if ($row['status'] == "Yet to be delivered"){
-            $counter += 1;
-        }
     }
 
     function getDistance($addressFrom, $addressTo, $unit = ''){
@@ -414,7 +410,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                         <li class="collection-item">
                                             <div class="row">
                                                 <div class="col s8">
-                                                    <p class="collections-title"> Subtotal</p>
+                                                    <p class="collections-title"> Total</p>
                                                 </div>
                                                 <div class="col s4">
                                                     <span><strong>$<?php echo number_format($total); ?> JMD</strong></span>
@@ -435,13 +431,12 @@ if($_SESSION['restaurant_sid']==session_id())
 
             <ul class="collection with-header" style="border-top-left-radius: 8px;border-top-right-radius: 8px;">
                 <li class="collection-header">
-                    <h6>Submit Order</h6>
+                    <h6>Place Order</h6>
                 </li>
-                <form method="post" action="routers/request-delivery.php">
-                <input type="hidden" name="pay_type" value="<?php echo $_POST['payment_type'];?>">
+                <form method="post" action="routers/hanker-router.php">
+                <input type="hidden" name="payment_type" value="<?php echo $payment_type;?>">
                 <input type="hidden" name="rest" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="del_fee" value="<?php echo $dis_fee; ?>">
-                <input type="hidden" name="pay_type" value="<?php echo $_POST['payment_type']; ?>">
                 <input type="hidden" name="address" value="<?php echo $customer_address; ?>">
                 <input type="hidden" name="contact" value="<?php echo $customer_contact; ?>">
                 <input type="hidden" name="customer_name" value="<?php echo $customer_name; ?>">

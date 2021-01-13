@@ -15,7 +15,7 @@ if($_SESSION['restaurant_sid']==session_id()) {
         }
         $sql = "INSERT INTO items (name, price,restaurant,restaurantid,category,description,size) VALUES ('$name', $price,'$restname',$user_id,'$category','$description','0')";
         $con->query($sql);
-        header("location: ../restaurant.php");
+        header("location: ../restaurant-menu.php");
     }
 }
 

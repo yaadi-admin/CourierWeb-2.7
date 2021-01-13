@@ -276,22 +276,22 @@ if($_SESSION['restaurant_sid']==session_id())
         </div>
         <div class="container">
 
-            <ul class="collection with-header">
-                <li class="collection-header"><h5>Place Hanker Order</h5></li>
+            <ul class="collection with-header" style="border-top-right-radius: 8px;border-top-left-radius: 8px;">
+                <li class="collection-header"><h5>Customer Details</h5></li>
                 <form class="col s12" method="post" action="confirm-hanker.php">
                     <li class="collection-item"><div class="input-field col s6">
                             <i class="mdi-action-account-circle prefix"></i>
-                            <input spellcheck="true" id="name" name="name" type="text">
-                            <label for="name">Customer name</label>
+                            <input spellcheck="true" id="name" name="name" type="text" style="border-bottom-right-radius: 8px;">
+                            <label for="name">Name</label>
                         </div></li>
                     <li class="collection-item"><div class="input-field col s6">
                             <i class="mdi-communication-phone prefix"></i>
-                            <input spellcheck="true" id="contact" name="contact" type="text">
-                            <label for="contact">Customer contact</label>
+                            <input spellcheck="true" id="contact" name="contact" type="text" style="border-bottom-right-radius: 8px;">
+                            <label for="contact">Contact</label>
                         </div></li>
                     <li class="collection-item"><div class="input-field col s12">
                             <i class="mdi-action-home prefix"></i>
-                            <textarea spellcheck="true" id="address" name="address" placeholder="Street, Road or Address" class="materialize-textarea validate" data-error=".errorTxt1"></textarea>
+                            <textarea spellcheck="true" id="address" name="address" placeholder="Street, Road or Address" class="materialize-textarea validate" data-error=".errorTxt1" style="border-bottom-right-radius: 8px;"></textarea>
                             <label for="address" class="">Delivering to</label>
                             <div class="errorTxt1"></div>
                         </div></li>
@@ -299,12 +299,11 @@ if($_SESSION['restaurant_sid']==session_id())
                         <i class="mdi-action-payment prefix"></i>
                             <p><select class="col s12 browser-default" name="payment_type">
                                 <option value="Cash">Cash</option>
-                                <option value="Online Card">Online Card</option>
-                                <option value="Bank Transfer">Bank Transfer</option>
-                                <option value="Online">Pay-pal</option>
-                                <option value="Wallet">Wallet</option>
+                                <option value="Online Card">Visa, Mastercard</option>
+                                <option value="Bank Transfer">NCB, Scotia, JN</option>
+                                <option value="Online">PayPal</option>
                                 </select></p>
-                        <label for="payment_type">Customers payment method</label>
+                        <label for="payment_type">Payment Method</label>
                     </li>
             </ul>
 
@@ -422,9 +421,9 @@ if($_SESSION['restaurant_sid']==session_id())
                 </li>
             </ul>
 
-            <ul class="collection with-header"><li class="collection-header"><h6>Submit order</h6></li>
-                <li class="collection-item"><p><button class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" type="submit" value="Change" name="submithide">Submit Order
-                            <i class="mdi-image-assistant-photo right" style="color: maroon;"></i>
+            <ul class="collection with-header"><li class="collection-header"><h6>Continue</h6></li>
+                <li class="collection-item"><p><button class="btn-flat waves-effect waves-light black-text left" style="border-radius: 6px;background-color: white;border: 1px solid maroon;font-size: 10px;color: black;width: 100%;" type="submit" value="Change" name="submithide">Continue
+                            <i class="mdi-hardware-keyboard-arrow-right right" style="color: maroon;"></i>
                         </button></p><br><br></li>
                 </form>
             </ul>
