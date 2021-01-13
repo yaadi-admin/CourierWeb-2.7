@@ -153,7 +153,7 @@ if($_SESSION['restaurant_sid']==session_id())
                     $totalnew+=$count;
                 }
 
-                $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders;");
+                $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Paused' OR status LIKE 'Ready For Pick-Up') AND restaurant_id='$user_id' AND not deleted;;");
                 $counter = 0;
                 $totalhanker = 0;
                 while($row = mysqli_fetch_array($gethankers)) {
