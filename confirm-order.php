@@ -451,6 +451,7 @@ if($_SESSION['customer_sid']==session_id())
                 <p class="collections-title"> Total</p>
             </div>
             <div class="col s4">
+            
                 <span><strong>$'.number_format($total).' JMD</strong></span>
             </div>
         </div>

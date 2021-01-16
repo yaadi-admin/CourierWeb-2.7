@@ -202,6 +202,44 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                         </li>
                     </ul>
                 </li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>Hanker Orders
+                            <?php
+
+                            $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '0';");
+                            $counter = 0;
+                            $totalhanker = 0;
+                            while($row = mysqli_fetch_array($gethankers)) {
+                                $count++;
+                                $totalhanker = 0;
+                                $totalhanker+=$counter;
+                            }
+                            if ($totalhanker == 0){
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+                            else{
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+
+                            ?>
+                        </a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="all-hanker-orders.php">All Orders</a>
+                                </li>
+                                <?php
+                                $sql = mysqli_query($con, "SELECT DISTINCT status FROM hanker_orders;");
+                                while($row = mysqli_fetch_array($sql)){
+                                    echo '<li><a href="all-hanker-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                    </li>';
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
                  <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-question-answer"></i> Tickets</a>

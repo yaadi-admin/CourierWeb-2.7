@@ -30,7 +30,7 @@ else{
         <meta name="description" content="Live faster with fast delivery and superior service.">
         <meta name="keywords" content="restaurants near me,food near me,places to eat near me,mexican restaurants,italian restaurants,steakhouse,diner,restaurants nearby,food places near me,seafood restaurants,vegan restaurants,breakfast restaurants,restaurant games,lunch near me,best restaurants near me,nearby restaurants,diners near me,restaurants near me now,places to eat,seafood restaurants near me,food around me,steakhouse near me,restaurant week,restaurants near my location,greek restaurant">
         <meta name="author" content="Copyright © 2019 Yaadi.co All Rights Reserved">
-        <title>Welcome to Yaadi</title>
+        <title>Welcome to Yaadi.co</title>
         <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
         <link rel="apple-touch-icon-precomposed" href="images/yaadi-icon.png">
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -138,7 +138,7 @@ else{
               <span class="badge" data-badge-caption="custom caption" style="color: antiquewhite;border: .5px solid white;
   font-weight: bold;box-shadow: -2px -2px 10px #FFF, 2.5px 2.5px 10px white;transition: all 0.2s ease-in-out;cursor: pointer;font-weight: 600;border-radius: 8px;line-height: 0;width: 80px;height: 40px;display: inline-flex;color: #b5796d;justify-content: center;align-items: center;margin: 0 8px;font-size: 15.2px;font-family: Open Sans, ;font-family: Akronim;border-bottom: 5px solid #b5796d;border-bottom-right-radius: 40px;border-top-right-radius: 120px;border-bottom-left-radius: 40px;border-top-left-radius: 120px;border-top-left: 2px solid #b5796d;border-top: 2px solid #b5796d;"><span>#</span>yaadi</span>
                     <img id="logoimg" src="images/yaadi-icon.png" width="auto" height="100px" style="object-position: center;object-fit: scale-down;zoom: 180%;">
-                    <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;"></p><span class="badge" data-badge-caption="custom caption"><h6 id="version" style="font-size:12px;font-family: Open Sans, ;font-family: Akronim;color: #a0381b;">Version .25</h6></span>
+                    <p class="center login-form-text" style="font-family: Raleway, sans-serif;font-size:18px;color:#b5796d;"></p><span class="badge" data-badge-caption="custom caption"><h6 id="version" style="font-size:12px;font-family: Open Sans, ;font-family: Akronim;color: #a0381b;">Version .24</h6></span>
                 </div>
             </div>
             <div class="row margin">

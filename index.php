@@ -1103,7 +1103,7 @@ if($_SESSION['customer_sid']==session_id())
 
                 else if (moment > 1900 && moment < 2400){
                     <?php
-                    echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
+                    echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Orderrr</button>', 8000);";
                     ?>
                 }
             }

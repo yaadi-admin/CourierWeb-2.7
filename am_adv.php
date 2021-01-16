@@ -225,10 +225,11 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
 
 
         <?php
-        $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Customer' AND email not LIKE '') AND not deleted;");
+        $result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
         while($row = mysqli_fetch_array($result)) {
 
 
+                if ($row['email'] != '') {
                     echo '<li class="collection-item avatar" style="background-color: white;color: black;">
       <img src="images/yaadi-icon.png" alt="" class="circle">
       <span class="title">' . $row["name"] . '</span>
@@ -237,7 +238,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
       </p>
       <a href="#." class="secondary-content waves-effect waves-light collapsible-header" style="border-bottom: 0px solid white;"><i class="mdi-action-info-outline" style="font-size: 21px;"></i></a>
       </li>';
-
+                }
         }
 
             ?>

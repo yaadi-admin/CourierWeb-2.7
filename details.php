@@ -401,6 +401,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
                 var passcode = $('#password').val();
 
                 if (name == "" || passcode == "" || email == "" || address == "" || phone == ""){
+                    // $('#modaltop').html('<h5>All fields are not filled</h5>');
                     Materialize.toast('All fields are not filled', 8000);
                 }
                 else {

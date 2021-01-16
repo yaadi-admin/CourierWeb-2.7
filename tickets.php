@@ -181,7 +181,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
              </ul>
              <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only z-depth-0" style="color: #a21318"><i class="mdi-navigation-menu" style="color: white;"></i></a>
          </aside>
-
+         
          <div class="row">
          </div>
 

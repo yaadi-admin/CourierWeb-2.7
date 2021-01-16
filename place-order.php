@@ -348,10 +348,10 @@ if($_SESSION['customer_sid']==session_id())
                         <li class="collection-item" style="height: auto;"><label for="payment_type">How will you pay?</label>
                             <select class="browser-default" id="pay_type" name="pay_type">
                                 <option value="Select how you pay" <?php if(!$verified) echo 'disabled';?> selected>Select how you pay</option>
-                                <option value="Cash" <?php if(!$verified) echo 'disabled';?>>Cash</option>
-                                <option value="Online Card" <?php if(!$verified) echo 'disabled';?>>Visa, Mastercard</option>
-                                <option value="Bank Transfer" <?php if(!$verified) echo 'disabled';?>>NCB, Scotia, JN</option>
-                                <option value="Online" <?php if(!$verified) echo 'disabled';?>>PayPal</option>
+                                <option value="Cash" <?php if(!$verified) echo 'disabled';?>>Cash - Pay via cash</option>
+                                <option value="Online Card" <?php if(!$verified) echo 'disabled';?>>Online Card - Visa, Mastercard</option>
+                                <option value="Bank Transfer" <?php if(!$verified) echo 'disabled';?>>Bank Transfer - NCB, Scotia, JN</option>
+                                <option value="Online" <?php if(!$verified) echo 'disabled';?>>Online - Paypal</option>
                                 <?php
                                 if ($balance !== 0)
                                 {?>

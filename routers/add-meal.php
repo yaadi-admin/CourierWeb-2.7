@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST["add_to_cart"]))  {
+if(isset($_POST["hidden_name"]))  {
     if(isset($_SESSION["shopping_cart"]))  {
         $item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
         if(!in_array($_GET["id"], $item_array_id))
@@ -17,13 +17,11 @@ if(isset($_POST["add_to_cart"]))  {
             );
             $_SESSION["shopping_cart"][$count] = $item_array;
             $Itemnm = $_POST["hidden_name"];
-            echo '<script>alert("Item Added To Cart")</script>';
-            echo '<script>window.location="options.php"</script>';
+            echo '<script>Materialize.toast("'.$Itemnm.' was added to your cart", 4000);</script>';
         }
         else
         {
-            echo '<script>alert("Item Already Added To Cart")</script>';
-            echo '<script>window.location="options.php"</script>';
+            echo '<script>Materialize.toast("'.$_POST["hidden_name"].' is already in your cart", 4000);</script>';
         }
     }
     else
@@ -47,10 +45,10 @@ if(isset($_GET["action"]))
             if($values["item_id"] == $_GET["id"])
             {
                 unset($_SESSION["shopping_cart"][$keys]);
-                echo '<script>alert("Item Removed")</script>';
-                echo '<script>window.location="options.php"</script>';
+                echo '<script>Materialize.toast("'.$Itemnm.' was removed fom your cart", 4000);</script>';
             }
         }
     }
 }
+echo '<script>Materialize.toast("'.$_POST["hidden_id"].' was added to your cart", 4000);</script>';
 ?>
