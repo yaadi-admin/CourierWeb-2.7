@@ -24,7 +24,14 @@ include 'includes/connect.php';
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>All Orders</title>
+    <title><?php
+
+        if (isset($_GET['status'])){
+            echo $_GET["status"];
+        }
+        else{
+            echo "All Orders";
+        }?></title>
   <link rel="icon" href="images/yaadi-icon.png" sizes="32x32">
   <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
   <meta name="msapplication-TileColor" content="#00bcd4">
@@ -95,32 +102,82 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             </li>
             <li class="bold"><a href="admin.php" class="waves-effect waves-cyan"><i class="mdi-editor-border-color"></i> Dashboard</a>
             </li>
-                <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan active"><i class="mdi-editor-insert-invitation"></i> All Orders</a>
-                            <div class="collapsible-body">
-                                <ul>
-								<li class="<?php
-								if(!isset($_GET['status'])){
-										echo 'active';
-									}?>
-									"><a href="all-orders.php">All Orders</a>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li class="bold active"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>All Orders
+                            <?php
+
+                            $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '0';");
+                            $count = 0;
+                            $total = 0;
+                            while($row = mysqli_fetch_array($getamount)) {
+                                $count++;
+                                $total = 0;
+                                $total+=$count;
+                            }
+                            if ($total == 0){
+                                echo '<span class="new badge">'.$total.'</span>';
+                            }
+                            else{
+                                echo '<span class="new badge">'.$total.'</span>';
+                            }
+
+                            ?>
+                        </a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="all-orders.php">All Orders</a>
                                 </li>
-								<?php
-									$sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
-									while($row = mysqli_fetch_array($sql)){
-									if(isset($_GET['status'])){
-										$status = $row['status'];
-									}
-                                    echo '<li class='.(isset($_GET['status'])?($status == $_GET['status'] ? 'active' : ''): '').'><a href="all-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                <?php
+                                $sql = mysqli_query($con, "SELECT DISTINCT status FROM orders;");
+                                while($row = mysqli_fetch_array($sql)){
+                                    echo '<li><a href="all-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
                                     </li>';
-									}
-									?>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-invitation"></i>Hanker Orders
+                            <?php
+
+                            $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE 0;");
+                            $counter = 0;
+                            $totalhanker = 0;
+                            while($row = mysqli_fetch_array($gethankers)) {
+                                $counter++;
+                                $totalhanker = 0;
+                                $totalhanker+=$counter;
+                            }
+                            if ($totalhanker == 0){
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+                            else{
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+
+                            ?>
+                        </a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="all-hanker-orders.php">All Orders</a>
+                                </li>
+                                <?php
+                                $sql = mysqli_query($con, "SELECT DISTINCT status FROM hanker_orders;");
+                                while($row = mysqli_fetch_array($sql)){
+                                    echo '<li><a href="all-hanker-orders.php?status='.$row['status'].'">'.$row['status'].'</a>
+                                    </li>';
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
                  <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-question-answer"></i> Tickets</a>

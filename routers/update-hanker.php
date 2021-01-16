@@ -4,31 +4,44 @@ require '../src/Twilio/autoload.php';
 use Twilio\Rest\Client;
 if($_SESSION['admin_sid']==session_id()) {
     if (isset($_POST['cos'])) {
-        $status = $_POST['status'];
-        $id = $_POST['id'];
-        $customer = $_POST['cos'];
-        $sql = "UPDATE hanker_orders SET status='$status' WHERE id=$id;";
-        $con->query($sql);
-        $csurph = $customer;
         $account_sid = 'AC8f235f78aa51cec01909115165e27a90';
         $auth_token = '64b73f721643ba5f3b3630b75b792116';
         $twilio_number = "+12029145139";
         $client = new Client($account_sid, $auth_token);
-        $client->messages->create(
-            $csurph,
-            array(
-                'from' => $twilio_number,
-                'body' => 'ORDER #'.$id.' Status: => '.$status.''));
 
-        $to = 'yaadiltd@gmail.com';
-        $subject = 'Order updated';
-        $message = '
+        $getriders = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' AND verified=1) AND not deleted;");
+        while ($row = mysqli_fetch_array($getriders)) {
+            $rider = $row['contact'];
+        }
+
+        $status = $_POST['status'];
+        $id = $_POST['id'];
+        $customer = $_POST['cos'];
+        $sql = "UPDATE hanker_orders SET status='$status' WHERE id=$id;";
+        if ($con->query($sql)) {
+
+            if ($status === "Ready For Pick-Up") {
+                $client->messages->create(
+                    $rider,
+                    array(
+                        'from' => $twilio_number,
+                        'body' => 'ORDER #' . $id . ' Status: => ' . $status . ''));
+            } else {
+                $client->messages->create(
+                    $customer,
+                    array(
+                        'from' => $twilio_number,
+                        'body' => 'ORDER #' . $id . ' Status: => ' . $status . ''));
+            }
+            $to = 'yaadiltd@gmail.com';
+            $subject = 'Order updated';
+            $message = '
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Order #'.$id.' Status updated -> '.$status.'</title>
+    <title>Order #' . $id . ' Status updated -> ' . $status . '</title>
     <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -277,7 +290,7 @@ if($_SESSION['admin_sid']==session_id()) {
                     <tr>
                       <td>
                         <h1>Order Updated</h1>
-                        <h2>Order #'.$id.' was updated by the restaurant -> '.$status.'</h2>
+                        <h2>Order #' . $id . ' was updated by the restaurant -> ' . $status . '</h2>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -328,12 +341,13 @@ if($_SESSION['admin_sid']==session_id()) {
   </body>
 </html>
 ';
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-        $headers[] = 'From: <orders@yaadi.co>';
-        mail($to, $subject, $message, implode("\r\n", $headers));
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+            $headers[] = 'From: <orders@yaadi.co>';
+            mail($to, $subject, $message, implode("\r\n", $headers));
 
-        echo "<script>Materialize.toast('Order updated', 8000);</script>";
-        header("location: ../restaurant.php");
+            echo "<script>Materialize.toast('Order updated', 8000);</script>";
+            header("location: ../update-hanker.php");
+        }
     }
 }
