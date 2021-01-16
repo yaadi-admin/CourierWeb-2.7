@@ -2,6 +2,10 @@
 include '../includes/connect.php';
 require '../src/Twilio/autoload.php';
 use Twilio\Rest\Client;
+$account_sid = 'AC8f235f78aa51cec01909115165e27a90';
+$auth_token = '64b73f721643ba5f3b3630b75b792116';
+$twilio_number = "+12029145139";
+$client = new Client($account_sid, $auth_token);
 if($_SESSION['restaurant_sid']==session_id()) {
     if (isset($_POST['cos'])) {
         $status = $_POST['status'];
@@ -19,15 +23,27 @@ if($_SESSION['restaurant_sid']==session_id()) {
             $phone = $row["contact"];
             $csurph = $phone;
         }
-        $account_sid = 'AC8f235f78aa51cec01909115165e27a90';
-        $auth_token = '64b73f721643ba5f3b3630b75b792116';
-        $twilio_number = "+12029145139";
-        $client = new Client($account_sid, $auth_token);
-        $client->messages->create(
-            $csurph,
-            array(
-                'from' => $twilio_number,
-                'body' => 'ORDER #'.$id.' Status: => '.$status.''));
+
+        if ($status === "Ready For Pick-Up"){
+            $getrider = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' AND verified=1) AND not deleted;");
+            while ($row = mysqli_fetch_array($getrider)) {
+                $rnum = $row["contact"];
+                $client->messages->create(
+                    $rnum,
+                    array(
+                        'from' => $twilio_number,
+                        'body' => 'ORDER #'.$id.' Status: => '.$status.''));
+            }
+        }
+        else {
+
+            $client->messages->create(
+                $csurph,
+                array(
+                    'from' => $twilio_number,
+                    'body' => 'ORDER #' . $id . ' Status: => ' . $status . ''));
+        }
+
 
         $to = 'yaadiltd@gmail.com';
         $subject = 'Order updated';

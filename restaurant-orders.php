@@ -183,14 +183,13 @@ label{
 							  <form method="post" action="routers/edit-r-orders.php">
 							    <input type="hidden" value="'.$row['id'].'" name="id">
 							    <input type="hidden" value="'.$cus.'" name="cos">
-								<select name="status">
+								<select name="status" id="status" class="browser-default">
 								<option value="Yet to be delivered" '.($status=='Yet to be delivered' ? 'selected' : '').'>Yet to be delivered</option>
 								<option value="Preparing" '.($status=='Preparing' ? 'selected' : '').'>Preparing</option>
 								<option value="Cancelled" '.($status=='Cancelled' ? 'selected' : '').'>Cancelled</option>
 								<option value="Paused" '.($status=='Paused' ? 'selected' : '').'>On Hold</option>
-                                <option value="Completed" '.($status=='Completed' ? 'selected' : '').'>Completed</option>
                                 <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').'>Ready For Pick-Up</option>
-                                <option value="Cancelled by Admin" '.($status=='Cancelled by Admin' ? 'selected' : '').'>Cancelled by Admin</option>
+                                <option value="Cancelled by Admin" '.($status=='Cancelled by Admin' ? 'selected' : '').' disabled>Cancelled by Admin</option>
 								</select>
 							  ').'</p>
                               <a href="#" class="secondary-content"><i class="mdi-action-grade"></i></a>
