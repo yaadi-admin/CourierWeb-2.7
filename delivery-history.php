@@ -159,6 +159,8 @@ if($_SESSION['delivery_sid']==session_id())
                     </li>
                     <li class="bold"><a href="delivery-dashboard.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i> Active Orders</a>
                     </li>
+                    <li class="bold"><a href="locate.php" class="waves-effect waves-cyan"><i class="mdi-maps-pin-drop"></i> Map</a>
+                    </li>
                     <li class="bold"><a href="delivery-new.php" class="waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> New Orders
                             <?php
 
@@ -176,6 +178,27 @@ if($_SESSION['delivery_sid']==session_id())
                             else{
                                 echo '<span class="new badge">'.$total.'</span>';
                             }
+                            ?>
+                        </a>
+                    </li>
+                    <li class="bold"><a href="delivery-dashboard.php" class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Orders
+                            <?php
+
+                            $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE 0;");
+                            $counter = 0;
+                            $totalhanker = 0;
+                            while($row = mysqli_fetch_array($gethankers)) {
+                                $counter++;
+                                $totalhanker = 0;
+                                $totalhanker+=$counter;
+                            }
+                            if ($totalhanker == 0){
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+                            else{
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+
                             ?>
                         </a>
                     </li>

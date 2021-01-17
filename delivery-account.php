@@ -147,6 +147,49 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
             </li>
             <li class="bold"><a href="delivery-dashboard.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i> Active Orders</a>
             </li>
+            <li class="bold"><a href="locate.php" class="waves-effect waves-cyan"><i class="mdi-maps-pin-drop"></i> Map</a>
+            </li>
+            <li class="bold"><a href="delivery-new.php" class="waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> New Orders
+                    <?php
+
+                    $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '0' ");
+                    $count = 0;
+                    $total = 0;
+                    while($row = mysqli_fetch_array($getamount)) {
+                        $count++;
+                        $total = 0;
+                        $total+=$count;
+                    }
+                    if ($total == 0){
+                        echo '<span class="new badge">'.$total.'</span>';
+                    }
+                    else{
+                        echo '<span class="new badge">'.$total.'</span>';
+                    }
+                    ?>
+                </a>
+            </li>
+            <li class="bold"><a href="delivery-dashboard.php" class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Orders
+                    <?php
+
+                    $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE 0;");
+                    $counter = 0;
+                    $totalhanker = 0;
+                    while($row = mysqli_fetch_array($gethankers)) {
+                        $counter++;
+                        $totalhanker = 0;
+                        $totalhanker+=$counter;
+                    }
+                    if ($totalhanker == 0){
+                        echo '<span class="new badge">'.$totalhanker.'</span>';
+                    }
+                    else{
+                        echo '<span class="new badge">'.$totalhanker.'</span>';
+                    }
+
+                    ?>
+                </a>
+            </li>
             <li class="bold"><a href="#." class="waves-effect waves-cyan"><i class="mdi-action-book"></i>History</a>
             </li>
             <li class="bold"><a href="delivery-finance.php" class="waves-effect waves-cyan"><i class="mdi-editor-attach-money"></i>Finance</a>

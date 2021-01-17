@@ -198,7 +198,7 @@ if($_SESSION['restaurant_sid']==session_id())
                               <i class="mdi-content-content-paste red circle"></i>
                               <span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
-                              <p><strong>Payment Type:</strong> '.$row['pay_type'].'</p>
+                              <p><strong>Payment Type:</strong> '.$row['payment_type'].'</p>
                               <p><strong>Courier:</strong> '.$fillername.'</p>
 							  <p><strong>Status:</strong> '.($deleted ? $status : '
                               

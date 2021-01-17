@@ -130,7 +130,26 @@ if($_SESSION['delivery_sid']==session_id())
                                 }
                                 ?>
                             </a></li>
-                        <li><a href="locate.php"><i class="mdi-maps-directions-bike"></i></a></li>
+                        <li><a href="delivery-new.php">
+                                <?php
+
+                                $gethankerss = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Ready For Pick-Up' OR status LIKE 'Preparing') AND assignedto LIKE 0;");
+                                $counterr = 0;
+                                $totalhankerr = 0;
+                                while($row = mysqli_fetch_array($gethankerss)) {
+                                    $counterr++;
+                                    $totalhankerr = 0;
+                                    $totalhankerr+=$counterr;
+                                }
+                                if ($totalhankerr == 0){
+                                    echo '<span class="new badge">'.$totalhankerr.'</span>';
+                                }
+                                else{
+                                    echo '<span class="new badge">'.$totalhankerr.'</span>';
+                                }
+
+                                ?>
+                            </a></li>
                     </ul>
                 </div>
             </nav>
@@ -160,6 +179,8 @@ if($_SESSION['delivery_sid']==session_id())
                     </li>
                     <li class="active bold"><a href="delivery-dashboard.php" class="waves-effect waves-cyan"><i class="mdi-action-swap-vert"></i> Active Orders</a>
                     </li>
+                    <li class="bold"><a href="locate.php" class="waves-effect waves-cyan"><i class="mdi-maps-pin-drop"></i> Map</a>
+                    </li>
                     <li class="bold"><a href="delivery-new.php" class="waves-effect waves-cyan"><i class="mdi-action-shopping-basket"></i> New Orders
                             <?php
 
@@ -180,24 +201,28 @@ if($_SESSION['delivery_sid']==session_id())
                             ?>
                         </a>
                     </li>
+                    <li class="bold"><a href="delivery-dashboard.php" class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-shop-two"></i>Hanker Orders
+                            <?php
+
+                            $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE 0;");
+                            $counter = 0;
+                            $totalhanker = 0;
+                            while($row = mysqli_fetch_array($gethankers)) {
+                                $counter++;
+                                $totalhanker = 0;
+                                $totalhanker+=$counter;
+                            }
+                            if ($totalhanker == 0){
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+                            else{
+                                echo '<span class="new badge">'.$totalhanker.'</span>';
+                            }
+
+                            ?>
+                        </a>
+                    </li>
                     <li class="bold"><a href="delivery-history.php" class="waves-effect waves-cyan"><i class="mdi-action-book"></i>History
-<!--                            --><?php
-//
-//                            $getamt = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Completed') AND assignedto LIKE '$user_id'; ");
-//                            $counter = 0;
-//                            $completed = 0;
-//                            while($row = mysqli_fetch_array($getamt)) {
-//                                $counter++;
-//                                $completed = 0;
-//                                $completed+=$count;
-//                            }
-//                            if ($completed == 0){
-//                                echo '<span class="new badge" style="font-size: 0px"><span style="font-size: 12px">'.$completed.'</span></span>';
-//                            }
-//                            else{
-//                                echo '<span class="new badge" style="font-size: 0px"><span style="font-size: 12px">'.$completed.'</span></span>';
-//                            }
-//                            ?>
                         </a>
                     </li>
                     <li class="bold"><a href="delivery-finance.php" class="waves-effect waves-cyan"><i class="mdi-editor-attach-money"></i>Finance</a>
@@ -217,9 +242,147 @@ if($_SESSION['delivery_sid']==session_id())
                     $totalnew = 0;
                     $totalnew+=$count;
                 }
+
+                $gethankers = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Paused' OR status LIKE 'Ready For Pick-Up') AND assignedto='$user_id' AND not deleted;;");
+                $counter = 0;
+                $totalhanker = 0;
+                while($row = mysqli_fetch_array($gethankers)) {
+                    $counter++;
+                    $totalhanker = 0;
+                    $totalhanker+=$counter;
+                }
                 ?>
                 <div class="container">
-                    <p class="caption">
+                    <div id="work-collections" class="section">
+                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Hanker Orders (<?php echo $totalhanker; ?>)</h5></li>
+                        </ul>
+                        <?php
+                        if(isset($_GET['status'])){
+                            $status = $_GET['status'];
+                            $re_id = $_GET['restaurantid'];
+                        }
+                        else{
+                            $status = '%';
+                        }
+
+                        $sql = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Ready For Pick-Up') AND assignedto='$user_id' AND not deleted;");
+                        echo '<div class="row">
+                <div>
+                    <ul id="issues-collection with-header" class="collection"  style="background-color: white;border-radius: 8px;">';
+                        while($row = mysqli_fetch_array($sql))
+                        {
+                            $filler = $row['assignedto'];
+                            $fillername = "Not yet filled";
+                            $getname = mysqli_query($con, "SELECT * FROM users WHERE id = $filler;");
+                            while($row5 = mysqli_fetch_array($getname))
+                            {
+                                $fillername = $row5['name'];
+                            }
+
+                            $fee = $row['fee'];
+                            $status = $row['status'];
+                            $deleted = $row['deleted'];
+                            echo '<li class="collection-item avatar" style="margin: 0 0 30px 0;">
+                              <i class="mdi-content-content-paste red circle"></i>
+                              <span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
+                              <p><strong>Date:</strong> '.$row['date'].'</p>
+                              <p><strong>Payment Type:</strong> '.$row['payment_type'].'</p>
+                              <p><strong>Courier:</strong> '.$fillername.'</p>
+							  <p><strong>Status:</strong> '.($deleted ? $status : '
+                              
+							  <form method="post" action="/routers/del-edit-hank-order.php">
+							    <input type="hidden" value="'.$row['id'].'" id="orderid" name="id">
+							    <input type="hidden" value="'.$row['contact'].'" id="cos" name="cos">
+								<select class="browser-default" name="status">
+								<option value="Preparing" '.($status=='Preparing' ? 'selected' : '').' disabled>Preparing</option>
+								<option value="Out For Delivery" '.($status=='Out For Delivery' ? 'selected' : '').'>Out For Delivery</option>
+                                <option value="Arrived" '.($status=='Arrived' ? 'selected' : '').'>Arrived</option>
+                                <option value="Completed" '.($status=='Completed' ? 'selected' : '').'>Completed</option>
+                                <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').'>Ready For Pick-Up</option>
+                                <option value="Yet to be delivered" '.($status=='Yet to be delivered' ? 'selected' : '').' disabled>Yet to be delivered</option>
+                                <option value="Cancelled by Admin" '.($status=='Cancelled by Admin' ? 'selected' : '').' disabled>Cancelled by Admin</option>
+                                <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').' disabled>Ready For Pick-Up</option>
+                                <option value="Cancelled" '.($status=='Cancelled' ? 'selected' : '').' disabled>Cancelled</option>
+								</select>
+							  ').'</p>
+                              <a href="#" class="secondary-content"><i class="mdi-action-grade"></i></a>
+                              </li>';
+                            $order_id = $row['id'];
+                            $sql1 = mysqli_query($con, "SELECT * FROM hanker_details WHERE order_id = $order_id;");
+                            echo '<li class="collection-item">
+                            <div class="row">
+							<p><strong>Name: </strong>'.$row['customer'].'</p>
+							<p><strong>Address: </strong>'.$row['address'].'</p>
+							<p><strong>Contact: </strong>'.$row['contact'].'</p>								
+                            </li>';
+                            while($row1 = mysqli_fetch_array($sql1))
+                            {
+                                $item_id = $row1['item_id'];
+                                $sql2 = mysqli_query($con, "SELECT * FROM items WHERE id = $item_id;");
+                                while($row2 = mysqli_fetch_array($sql2))
+                                    $item_name = $row2['name'];
+                                echo '<li class="collection-item">
+                            <div class="row">
+                            <div class="col s1">
+                            <span style="background-color: mediumaquamarine;border-radius: 8px;color: black;">('.$row1['quantity'].')</span>
+                            </div>
+                            <div class="col s8">
+                            <p class="collections-title">'.$item_name.'</p>';
+                                if (isset($row1["variation"]) && $row1["variation"] !== '') {
+                                    echo ' 
+                                                                <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
+                                }
+
+                                if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
+                                    echo '   
+                                                                <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
+                                }
+
+                                if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
+                                    echo '  
+                                                                <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
+                                }
+
+                                if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
+                                    echo '  
+                                                                <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
+                                }
+
+                                echo'
+                                </div>
+                            <div class="col s3">
+                            <span>$'.number_format($row1['price']).' <span style="font-size: 6px;">JMD</span></span>
+                            </div>
+                            </div>
+                            </li>';
+
+                            }
+                            $total = $row['total'] - ($row['service_fee'] + $row['fee']);
+                            echo'<li class="collection-item">
+                                        <div class="row">
+                                            <div class="col s8">
+                                                <p class="collections-title"> Total</p>
+                                            </div>
+                                            <div class="col s4">
+                                                <span><strong>$'.$total.' JMD</strong></span>
+                                            </div>';
+                            if(!$deleted){
+
+                                echo '<br><br><p><button class="waves-effect waves-green btn-flat" id="updateorderbtn" style="border-radius:10px;border: 1px solid #a21318;width: 100%;background-color: #a21318;color: white;">Update Order #'.$order_id.'
+                                              <i class="mdi-action-thumbs-up-down right"></i> 
+										</button></p>
+										</form>';
+                            }
+                            echo'</div></li>';
+                        }
+                        echo '</ul>
+                </div>';
+                        ?>
+                        <span id="message"></span>
+                    </div>
+                </div>
+
                     <div id="work-collections" class="section">
                         <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
                             <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Active Orders (<?php echo $totalnew; ?>)</h5></li>
