@@ -374,7 +374,7 @@ if($_SESSION['restaurant_sid']==session_id())
 
                                             <?php
                                             $total = $total + ($values["item_quantity"] * $values["item_price"]);
-                                            $service_fee = $total * .08;
+                                            $service_fee = $total * .05;
                                         }
                                         ?>
 
@@ -384,7 +384,7 @@ if($_SESSION['restaurant_sid']==session_id())
                                                     <p class="collections-title">Service fee</p>
                                                 </div>
                                                 <div class="col s2">
-                                                    <p class="collections-title">8%</p>
+                                                    <p class="collections-title">5%</p>
                                                 </div>
                                                 <div class="col s4">
                                                     <span><strong>$<?php echo number_format($service_fee); ?> JMD</strong></span>

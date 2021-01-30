@@ -19,7 +19,6 @@ if($_SESSION['restaurant_sid']==session_id()) {
         $customer = $_POST['cos'];
         $sql = "UPDATE hanker_orders SET status='$status' WHERE id=$id;";
         if ($con->query($sql)) {
-
             if ($status === "Ready For Pick-Up"){
                 $client->messages->create(
                     $rider,

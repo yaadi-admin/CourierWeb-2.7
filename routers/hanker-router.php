@@ -6,9 +6,15 @@ use Twilio\Rest\Client;
 if($_SESSION['restaurant_sid']==session_id()) {
     if (isset($_POST['rest'])) {
 
+        $account_sid = 'AC8f235f78aa51cec01909115165e27a90';
+        $auth_token = '64b73f721643ba5f3b3630b75b792116';
+        $twilio_number = "+12029145139";
+        $client = new Client($account_sid, $auth_token);
+
        $payment_type = $_POST['payment_type'];
        $restaurant = $_POST['rest'];
        $fee = $_POST['del_fee'];
+       $admn = "18763622910";
        $address = $_POST['address'];
        $contact = $_POST['contact'];
        $customer = $_POST['customer_name'];
@@ -48,8 +54,30 @@ if($_SESSION['restaurant_sid']==session_id()) {
                 }
                 unset($_SESSION["shopping_cart"]);
 
+//                Customer order confirmation...
+                $client->messages->create(
+                    $contact,
+                    array(
+                        'from' => $twilio_number,
+                        'body' => 'Order Placed!, Order: #'.$order_id.', Total: $'.$total.' => Yaadi.Co'));
 
+//            Admin order notification...
+                    $client->messages->create(
+                        $admn,
+                        array(
+                            'from' => $twilio_number,
+                            'body' => '(HANKER ODER) => #' . $order_id . ' => Total: $' . $total . ' => Restaurant: ' . $name . ''));
 
+//            Rider order notification...
+                $getriders = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' AND verified=1) AND not deleted;");
+                while ($row = mysqli_fetch_array($getriders)) {
+                    $rider = $row['contact'];
+                    $client->messages->create(
+                        $rider,
+                        array(
+                            'from' => $twilio_number,
+                            'body' => '(HANKER ORDER) => #'.$order_id.' => Total: $'.$total.' => Restaurant: '.$name.''));
+                }
 
                 echo '<script>alert("Your order #' . $order_id . ' has been placed!\n");</script>';
                 echo '<script>window.location=" ../restaurant.php"</script>';

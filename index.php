@@ -111,9 +111,9 @@ if($_SESSION['customer_sid']==session_id())
                 <div class="nav-content">
                     <div class="responsive col-md-10 text-center" id="menu-filters">
                     <ul class="tabs tabs-transparent">
-                        <li class="tab z-depth-0"><a class="filter active" data-filter=".delivery" style="background-color: white;color: black;font-weight: 800;">DELIVERY</a></li>
-                        <li class="tab z-depth-0"><a class="filter" data-filter=".pickup" style="background-color: white;color: black;font-weight: 800;">PICKUP</a></li>
-                        <li class="tab z-depth-0"><a class="filter" data-filter=".stelizabeth" style="background-color: white;color: black;font-weight: 800;">ST.ELIZABETH</a></li>
+                        <li class="tab z-depth-0"><a class="filter active" data-filter=".delivery" style="background-color: white;color: black;font-weight: 800;">MANCHESTER</a></li>
+<!--                        <li class="tab z-depth-0"><a class="filter" data-filter=".pickup" style="background-color: white;color: black;font-weight: 800;">PICKUP</a></li>-->
+                        <li class="tab z-depth-0"><a class="filter" data-filter=".stelizabeth" style="background-color: white;color: black;font-weight: 800;">SAINT ELIZABETH</a></li>
                     </ul>
                     </div>
                 </div>
@@ -861,8 +861,8 @@ if($_SESSION['customer_sid']==session_id())
                     <div class="menu-restaurant stelizabeth" style="border: .5px solid #ddd;border-radius: 2px;width: 100%;">
                         <div class="row" style="height: 8px;background-color: white;border: 1px solid darkgray;border-right: 0px solid transparent;border-left: 0px solid transparent;"></div>
 
-                        <div class="col s12" id="stelizbeth">
-                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">St.Elizbeth</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
+                        <div class="col s12" id="stelizabeth">
+                            <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">St.Elizabeth</b> <span class="right" style="padding-right: 20px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
                             <div class="scrolling-wrapper" style="height: 280px;">
                                 <?php
                                 $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND parish='st.elizabeth' AND not deleted ORDER BY id DESC;");
@@ -1103,7 +1103,7 @@ if($_SESSION['customer_sid']==session_id())
 
                 else if (moment > 1900 && moment < 2400){
                     <?php
-                    echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Orderrr</button>', 8000);";
+                    echo "Materialize.toast('Ordering is currently closed 🥺 <button>Schedule Order</button>', 8000);";
                     ?>
                 }
             }

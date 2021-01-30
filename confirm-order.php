@@ -36,39 +36,36 @@ if($_SESSION['customer_sid']==session_id())
     else if($_POST['distance'] <= 2.0 && $_POST['distance'] >= 1.5){
         $fee = 550;
     }
-    else if($_POST['distance'] >= 2.5 && $_POST['distance'] <= 7.0){
+    else if($_POST['distance'] <= 3.0 && $_POST['distance'] >= 2.5){
         $fee = 600;
     }
-//    else if($_POST['distance'] <= 3.0 && $_POST['distance'] >= 2.5){
-//        $fee = 600;
-//    }
-//    else if($_POST['distance'] <= 3.5 && $_POST['distance'] >= 3.0){
-//        $fee = 650;
-//    }
-//    else if($_POST['distance'] <= 4.0 && $_POST['distance'] >= 3.5){
-//        $fee = 700;
-//    }
-//    else if($_POST['distance'] <= 4.5 && $_POST['distance'] >= 4.0){
-//        $fee = 750;
-//    }
-//    else if($_POST['distance'] <= 5.0 && $_POST['distance'] >= 4.5){
-//        $fee = 800;
-//    }
-//    else if($_POST['distance'] <= 5.5 && $_POST['distance'] >= 5.0){
-//        $fee = 850;
-//    }
-//    else if($_POST['distance'] <= 6.0 && $_POST['distance'] >= 5.5){
-//        $fee = 900;
-//    }
-//    else if($_POST['distance'] <= 6.5 && $_POST['distance'] >= 6.0){
-//        $fee = 950;
-//    }
-//    else if($_POST['distance'] <= 7.0 && $_POST['distance'] >= 6.5){
-//        $fee = 1000;
-//    }
-//    else if($_POST['distance'] <= 7.5 && $_POST['distance'] >= 7.0){
-//        $fee = 1050;
-//    }
+    else if($_POST['distance'] <= 3.5 && $_POST['distance'] >= 3.0){
+        $fee = 650;
+    }
+    else if($_POST['distance'] <= 4.0 && $_POST['distance'] >= 3.5){
+        $fee = 700;
+    }
+    else if($_POST['distance'] <= 4.5 && $_POST['distance'] >= 4.0){
+        $fee = 750;
+    }
+    else if($_POST['distance'] <= 5.0 && $_POST['distance'] >= 4.5){
+        $fee = 800;
+    }
+    else if($_POST['distance'] <= 5.5 && $_POST['distance'] >= 5.0){
+        $fee = 850;
+    }
+    else if($_POST['distance'] <= 6.0 && $_POST['distance'] >= 5.5){
+        $fee = 900;
+    }
+    else if($_POST['distance'] <= 6.5 && $_POST['distance'] >= 6.0){
+        $fee = 950;
+    }
+    else if($_POST['distance'] <= 7.0 && $_POST['distance'] >= 6.5){
+        $fee = 1000;
+    }
+    else if($_POST['distance'] <= 7.5 && $_POST['distance'] >= 7.0){
+        $fee = 1050;
+    }
     else if($_POST['distance'] <= 8.0 && $_POST['distance'] >= 7.5){
         $fee = 1100;
     }
