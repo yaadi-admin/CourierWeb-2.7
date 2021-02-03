@@ -13,9 +13,8 @@ if($_SESSION['restaurant_sid']==session_id()) {
         $val = $_POST['category'];
         $sql = "UPDATE items SET category = '$val' WHERE id = '$item_id';";
         $con->query($sql);
-        header("location: ../restaurant.php#$item_id");
+        header("location: ../restaurant-menu.php#$item_id");
     } else {
-        header("location: ../restaurant.php#$item_id");
+        header("location: ../restaurant-menu.php#$item_id");
     }
 }
-?>

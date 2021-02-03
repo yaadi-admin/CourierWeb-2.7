@@ -56,12 +56,10 @@ if($_SESSION['restaurant_sid']==session_id()) {
         } else {
             if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
                 echo '<script>alert("File has been uploaded.");</script>';
-                echo '<script>window.location=" ../restaurant.php#' . $itemid . '"</script>';
+                echo '<script>window.location=" ../restaurant-menu.php#' . $itemid . '"</script>';
             } else {
                 echo "Sorry, there was an error uploading your file.";
             }
         }
     }
 }
-
-?>

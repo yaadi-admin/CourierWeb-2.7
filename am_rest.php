@@ -15,19 +15,19 @@ include 'includes/connect.php';
         $action = "Viewed restaurants page";
         $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
         $con->query($sql);
-        $count = 0;
-        $count2 = 0;
+        $allrestaurants = 0;
+        $verifiedrestaurants = 0;
         $count3 = 0;
         $count4 = 0;
         $result = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant';");
         while($row = mysqli_fetch_array($result))
         {
-            $count++;
+            $allrestaurants++;
         }
         $results = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND verified='1';");
         while($row = mysqli_fetch_array($results))
         {
-            $count2++;
+            $verifiedrestaurants++;
         }
         $getndeleted = mysqli_query($con, "SELECT * FROM users WHERE role='Restaurant' AND deleted='0';");
         while($row = mysqli_fetch_array($getndeleted))
@@ -289,7 +289,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           <div id="editableTable" class="section">
             <div class="row">
                   <ul class="collection with-header collapsible z-depth-0">
-                      <li class="collection-header"><h4>Restaurants <span class="right"><?php echo $count2; ?><label style="font-size: 6px;"> Partnered</label></span> <span class="right"><?php echo $count; ?><label style="font-size: 6px;"> Restaurants</label></span></h4><p class="caption">Add, Enable, Disable or Modify Restaurant.</p>
+                      <li class="collection-header"><h4>Restaurants <span class="right"><?php echo $verifiedrestaurants; ?><label style="font-size: 6px;"> Partnered</label></span> <span class="right"><?php echo $allrestaurants; ?><label style="font-size: 6px;"> Restaurants</label></span></h4><p class="caption">Add, Enable, Disable or Modify Restaurant.</p>
                           </li>
 
                       <?php

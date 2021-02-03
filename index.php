@@ -90,6 +90,36 @@ if($_SESSION['customer_sid']==session_id())
             .hidden {
                 display: none;
             }
+
+            .rating{
+                flex-direction:row;
+                display:flex;
+                width:30px;
+                height:30px;
+                background:#D8E3DE;
+                color:#4EA458;
+                border-radius: 100%;
+                justify-content: center;
+                align-items: center;
+                margin: 1px;
+                font-size: 12px;
+            }
+
+            .info{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .line {
+                height: 5px;
+                border-top: solid 1px #ddd;
+                margin: 5px;
+            }
+
+            .details{
+                font-size:5px;
+            }
         </style>
     </head>
     <body>
@@ -301,20 +331,16 @@ if($_SESSION['customer_sid']==session_id())
                                             Chinese</button>
                                             </form>
                                         </div>
-
                                     </div></div>
                         </div>
             </div>
 
             <section id="menu-list" class="responsive">
-
                 <div id="menu-wrapper">
-
                     <div class="menu-restaurant delivery" style="border: .5px solid #ddd;border-radius: 2px;width: 100%;">
-
                         <div class="container col s12">
                             <h5 style="padding-left: 20px;font-weight: 600;background-color: ghostwhite;"><b style="color: black;">Favorites</b> <span class="right" style="padding-right: 10px;font-weight: 600;"><b><a href="#."><i class="mdi-navigation-arrow-forward white-text" style="background-color: #a21318;border-radius: 16px;width: 50px;"></i></a></b></span></h5>
-                            <div class="scrolling-wrapper" style="height: 280px;">
+                            <div class="scrolling-wrapper" style="height: 290px;">
                                 <?php
                                 $result = mysqli_query($con, "SELECT * FROM users where (role='Restaurant') AND not deleted AND ocassion='Fast Food' OR (id='331' OR id='430' OR id='80' OR id='294' OR id='8')  ORDER BY id='53' DESC, id='331' DESC, id='430' DESC, id='540' DESC, id='55' DESC, id='80' DESC, id='54' DESC, id='57' DESC, id='131' DESC;");
                                 while($row = mysqli_fetch_array($result))
@@ -341,7 +367,7 @@ if($_SESSION['customer_sid']==session_id())
                                         ?>
                                         <input type="hidden" id="userlong" value="<?php echo $long; ?>">
                                         <input type="hidden" id="userlat" value="<?php echo $lat; ?>">
-                                        <div class="smallcard" style="width: 280px;">
+                                        <div class="smallcard" style="width: 320px;">
                                             <form class="formValidate" id="formValidate" method="post" action="routers/c-router.php" novalidate="novalidate">
                                                 <div class="column">
                                                     <div class="row">
@@ -349,23 +375,21 @@ if($_SESSION['customer_sid']==session_id())
                                                             <input name="rest" value="<?php echo $restaurant_name; ?>" hidden>
                                                             <input type="hidden" id="rest_address" value="<?php echo $address; ?>">
                                                             <input type="hidden" id="cust_address" value="<?php echo $usr_address; ?>">
-                                                            <div class="card z-depth-0" style="border-radius: 8px;background-color: transparent;">
-                                                                <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
-                                                                    <div class="card-image">
-                                                                        <img src="<?php echo $image_dir; ?>" height="150px" width="100%" style="object-fit: cover;border-radius: 8px">
+                                                            <button type="submit" style="border-radius: 8px; background-color: transparent;margin: 0; border: 0px;width: 100%;">
+                                                            <img src="<?php echo $image_dir; ?>" width="330" height="220" style="object-fit: cover;border-radius: 8px">
+                                                            </button>
+                                                                    <div class="info">
+                                                                        <div class="text">
+                                                                            <div class="title black-text"><?php echo $restaurant_name; ?></div>
+                                                                            <div class="details black-text"><?php echo $ocassion; ?>・⏱️ 50 Min・$</div>
+                                                                        </div>
+                                                                        <div class="rating">50</div>
                                                                     </div>
-                                                                </button>
-                                                                <div class="card-content" style="height: 100px;background-color: ghostwhite;color: black;border-radius: 4px;border-top-left-radius: 32px;border-top-right-radius: 32px;">
-                                                                    <span style="font-size: 16px;"><b><?php echo $restaurant_name; ?></b> <i class="mdi-action-shopping-basket right hide-on-med-and-up" style="color: black;"></i></span><br>
-                                                                    <h6 style="color: black;font-size: 12px;"><label style="color: black;"><?php echo $address; ?></label></h6>
-                                                                    <label style="font-size: 8px;color: black;">⏱️ <b>55 Min</b> <i class="mdi-hardware-keyboard-arrow-right"></i> <span><b><?php echo $ocassion; ?></b></span> <i class="mdi-hardware-keyboard-arrow-right"></i> $<span id="delivery"><?php echo $dis_fee; ?></span> <i class="mdi-hardware-keyboard-arrow-right"></i> <b>Delivery</b></label>
-                                                                </div>
-                                                            </div>
+                                                                    <div class="line"></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </form>
-
                                         </div>
                                         <?php
                                     }

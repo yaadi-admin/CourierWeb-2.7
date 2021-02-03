@@ -15,17 +15,17 @@ include 'includes/connect.php';
         $action = "Viewed couriers page";
         $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
         $con->query($sql);
-        $count = 0;
-        $count2 = 0;
+        $allcouriers = 0;
+        $verifiedcouriers = 0;
         $result = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' OR role='Delivery');");
         while($row = mysqli_fetch_array($result))
         {
-            $count++;
+            $allcouriers++;
         }
         $results = mysqli_query($con, "SELECT * FROM users WHERE (role='Rider' OR role='Delivery') AND verified='1';");
         while($row = mysqli_fetch_array($results))
         {
-            $count2++;
+            $verifiedcouriers++;
         }
 		?>
 <!DOCTYPE html>
@@ -256,7 +256,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           <div id="editableTable" class="section">
             <div class="row">
                   <ul class="collection with-header collapsible z-depth-0">
-                      <li class="collection-header"><h4>Couriers <span class="right"><?php echo $count2; ?><span style="font-size: 10px;"> Verified</span></span> <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Couriers</span></span></h4><p class="caption">Enable, Disable or add couriers</p></li>
+                      <li class="collection-header"><h4>Couriers <span class="right"><?php echo $verifiedcouriers; ?><span style="font-size: 10px;"> Verified</span></span> <span class="right"><?php echo $allcouriers; ?><span style="font-size: 10px;"> Couriers</span></span></h4><p class="caption">Enable, Disable or add couriers</p></li>
 
                   <?php
 

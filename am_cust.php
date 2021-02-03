@@ -15,11 +15,11 @@ include 'includes/connect.php';
         $action = "Viewed customer page";
         $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
         $con->query($sql);
-        $count = 0;
+        $allcustomers = 0;
         $result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer';");
         while($row = mysqli_fetch_array($result))
         {
-            $count++;
+            $allcustomers++;
         }
 		?>
 <!DOCTYPE html>
@@ -244,7 +244,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           <div id="editableTable" class="section">
             <div class="row">
                   <ul class="collection with-header collapsible z-depth-0">
-                      <li class="collection-header"><h4>Customers <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Customers</span></span></h4><p class="caption">Enable or Disable Customer Accounts.</p></li>
+                      <li class="collection-header"><h4>Customers <span class="right"><?php echo $allcustomers; ?><span style="font-size: 10px;"> Customers</span></span></h4><p class="caption">Enable or Disable Customer Accounts.</p></li>
 
                       <?php
 

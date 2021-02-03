@@ -1135,8 +1135,6 @@ if($_SESSION['restaurant_sid']==session_id())
 							<div class="collapsible-body">
 					<p class="col s9"><input placeholder="Add a Variation" value="'.$row["type5"].'" id="'.$row["id"].'_type5" name="'.$row['id'].'_type5" type="text" data-error=".errorTxt'.$row["id"].'" style="border-bottom-right-radius: 8px;border-bottom: 1px solid black;"></p>
                     <div class="errorTxt'.$row["id"].'"></div>
-					<p class="col s3"><input placeholder="Variation Price" value="'.$row["five"].'" id="'.$row["id"].'_five" name="'.$row['id'].'_five" type="text" data-error=".errorTxt'.$row["id"].'" style="border-bottom-right-radius: 8px;border-bottom: 1px solid black;"></p>
-                    <div class="errorTxt'.$row["id"].'"></div>
                     
                     <p class="col s9"><input placeholder="Add a Variation" value="'.$row["type6"].'" id="'.$row["id"].'_type6" name="'.$row['id'].'_type6" type="text" data-error=".errorTxt'.$row["id"].'" style="border-bottom-right-radius: 8px;border-bottom: 1px solid black;"></p>
                     <div class="errorTxt'.$row["id"].'"></div>

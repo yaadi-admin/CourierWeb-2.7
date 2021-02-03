@@ -67,7 +67,7 @@ if($_SESSION['restaurant_sid']==session_id()) {
                 $sql = "UPDATE items SET type5 = '$value' WHERE id = $key;";
                 $con->query($sql);
             }
-            if (preg_match("/[0-9]+_five/", $key)) {
+            if (preg_match("/[0-9]+_fivee/", $key)) {
                 $key = strtok($key, '_');
                 $sql = "UPDATE items SET five = '$value' WHERE id = $key;";
                 $con->query($sql);

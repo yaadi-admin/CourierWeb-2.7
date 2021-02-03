@@ -235,10 +235,10 @@ if($_SESSION['delivery_sid']==session_id())
                 </div>
                 <?php
                 $getamount = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing') AND assignedto LIKE '$user_id';");
-                $count = 0;
+                $countorders = 0;
                 $totalnew = 0;
                 while($row = mysqli_fetch_array($getamount)) {
-                    $count++;
+                    $countorders++;
                     $totalnew = 0;
                     $totalnew+=$count;
                 }
@@ -252,38 +252,48 @@ if($_SESSION['delivery_sid']==session_id())
                     $totalhanker+=$counter;
                 }
                 ?>
-                <div class="container">
-                    <div id="work-collections" class="section">
-                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
-                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Hanker Orders (<?php echo $totalhanker; ?>)</h5></li>
-                        </ul>
-                        <?php
-                        if(isset($_GET['status'])){
-                            $status = $_GET['status'];
-                            $re_id = $_GET['restaurantid'];
-                        }
-                        else{
-                            $status = '%';
-                        }
 
-                        $sql = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Ready For Pick-Up') AND assignedto='$user_id' AND not deleted;");
-                        echo '<div class="row">
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs">
+                            <li class="tab col s3"><a class="active" href="#test2"><i class="mdi-hardware-phone-iphone"></i> Active Orders (<?php echo $totalnew; ?>)</a></li>
+                            <li class="tab col s3"><a class="" href="#test1"><i class="mdi-communication-phone"></i> Hanker Orders (<?php echo $totalhanker; ?>)</a></li>
+                        </ul>
+                    </div>
+                    <div id="test1" class="col s12">
+
+                        <div class="container">
+                            <div id="work-collections" class="section">
+                                <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                                    <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Hanker Orders (<?php echo $totalhanker; ?>)</h5></li>
+                                </ul>
+                                <?php
+                                if(isset($_GET['status'])){
+                                    $status = $_GET['status'];
+                                    $re_id = $_GET['restaurantid'];
+                                }
+                                else{
+                                    $status = '%';
+                                }
+
+                                $sql = mysqli_query($con, "SELECT * FROM hanker_orders WHERE (status LIKE 'Ready For Pick-Up') AND assignedto='$user_id' AND not deleted;");
+                                echo '<div class="row">
                 <div>
                     <ul id="issues-collection with-header" class="collection"  style="background-color: white;border-radius: 8px;">';
-                        while($row = mysqli_fetch_array($sql))
-                        {
-                            $filler = $row['assignedto'];
-                            $fillername = "Not yet filled";
-                            $getname = mysqli_query($con, "SELECT * FROM users WHERE id = $filler;");
-                            while($row5 = mysqli_fetch_array($getname))
-                            {
-                                $fillername = $row5['name'];
-                            }
+                                while($row = mysqli_fetch_array($sql))
+                                {
+                                    $filler = $row['assignedto'];
+                                    $fillername = "Not yet filled";
+                                    $getname = mysqli_query($con, "SELECT * FROM users WHERE id = $filler;");
+                                    while($row5 = mysqli_fetch_array($getname))
+                                    {
+                                        $fillername = $row5['name'];
+                                    }
 
-                            $fee = $row['fee'];
-                            $status = $row['status'];
-                            $deleted = $row['deleted'];
-                            echo '<li class="collection-item avatar" style="margin: 0 0 30px 0;">
+                                    $fee = $row['fee'];
+                                    $status = $row['status'];
+                                    $deleted = $row['deleted'];
+                                    echo '<li class="collection-item avatar" style="margin: 0 0 30px 0;">
                               <i class="mdi-content-content-paste red circle"></i>
                               <span class="collection-header">Order No. <span style="font-size: 20px;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
@@ -299,7 +309,7 @@ if($_SESSION['delivery_sid']==session_id())
 								<option value="Out For Delivery" '.($status=='Out For Delivery' ? 'selected' : '').'>Out For Delivery</option>
                                 <option value="Arrived" '.($status=='Arrived' ? 'selected' : '').'>Arrived</option>
                                 <option value="Completed" '.($status=='Completed' ? 'selected' : '').'>Completed</option>
-                                <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').'>Ready For Pick-Up</option>
+                                <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').' disabled>Ready For Pick-Up</option>
                                 <option value="Yet to be delivered" '.($status=='Yet to be delivered' ? 'selected' : '').' disabled>Yet to be delivered</option>
                                 <option value="Cancelled by Admin" '.($status=='Cancelled by Admin' ? 'selected' : '').' disabled>Cancelled by Admin</option>
                                 <option value="Ready For Pick-Up" '.($status=='Ready For Pick-Up' ? 'selected' : '').' disabled>Ready For Pick-Up</option>
@@ -308,48 +318,48 @@ if($_SESSION['delivery_sid']==session_id())
 							  ').'</p>
                               <a href="#" class="secondary-content"><i class="mdi-action-grade"></i></a>
                               </li>';
-                            $order_id = $row['id'];
-                            $sql1 = mysqli_query($con, "SELECT * FROM hanker_details WHERE order_id = $order_id;");
-                            echo '<li class="collection-item">
+                                    $order_id = $row['id'];
+                                    $sql1 = mysqli_query($con, "SELECT * FROM hanker_details WHERE order_id = $order_id;");
+                                    echo '<li class="collection-item">
                             <div class="row">
 							<p><strong>Name: </strong>'.$row['customer'].'</p>
 							<p><strong>Address: </strong>'.$row['address'].'</p>
 							<p><strong>Contact: </strong>'.$row['contact'].'</p>								
                             </li>';
-                            while($row1 = mysqli_fetch_array($sql1))
-                            {
-                                $item_id = $row1['item_id'];
-                                $sql2 = mysqli_query($con, "SELECT * FROM items WHERE id = $item_id;");
-                                while($row2 = mysqli_fetch_array($sql2))
-                                    $item_name = $row2['name'];
-                                echo '<li class="collection-item">
+                                    while($row1 = mysqli_fetch_array($sql1))
+                                    {
+                                        $item_id = $row1['item_id'];
+                                        $sql2 = mysqli_query($con, "SELECT * FROM items WHERE id = $item_id;");
+                                        while($row2 = mysqli_fetch_array($sql2))
+                                            $item_name = $row2['name'];
+                                        echo '<li class="collection-item">
                             <div class="row">
                             <div class="col s1">
                             <span style="background-color: mediumaquamarine;border-radius: 8px;color: black;">('.$row1['quantity'].')</span>
                             </div>
                             <div class="col s8">
                             <p class="collections-title">'.$item_name.'</p>';
-                                if (isset($row1["variation"]) && $row1["variation"] !== '') {
-                                    echo ' 
+                                        if (isset($row1["variation"]) && $row1["variation"] !== '') {
+                                            echo ' 
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
-                                }
+                                        }
 
-                                if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
-                                    echo '   
+                                        if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
+                                            echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
-                                }
+                                        }
 
-                                if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
-                                    echo '  
+                                        if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
+                                            echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
-                                }
+                                        }
 
-                                if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
-                                    echo '  
+                                        if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
+                                            echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
-                                }
+                                        }
 
-                                echo'
+                                        echo'
                                 </div>
                             <div class="col s3">
                             <span>$'.number_format($row1['price']).' <span style="font-size: 6px;">JMD</span></span>
@@ -357,9 +367,9 @@ if($_SESSION['delivery_sid']==session_id())
                             </div>
                             </li>';
 
-                            }
-                            $total = $row['total'] - ($row['service_fee'] + $row['fee']);
-                            echo'<li class="collection-item">
+                                    }
+                                    $total = $row['total'] - ($row['service_fee'] + $row['fee']);
+                                    echo'<li class="collection-item">
                                         <div class="row">
                                             <div class="col s8">
                                                 <p class="collections-title"> Total</p>
@@ -367,53 +377,59 @@ if($_SESSION['delivery_sid']==session_id())
                                             <div class="col s4">
                                                 <span><strong>$'.$total.' JMD</strong></span>
                                             </div>';
-                            if(!$deleted){
+                                    if(!$deleted){
 
-                                echo '<br><br><p><button class="waves-effect waves-green btn-flat" id="updateorderbtn" style="border-radius:10px;border: 1px solid #a21318;width: 100%;background-color: #a21318;color: white;">Update Order #'.$order_id.'
+                                        echo '<br><br><p><button class="waves-effect waves-green btn-flat" id="updateorderbtn" style="border-radius:10px;border: 1px solid #a21318;width: 100%;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button></p>
 										</form>';
-                            }
-                            echo'</div></li>';
-                        }
-                        echo '</ul>
+                                    }
+                                    echo'</div></li>';
+                                }
+                                echo '</ul>
                 </div>';
-                        ?>
-                        <span id="message"></span>
+                                ?>
+                                <span id="message"></span>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
 
-                    <div id="work-collections" class="section">
-                        <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
-                            <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Active Orders (<?php echo $totalnew; ?>)</h5></li>
-                        </ul>
 
-                        <?php
-                        if(isset($_GET['status'])){
-                            $status = $_GET['status'];
-                            $re_id = $_GET['restaurantid'];
-                        }
-                        else{
-                            $status = '%';
-                        }
 
-                        $sql = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Ready For Pick-Up' OR status LIKE 'Out For Delivery' OR status LIKE 'Arrived') AND assignedto LIKE '$user_id'");
-                        echo '<div class="row">
+                    <div id="test2" class="col s12">
+
+                        <div id="work-collections" class="section">
+                            <ul class="collection white" style="border-radius: 8px;border: 0px solid transparent;">
+                                <li class="collection-header" style="padding-left: 10px;border: 0px solid transparent;"><h5>Active Orders (<?php echo $totalnew; ?>)</h5></li>
+                            </ul>
+
+                            <?php
+                            if(isset($_GET['status'])){
+                                $status = $_GET['status'];
+                                $re_id = $_GET['restaurantid'];
+                            }
+                            else{
+                                $status = '%';
+                            }
+
+                            $sql = mysqli_query($con, "SELECT * FROM orders WHERE (status LIKE 'Yet to be delivered' OR status LIKE 'Preparing' OR status LIKE 'Ready For Pick-Up' OR status LIKE 'Out For Delivery' OR status LIKE 'Arrived') AND assignedto LIKE '$user_id'");
+                            echo '<div class="row">
                 <div>
                     <ul id="issues-collection" class="collection white" style="border-radius: 8px;">';
 
-                        $count = 0;
+                            $count = 0;
 
-                        while($row = mysqli_fetch_array($sql))
-                        {
-                            $count++;
+                            while($row = mysqli_fetch_array($sql))
+                            {
+                                $count++;
 
-                            if ($count > 0){
-                                $fee = $row['fee'];
+                                if ($count > 0){
+                                    $fee = $row['fee'];
 
-                                $status = $row['status'];
-                                $deleted = $row['deleted'];
-                                echo '<li class="collection-item avatar" style="margin: 50px 0px;">
+                                    $status = $row['status'];
+                                    $deleted = $row['deleted'];
+                                    echo '<li class="collection-item avatar" style="margin: 50px 0px;">
                               <i class="mdi-content-content-paste red circle"></i>
                               <span class="collection-header">Order No. <span style="font-size: 20px;color: #A82128;">'.$row['id'].'</span></span>
                               <p><strong>Date:</strong> '.$row['date'].'</p>
@@ -435,56 +451,56 @@ if($_SESSION['delivery_sid']==session_id())
 							  ').'</p>
                               <a href="#" class="secondary-content"><i class="mdi-action-grade"></i></a>
                               </li>';
-                                $order_id = $row['id'];
-                                $customer_id = $row['customer_id'];
-                                $sql1 = mysqli_query($con, "SELECT * FROM order_details WHERE order_id = $order_id;");
-                                $sql3 = mysqli_query($con, "SELECT * FROM users WHERE id = $customer_id;");
-                                while($row3 = mysqli_fetch_array($sql3))
-                                {
-                                    $cus = $customer_id;
-                                    echo '<li class="collection-item">
+                                    $order_id = $row['id'];
+                                    $customer_id = $row['customer_id'];
+                                    $sql1 = mysqli_query($con, "SELECT * FROM order_details WHERE order_id = $order_id;");
+                                    $sql3 = mysqli_query($con, "SELECT * FROM users WHERE id = $customer_id;");
+                                    while($row3 = mysqli_fetch_array($sql3))
+                                    {
+                                        $cus = $customer_id;
+                                        echo '<li class="collection-item">
                             <div class="row">
 							<p><strong>Name: </strong>'.$row3['name'].'</p>
 							<p><strong>Address: </strong>'.$row['address'].'</p>
 							'.($row3['contact'] == '' ? '' : '<p><strong>Contact: </strong>'.$row3['contact'].'</p>').'			
 							'.(!empty($row['description']) ? '<p><strong>Note: </strong>'.$row['description'].'</p>' : '').'								
                             </li>';
-                                }
-                                while($row1 = mysqli_fetch_array($sql1))
-                                {
-                                    $item_id = $row1['item_id'];
-                                    $sql2 = mysqli_query($con, "SELECT * FROM items WHERE id = $item_id;");
-                                    while($row2 = mysqli_fetch_array($sql2))
+                                    }
+                                    while($row1 = mysqli_fetch_array($sql1))
+                                    {
+                                        $item_id = $row1['item_id'];
+                                        $sql2 = mysqli_query($con, "SELECT * FROM items WHERE id = $item_id;");
+                                        while($row2 = mysqli_fetch_array($sql2))
 
-                                        $item_name = $row2['name'];
-                                    echo '<li class="collection-item">
+                                            $item_name = $row2['name'];
+                                        echo '<li class="collection-item">
                             <div class="row">
                             <div class="col s1">
                             <span style="background-color: mediumaquamarine;border-radius: 8px;color: black;">('.$row1['quantity'].')</span>
                             </div>
                             <div class="col s5">
                             <p class="collections-title">'.$item_name.'</p>';
-                                    if (isset($row1["variation"]) && $row1["variation"] !== '') {
-                                        echo ' 
+                                        if (isset($row1["variation"]) && $row1["variation"] !== '') {
+                                            echo ' 
                                                                 <label>Flavor: </label><label>'.$row1["variation"].'</label><br>';
-                                    }
+                                        }
 
-                                    if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
-                                        echo '   
+                                        if (isset($row1["variation_type"]) && $row1["variation_type"] !== ''){
+                                            echo '   
                                                                 <label>Type: </label><label>'.$row1["variation_type"].'</label><br>';
-                                    }
+                                        }
 
-                                    if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
-                                        echo '  
+                                        if (isset($row1["variation_side"]) && $row1["variation_side"] !== ''){
+                                            echo '  
                                                                 <label>Side: </label><label>'.$row1["variation_side"].'</label><br>';
-                                    }
+                                        }
 
-                                    if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
-                                        echo '  
+                                        if (isset($row1["variation_drink"]) && $row1["variation_drink"] !== '') {
+                                            echo '  
                                                                 <label>Drink: </label><label>'.$row1["variation_drink"].'</label><br>';
-                                    }
+                                        }
 
-                                    echo'
+                                        echo'
                                 </div>
                                 <div class="col s3">
                             <label>'.$row1['restaurant'].'</label>
@@ -494,8 +510,8 @@ if($_SESSION['delivery_sid']==session_id())
                             </div>
                             </div>
                             </li>';
-                                }
-                                echo'<li class="collection-item">
+                                    }
+                                    echo'<li class="collection-item">
                                         <div class="row">
                                             <div class="col s7">
                                                 <p class="collections-title">Service Fee</p>
@@ -527,35 +543,45 @@ if($_SESSION['delivery_sid']==session_id())
                                             <div class="col s3">
                                                 <span><strong style="font-size: 16px;">$'.number_format($row['total']).' <span style="font-size: 6px;">JMD</span></strong></span>
                                             </div>';
-                                if(!$deleted){
+                                    if(!$deleted){
 
-                                    echo '<br><br>
+                                        echo '<br><br>
                                     <button class="waves-effect waves-green btn-flat right" type="submit" name="action" style="border-radius:10px;border: 1px solid maroon;background-color: #a21318;color: white;">Update Order #'.$order_id.'
                                               <i class="mdi-action-thumbs-up-down right"></i> 
 										</button>
 										</form>';
+                                    }
+                                    echo'</div></li>';
                                 }
-                                echo'</div></li>';
+                                else if ($count < 1){
+                                    echo "<span>No active orders</span>";
+                                }
+
+
                             }
-                            else if ($count < 1){
-                                echo "<span>No active orders</span>";
+
+                            if ($count == 0){
+                                echo '<h5 class="center">No active orders</h5>';
                             }
 
 
-                        }
-
-                        if ($count == 0){
-                            echo '<h5 class="center">No active orders</h5>';
-                        }
 
 
 
-
-
-                        echo '</ul>
+                            echo '</ul>
                 </div>';
-                        ?>
+                            ?>
+                        </div>
+
                     </div>
+
+
+
+                </div>
+
+
+
+
                 </div>
             </section>
         </div>

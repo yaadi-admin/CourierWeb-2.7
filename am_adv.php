@@ -15,11 +15,11 @@ include 'includes/connect.php';
         $action = "Viewed email accounts for promo";
         $sql = "INSERT INTO timeline (user_id, action, url, date) VALUES ('$id', '$action', '$url', '$timestamp')";
         $con->query($sql);
-        $count = 0;
+        $emailcount = 0;
         $result = mysqli_query($con, "SELECT * FROM users WHERE role='Customer' AND email not LIKE '';");
         while($row = mysqli_fetch_array($result))
         {
-            $count++;
+            $emailcount++;
         }
 		?>
 <!DOCTYPE html>
@@ -247,7 +247,7 @@ ul.side-nav.leftnavset ul.collapsible-accordion{background-color:#fff}
           <div id="editableTable" class="section">
             <div class="row">
                 <ul class="collection with-header collapsible z-depth-0">
-                    <li class="collection-header"><h4>Promotions <span class="right"><?php echo $count; ?><span style="font-size: 10px;"> Emails</span></span></h4><p class="caption">Promotions advertise products and services to customers via email. <span class="right"><a class="waves-effect waves-light modal-trigger" href="#broadcast"><i class="mdi-communication-messenger"></i></a></span></p></li>
+                    <li class="collection-header"><h4>Promotions <span class="right"><?php echo $emailcount; ?><span style="font-size: 10px;"> Emails</span></span></h4><p class="caption">Promotions advertise products and services to customers via email. <span class="right"><a class="waves-effect waves-light modal-trigger" href="#broadcast"><i class="mdi-communication-messenger"></i></a></span></p></li>
 
                     <div id="broadcast" class="modal modal-fixed-footer">
                         <form class="formValidate" id="formValidate" method="post" action="routers/promo.php" novalidate="novalidate">
